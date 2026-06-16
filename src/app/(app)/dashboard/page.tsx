@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCw, CheckCircle2, XCircle, ArrowUpRight, ArrowRight, FileText } from "lucide-react";
+import { Loader2, RefreshCw, CheckCircle2, XCircle, ArrowUpRight, ArrowRight, FileText, Activity, Shield } from "lucide-react";
 
 export default function DashboardPage() {
   const [themes, setThemes] = useState<any[]>([]);

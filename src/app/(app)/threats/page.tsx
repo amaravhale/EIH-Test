@@ -17,11 +17,10 @@ export default function ThreatsPage() {
 
       <FilterBar
         filters={[
-          { id: "status", label: "Status", options: [{ id: "critical", label: "Critical" }, { id: "high", label: "High" }] }
+          { id: "status", label: "Status", type: "select", options: [{ value: "critical", label: "Critical" }, { value: "high", label: "High" }] }
         ]}
-        onSearch={() => {}}
+        onSearchChange={() => {}}
         onFilterChange={() => {}}
-        onSortChange={() => {}}
       />
 
       <div className="grid gap-6 md:grid-cols-4">

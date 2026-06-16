@@ -8,7 +8,7 @@ import type { Tables, Enums, Json } from "./database";
 
 // ─── Profile / User ──────────────────────────────────────────────────
 
-export interface UserProfile extends Tables<"profiles"> {
+export type UserProfile = Tables<"profiles"> & {
   initials: string;
 }
 
@@ -24,7 +24,7 @@ export interface UserPreferences {
 
 // ─── Competitor ──────────────────────────────────────────────────────
 
-export interface Competitor extends Tables<"competitors"> {
+export type Competitor = Tables<"competitors"> & {
   signal_count?: number;
   recent_signal_count?: number;
   last_signal_at?: string | null;
@@ -63,7 +63,7 @@ export interface CompetitorComparison {
 
 // ─── Signal ──────────────────────────────────────────────────────────
 
-export interface Signal extends Tables<"signals"> {
+export type Signal = Tables<"signals"> & {
   competitor_name?: string | null;
 }
 
@@ -85,7 +85,7 @@ export interface SignalTimelineEntry {
 
 // ─── Tender ──────────────────────────────────────────────────────────
 
-export interface Tender extends Tables<"tenders"> {
+export type Tender = Tables<"tenders"> & {
   assigned_to_name?: string | null;
   days_until_deadline?: number | null;
 }
@@ -107,7 +107,7 @@ export interface TenderValueRange {
 
 // ─── Regulation ──────────────────────────────────────────────────────
 
-export interface Regulation extends Tables<"regulations"> {
+export type Regulation = Tables<"regulations"> & {
   assigned_to_name?: string | null;
   days_until_effective?: number | null;
   days_until_consultation_deadline?: number | null;
@@ -122,7 +122,7 @@ export interface RegulationDetail extends Regulation {
 
 // ─── Conversation / Message ──────────────────────────────────────────
 
-export interface Conversation extends Tables<"conversations"> {
+export type Conversation = Tables<"conversations"> & {
   created_by_profile?: UserProfile | null;
   last_message_preview?: string | null;
 }
@@ -131,7 +131,7 @@ export interface ConversationDetail extends Conversation {
   messages: Message[];
 }
 
-export interface Message extends Tables<"messages"> {
+export type Message = Tables<"messages"> & {
   parsed_citations?: Citation[];
 }
 
@@ -156,7 +156,7 @@ export interface StreamingMessage {
 
 // ─── Document / Chunk ────────────────────────────────────────────────
 
-export interface Document extends Tables<"documents"> {
+export type Document = Tables<"documents"> & {
   created_by_profile?: UserProfile | null;
   download_url?: string;
 }
@@ -165,7 +165,7 @@ export interface DocumentDetail extends Document {
   chunks: DocumentChunk[];
 }
 
-export interface DocumentChunk extends Tables<"document_chunks"> {
+export type DocumentChunk = Tables<"document_chunks"> & {
   document_title?: string;
 }
 
@@ -182,7 +182,7 @@ export interface DocumentChunkMatch {
 
 // ─── Content ─────────────────────────────────────────────────────────
 
-export interface ContentItem extends Tables<"content_items"> {
+export type ContentItem = Tables<"content_items"> & {
   author_name?: string | null;
   author_avatar?: string | null;
 }
@@ -194,7 +194,7 @@ export interface ContentItemDetail extends ContentItem {
 
 // ─── Audit ───────────────────────────────────────────────────────────
 
-export interface AuditLog extends Tables<"audit_logs"> {
+export type AuditLog = Tables<"audit_logs"> & {
   user_name?: string | null;
   user_email?: string | null;
 }

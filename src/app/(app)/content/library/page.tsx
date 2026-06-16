@@ -12,7 +12,7 @@ export default function ContentLibraryPage() {
       <PageHeader
         title="Content Library"
         description="Your repository of approved and published thought leadership assets."
-        action={
+        actions={
           <Button className="bg-blue-600 hover:bg-blue-700">Upload Asset</Button>
         }
       />

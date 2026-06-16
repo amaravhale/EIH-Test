@@ -23,7 +23,7 @@ export default function MarketAnalyticsPage() {
       <PageHeader
         title="Market Analytics"
         description="High-level market trends and macro indicators for target sectors."
-        action={
+        actions={
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" /> Export Report
           </Button>

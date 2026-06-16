@@ -37,7 +37,7 @@ export default function ContentIdeasPage() {
       <PageHeader
         title="Content Ideas"
         description="AI-generated content concepts based on market gaps and trending topics."
-        action={
+        actions={
           <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
             <Sparkles className="h-4 w-4" /> Generate New Ideas
           </Button>

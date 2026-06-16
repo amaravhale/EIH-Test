@@ -12,7 +12,7 @@ export default function SentimentAnalyticsPage() {
       <PageHeader
         title="Sentiment Analysis"
         description="Public perception and brand sentiment tracking."
-        action={
+        actions={
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" /> Export Report
           </Button>

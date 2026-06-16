@@ -3,7 +3,8 @@ import { CapabilitiesTab } from "@/components/domain/capabilities-tab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function CompetitorDetailPage({ params }: { params: { id: string } }) {
+export default async function CompetitorDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
   // Mock data for the specific competitor
   const competitor = {
     id: "comp-1",
