@@ -61,6 +61,12 @@ export interface CompetitorComparison {
   signal_count: number;
 }
 
+export interface IncidentIntelligence {
+  incidentType: string;
+  consultantHired: string;
+  pitchApproach: string;
+}
+
 export interface LeadScoreProfile {
   companyName: string;
   industry: string;
@@ -69,6 +75,7 @@ export interface LeadScoreProfile {
   recommendedProduct: "BOOST" | "SENSE" | "Both" | "None";
   confidenceLevel: number;
   rationale: string;
+  incident?: IncidentIntelligence | null;
 }
 
 // ─── Signal ──────────────────────────────────────────────────────────

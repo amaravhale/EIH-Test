@@ -50,15 +50,15 @@ export default function DashboardPage() {
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-zinc-900">Intelligence Hub</h2>
           <p className="text-zinc-500 mt-1">
-            Central command for market themes and HSE lead scoring.
+            Central command for market themes and Client Acquisition Intelligence (CAI).
           </p>
         </div>
       </div>
 
       <Tabs defaultValue="market" className="w-full">
-        <TabsList className="mb-6 grid w-full max-w-[400px] grid-cols-2">
+        <TabsList className="mb-6 grid w-full max-w-[500px] grid-cols-2">
           <TabsTrigger value="market" className="data-[state=active]:bg-teal data-[state=active]:text-white">Market Intelligence</TabsTrigger>
-          <TabsTrigger value="lead-scoring" className="data-[state=active]:bg-teal data-[state=active]:text-white">Lead Scoring Agent</TabsTrigger>
+          <TabsTrigger value="lead-scoring" className="data-[state=active]:bg-teal data-[state=active]:text-white">Client Acquisition Intelligence</TabsTrigger>
         </TabsList>
 
         <TabsContent value="market" className="space-y-6 animate-in fade-in-50 duration-500">
