@@ -11,9 +11,15 @@ const MOCK_PROFILES: Record<string, LeadScoreProfile> = {
     confidenceLevel: 88,
     rationale: "High volume of complex HSE data and historical weak signals indicate a strong need for BOOST's AI analytics to identify hidden risks before they materialize.",
     incident: {
-      incidentType: "Tier 1 Process Safety Near-Miss (March 2023)",
-      consultantHired: "McKinsey & Company (Safety Culture Review)",
-      pitchApproach: "Disrupt McKinsey by leading with BOOST's AI-driven weak signal detection, proving that standard culture reviews miss predictive data patterns."
+      id: "inc-001",
+      incidentType: "Tier 1 Process Safety Near-Miss",
+      consultantHired: "McKinsey & Company",
+      pitchApproach: "Disrupt McKinsey by leading with BOOST's AI-driven weak signal detection, proving that standard culture reviews miss predictive data patterns.",
+      incidentDescription: "A severe overpressurization event occurred at the primary distillation column, triggering emergency relief valves but narrowly avoiding structural failure. Initial findings point to fragmented sensor data leading up to the event.",
+      regulatoryNotice: "HSE Improvement Notice served under COMAH regulations regarding alarm management and predictive maintenance protocols.",
+      clientDetails: "BP plc - North Sea Operations",
+      scenario: "Offshore Platform - Distillation Unit",
+      dateTime: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString()
     }
   },
   "Balfour Beatty": {
@@ -25,9 +31,15 @@ const MOCK_PROFILES: Record<string, LeadScoreProfile> = {
     confidenceLevel: 92,
     rationale: "Data indicates strong compliance but significant gaps in cultural alignment across projects. SENSE diagnostics will bridge the gap between leadership intent and workforce experience.",
     incident: {
-      incidentType: "Subcontractor Fatality on Major Infrastructure Site (2022)",
+      id: "inc-002",
+      incidentType: "Subcontractor Fatality Risk Event",
       consultantHired: "ERM (Environmental Resources Management)",
-      pitchApproach: "Position SENSE as the continuous pulse-check that ERM's static audits failed to capture; focus on sub-contractor integration."
+      pitchApproach: "Position SENSE as the continuous pulse-check that ERM's static audits failed to capture; focus on sub-contractor integration and cultural alignment.",
+      incidentDescription: "A lifting operation involving a 50-ton module failed due to miscommunication between primary contractors and lifting sub-contractors. The load dropped, narrowly missing a crew of 6 workers.",
+      regulatoryNotice: "Immediate Prohibition Notice issued by HSE halting all heavy lifting operations on site pending a full cultural and operational review.",
+      clientDetails: "Balfour Beatty - Major Infrastructure Project",
+      scenario: "Heavy Lifting & Subcontractor Coordination",
+      dateTime: new Date(Date.now() - 1000 * 60 * 60 * 18).toISOString()
     }
   },
   "Shell": {
@@ -39,9 +51,15 @@ const MOCK_PROFILES: Record<string, LeadScoreProfile> = {
     confidenceLevel: 85,
     rationale: "Requires both cultural realignment (SENSE) for legacy sites and advanced weak-signal detection (BOOST) for their extensive observation datasets.",
     incident: {
-      incidentType: "Critical Equipment Failure & Unplanned Flaring (Q4 2023)",
+      id: "inc-003",
+      incidentType: "Critical Equipment Failure & Unplanned Flaring",
       consultantHired: "DuPont Sustainable Solutions (dss+)",
-      pitchApproach: "Leverage both BOOST and SENSE to outcompete dss+ by offering a modern, tech-enabled predictive model rather than traditional consulting frameworks."
+      pitchApproach: "Leverage both BOOST and SENSE to outcompete dss+ by offering a modern, tech-enabled predictive model rather than traditional consulting frameworks.",
+      incidentDescription: "Failure of a primary cooling circuit led to an emergency shutdown sequence, resulting in massive unplanned flaring and local community complaints. Maintenance records showed 'weak signals' of vibration anomalies weeks prior.",
+      regulatoryNotice: "Warning letter from Environmental Agency regarding flaring volumes, with HSE investigating maintenance culture.",
+      clientDetails: "Shell - Onshore Refinery",
+      scenario: "Plant Operations & Maintenance Routine",
+      dateTime: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString()
     }
   }
 };
@@ -66,9 +84,15 @@ export async function POST(request: Request) {
         confidenceLevel: 75,
         rationale: "Based on generic industry patterns, this lead exhibits both data fragmentation and cultural challenges. Initial engagement should focus on the recommended product to establish a baseline.",
         incident: {
-          incidentType: "Recent High-Potential Near Miss (Unreported externally)",
+          id: `inc-rand-${Math.floor(Math.random() * 1000)}`,
+          incidentType: "Recent High-Potential Near Miss",
           consultantHired: "Local Specialized HSE Firm",
-          pitchApproach: "Lead with the Intelligence Hub. Show them how combining SENSE and BOOST can identify these high-potential events before they escalate, replacing fragmented local consulting."
+          pitchApproach: "Lead with the Intelligence Hub. Show them how combining SENSE and BOOST can identify these high-potential events before they escalate.",
+          incidentDescription: "An unreported high-potential near miss was extracted from scattered safety observation reports, indicating a failure in frontline reporting culture.",
+          regulatoryNotice: "Currently undetected by regulatory bodies, presenting an opportunity for proactive intervention.",
+          clientDetails: companyName || "Unknown Company",
+          scenario: "Frontline Operations",
+          dateTime: new Date().toISOString()
         }
       };
     }
