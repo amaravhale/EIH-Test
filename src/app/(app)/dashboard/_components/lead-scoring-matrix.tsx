@@ -1,27 +1,47 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
-import { Loader2, Search, Target, Zap, CheckCircle2, ShieldAlert, AlertTriangle, Briefcase, Lightbulb, Clock, Activity, Building2 } from "lucide-react";
+import { Loader2, Search, Target, Zap, CheckCircle2, ShieldAlert, AlertTriangle, Briefcase, Lightbulb, Clock, Activity, Building2, X } from "lucide-react";
 import { LeadScoreProfile, IncidentIntelligence } from "@/types/domain";
 
 export function LeadScoringMatrix() {
   const [companyName, setCompanyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState<LeadScoreProfile | null>(null);
+  const [liveIncidents, setLiveIncidents] = useState<IncidentIntelligence[]>([]);
 
-  const handleAnalyze = async () => {
-    if (!companyName.trim()) return;
+  useEffect(() => {
+    fetchLiveIncidents();
+  }, []);
+
+  const fetchLiveIncidents = async () => {
+    try {
+      const res = await fetch('/api/agent/live-incidents');
+      const data = await res.json();
+      if (data.incidents) {
+        setLiveIncidents(data.incidents);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleAnalyze = async (overrideCompanyName?: string) => {
+    const targetCompany = overrideCompanyName || companyName;
+    if (!targetCompany.trim()) return;
     
+    setCompanyName(targetCompany);
     setIsLoading(true);
+    setProfile(null); // Clear existing report before fetching
     try {
       const res = await fetch('/api/agent/lead-scoring', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ companyName }),
+        body: JSON.stringify({ companyName: targetCompany }),
       });
       const data = await res.json();
       if (data.profile) {
@@ -32,6 +52,11 @@ export function LeadScoringMatrix() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const clearReport = () => {
+    setProfile(null);
+    setCompanyName("");
   };
 
   return (
@@ -52,16 +77,25 @@ export function LeadScoringMatrix() {
               <input 
                 type="text"
                 placeholder="Enter company name to analyze (e.g. BP, Shell)..."
-                className="w-full pl-12 pr-4 py-4 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-lg shadow-sm transition-shadow"
+                className="w-full pl-12 pr-12 py-4 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-lg shadow-sm transition-shadow"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
               />
+              {companyName && (
+                <button 
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-600 rounded-full hover:bg-zinc-100 transition-colors"
+                  onClick={clearReport}
+                  title="Clear Search"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              )}
             </div>
             <Button 
               size="lg" 
               className="py-4 px-8 h-auto rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg shadow-md transition-all hover:shadow-lg w-full md:w-auto"
-              onClick={handleAnalyze}
+              onClick={() => handleAnalyze()}
               disabled={isLoading || !companyName.trim()}
             >
               {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Zap className="mr-2 h-5 w-5 fill-white" />}
@@ -75,13 +109,7 @@ export function LeadScoringMatrix() {
                 key={sample} 
                 variant="secondary" 
                 className="cursor-pointer hover:bg-zinc-200 transition-colors py-1 px-3 text-sm font-medium"
-                onClick={() => {
-                  setCompanyName(sample);
-                  setTimeout(() => {
-                    const btn = document.querySelector('button:not([disabled])') as HTMLButtonElement;
-                    if(btn && btn.textContent?.includes('Analyze')) btn.click();
-                  }, 100);
-                }}
+                onClick={() => handleAnalyze(sample)}
               >
                 {sample}
               </Badge>
@@ -101,11 +129,70 @@ export function LeadScoringMatrix() {
         </div>
       )}
 
+      {/* Live Incident Feed (Empty State) */}
+      {!profile && !isLoading && (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="flex items-center gap-3 border-b border-zinc-200 pb-4">
+            <Activity className="h-6 w-6 text-red-500 animate-pulse" />
+            <h3 className="text-2xl font-bold text-zinc-900 tracking-tight">Live Near-Miss Feed</h3>
+            <Badge variant="outline" className="ml-2 bg-red-50 text-red-700 border-red-200">Automatically Updating</Badge>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {liveIncidents.map((incident) => {
+              const hoursAgo = Math.floor((Date.now() - new Date(incident.dateTime).getTime()) / (1000 * 60 * 60));
+              const timeString = hoursAgo < 24 ? `${Math.max(1, hoursAgo)} hours ago` : `${Math.floor(hoursAgo / 24)} days ago`;
+              const baseCompany = incident.clientDetails.split('-')[0].trim();
+
+              return (
+                <Card key={incident.id} className="border-zinc-200 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden flex flex-col bg-white">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-orange-400"></div>
+                  <CardContent className="p-6 flex-1 flex flex-col">
+                    <div className="flex justify-between items-start mb-4 gap-4">
+                      <div>
+                        <h4 className="font-black text-zinc-900 text-xl flex items-center gap-2 tracking-tight">
+                          <Building2 className="h-5 w-5 text-zinc-400" />
+                          {baseCompany}
+                        </h4>
+                        <span className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">{timeString}</span>
+                      </div>
+                      <Badge className="bg-red-50 text-red-700 border-red-200 shadow-sm text-xs font-bold text-center leading-tight py-1">{incident.incidentType}</Badge>
+                    </div>
+                    <p className="text-zinc-600 mb-5 line-clamp-3 flex-1 text-[15px] leading-relaxed font-medium">
+                      {incident.incidentDescription}
+                    </p>
+                    <div className="bg-zinc-50 rounded-xl p-4 border border-zinc-100 mb-5 flex items-center gap-3">
+                       <Briefcase className="h-5 w-5 text-zinc-400 shrink-0" />
+                       <div>
+                         <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-black block mb-0.5">Incumbent Consultant</span>
+                         <span className="text-sm font-bold text-zinc-800">{incident.consultantHired}</span>
+                       </div>
+                    </div>
+                    <Button 
+                      className="w-full bg-white border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-600 hover:text-white font-bold shadow-sm transition-all text-sm py-5"
+                      onClick={() => handleAnalyze(baseCompany)}
+                    >
+                      <Zap className="h-4 w-4 mr-2" /> Analyse Client Details
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
+            
+            {liveIncidents.length === 0 && (
+              <div className="col-span-2 text-center py-12 text-zinc-500 font-medium">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-zinc-300" />
+                Listening for incoming intelligence signals...
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Comprehensive Analytical Report */}
       {profile && !isLoading && (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
           
-          {/* Header Dashboard */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm gap-4">
             <div className="flex items-center gap-4">
               <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100">
@@ -118,11 +205,22 @@ export function LeadScoringMatrix() {
                 <p className="text-zinc-500 font-semibold mt-1 uppercase tracking-wider text-sm">{profile.industry} &bull; Target Lead</p>
               </div>
             </div>
-            <div className="flex flex-col md:items-end bg-zinc-50 p-4 rounded-xl border border-zinc-100 w-full md:w-auto">
-              <span className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Empirisys Score</span>
-              <Badge className={`text-2xl py-1.5 px-6 shadow-sm border-2 ${profile.overallScore < 70 ? 'bg-orange-50 text-orange-800 border-orange-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'}`}>
-                {profile.overallScore} <span className="text-lg opacity-50 ml-1 font-medium">/ 100</span>
-              </Badge>
+            <div className="flex items-center gap-4 w-full md:w-auto">
+              <div className="flex flex-col items-end bg-zinc-50 p-4 rounded-xl border border-zinc-100 flex-1 md:flex-none">
+                <span className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Empirisys Score</span>
+                <Badge className={`text-2xl py-1.5 px-6 shadow-sm border-2 ${profile.overallScore < 70 ? 'bg-orange-50 text-orange-800 border-orange-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'}`}>
+                  {profile.overallScore} <span className="text-lg opacity-50 ml-1 font-medium">/ 100</span>
+                </Badge>
+              </div>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-full px-4 rounded-xl border-zinc-200 text-zinc-400 hover:text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors"
+                onClick={clearReport}
+                title="Close Report & Return to Feed"
+              >
+                <X className="h-6 w-6" />
+              </Button>
             </div>
           </div>
           
