@@ -61,6 +61,16 @@ export interface CompetitorComparison {
   signal_count: number;
 }
 
+export interface LeadScoreProfile {
+  companyName: string;
+  industry: string;
+  overallScore: number;
+  keyRiskFactors: string[];
+  recommendedProduct: "BOOST" | "SENSE" | "Both" | "None";
+  confidenceLevel: number;
+  rationale: string;
+}
+
 // ─── Signal ──────────────────────────────────────────────────────────
 
 export type Signal = Tables<"signals"> & {
