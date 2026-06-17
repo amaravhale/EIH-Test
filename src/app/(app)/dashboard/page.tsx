@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, RefreshCw, CheckCircle2, XCircle, ArrowUpRight, ArrowRight, FileText, Activity, Shield, Zap } from "lucide-react";
+import { Loader2, RefreshCw, CheckCircle2, XCircle, ArrowUpRight, ArrowRight, FileText, Activity, Shield, Zap, Target } from "lucide-react";
 import { LeadScoringMatrix } from "./_components/lead-scoring-matrix";
 
 export default function DashboardPage() {
@@ -56,9 +56,21 @@ export default function DashboardPage() {
       </div>
 
       <Tabs defaultValue="market" className="w-full">
-        <TabsList className="mb-6 grid w-full max-w-[500px] grid-cols-2">
-          <TabsTrigger value="market" className="data-[state=active]:bg-teal data-[state=active]:text-white">Market Intelligence</TabsTrigger>
-          <TabsTrigger value="lead-scoring" className="data-[state=active]:bg-teal data-[state=active]:text-white">Client Acquisition Intelligence</TabsTrigger>
+        <TabsList className="mb-8 flex w-full max-w-2xl bg-zinc-100/70 p-1.5 rounded-2xl border border-zinc-200/60 shadow-inner h-auto">
+          <TabsTrigger 
+            value="market" 
+            className="flex-1 rounded-xl py-3 text-sm font-semibold text-zinc-500 transition-all data-[state=active]:bg-white data-[state=active]:text-teal-700 data-[state=active]:shadow-sm hover:text-teal-600"
+          >
+            <Activity className="h-4 w-4 mr-2 inline-block" />
+            Market Intelligence
+          </TabsTrigger>
+          <TabsTrigger 
+            value="lead-scoring" 
+            className="flex-1 rounded-xl py-3 text-sm font-semibold text-zinc-500 transition-all data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm hover:text-emerald-600"
+          >
+            <Target className="h-4 w-4 mr-2 inline-block" />
+            Client Acquisition Intelligence
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="market" className="space-y-6 animate-in fade-in-50 duration-500">

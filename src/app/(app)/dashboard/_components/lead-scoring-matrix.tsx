@@ -1,60 +1,27 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
-import { Loader2, Search, Target, Zap, CheckCircle2, ShieldAlert, AlertTriangle, Briefcase, Lightbulb, Clock, Activity } from "lucide-react";
+import { Loader2, Search, Target, Zap, CheckCircle2, ShieldAlert, AlertTriangle, Briefcase, Lightbulb, Clock, Activity, Building2 } from "lucide-react";
 import { LeadScoreProfile, IncidentIntelligence } from "@/types/domain";
 
-function formatTimeAgo(dateString: string) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-  if (diffHours < 1) return "Just now";
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-  return `${Math.floor(diffHours / 24)} day${Math.floor(diffHours / 24) > 1 ? 's' : ''} ago`;
-}
-
 export function LeadScoringMatrix() {
-  const [query, setQuery] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState<LeadScoreProfile | null>(null);
-  
-  const [liveIncidents, setLiveIncidents] = useState<IncidentIntelligence[]>([]);
-  const [isFeedLoading, setIsFeedLoading] = useState(true);
 
-  // Fetch Live Incidents automatically on mount
-  useEffect(() => {
-    const fetchIncidents = async () => {
-      try {
-        const res = await fetch("/api/agent/live-incidents");
-        const data = await res.json();
-        if (data.incidents) {
-          setLiveIncidents(data.incidents);
-        }
-      } catch (e) {
-        console.error("Failed to fetch live incidents", e);
-      } finally {
-        setIsFeedLoading(false);
-      }
-    };
-    fetchIncidents();
-  }, []);
-
-  const analyzeLead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-
+  const handleAnalyze = async () => {
+    if (!companyName.trim()) return;
+    
     setIsLoading(true);
-    setProfile(null);
     try {
-      const res = await fetch("/api/agent/lead-scoring", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ companyName: query }),
+      const res = await fetch('/api/agent/lead-scoring', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ companyName }),
       });
       const data = await res.json();
       if (data.profile) {
@@ -67,315 +34,237 @@ export function LeadScoringMatrix() {
     }
   };
 
-  const sampleLeads = ["BP", "Shell", "Balfour Beatty"];
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-      
-      {/* LEFT COLUMN: Live Incident Feed */}
-      <div className="lg:col-span-1 space-y-4 sticky top-6">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-zinc-900 flex items-center gap-2">
-            <Activity className="h-5 w-5 text-red-500 animate-pulse" />
-            Live Near-Miss Feed
-          </h3>
-          <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
-            Real-Time
-          </Badge>
+    <div className="space-y-8 pb-10">
+      {/* Search Engine */}
+      <Card className="border-0 shadow-lg bg-white overflow-hidden ring-1 ring-zinc-200">
+        <div className="bg-gradient-to-r from-emerald-900 to-teal-800 p-8 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+            <Target className="w-32 h-32" />
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-2 relative z-10">Client Acquisition Intelligence</h3>
+          <p className="text-emerald-100 max-w-2xl mx-auto relative z-10">Enter a target client to instantly aggregate HSE records, uncover near-miss incidents, and generate a customized Empirisys pitch strategy.</p>
         </div>
-        
-        <Card className="border-border shadow-sm overflow-hidden bg-zinc-50/50">
-          {isFeedLoading ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-3">
-              <Loader2 className="h-6 w-6 animate-spin text-zinc-400" />
-              <span className="text-sm text-zinc-500">Scanning global HSE sources...</span>
+        <CardContent className="p-8">
+          <div className="flex flex-col md:flex-row gap-3 max-w-3xl mx-auto">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
+              <input 
+                type="text"
+                placeholder="Enter company name to analyze (e.g. BP, Shell)..."
+                className="w-full pl-12 pr-4 py-4 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-lg shadow-sm transition-shadow"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
+              />
             </div>
-          ) : (
-            <ScrollArea className="h-[600px] w-full">
-              <div className="p-4 space-y-4">
-                {liveIncidents.map((incident) => (
-                  <Dialog key={incident.id}>
-                    <DialogTrigger asChild>
-                      <Card className="cursor-pointer hover:border-red-300 hover:shadow-md transition-all group border-l-4 border-l-red-400">
-                        <CardContent className="p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <span className="text-xs font-bold text-zinc-500 flex items-center gap-1">
-                              <Clock className="h-3 w-3" /> {formatTimeAgo(incident.dateTime)}
-                            </span>
-                            <Badge variant="secondary" className="text-[10px] bg-zinc-100 text-zinc-600">
-                              {incident.consultantHired.split(' ')[0]}
-                            </Badge>
-                          </div>
-                          <h4 className="text-sm font-bold text-zinc-900 leading-snug group-hover:text-red-700 transition-colors">
-                            {incident.incidentType}
-                          </h4>
-                          <p className="text-xs text-zinc-600 mt-2 font-medium">
-                            {incident.clientDetails}
-                          </p>
-                          <div className="mt-3 bg-teal-50 text-teal-800 text-xs p-2 rounded border border-teal-100 line-clamp-2">
-                            <span className="font-bold">Pitch:</span> {incident.pitchApproach}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </DialogTrigger>
+            <Button 
+              size="lg" 
+              className="py-4 px-8 h-auto rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg shadow-md transition-all hover:shadow-lg w-full md:w-auto"
+              onClick={handleAnalyze}
+              disabled={isLoading || !companyName.trim()}
+            >
+              {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Zap className="mr-2 h-5 w-5 fill-white" />}
+              Analyze Client
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center justify-center mt-6 gap-3 text-sm text-zinc-500">
+            <span className="font-semibold uppercase tracking-wider text-xs">Try Samples:</span>
+            {["BP", "Shell", "Balfour Beatty"].map((sample) => (
+              <Badge 
+                key={sample} 
+                variant="secondary" 
+                className="cursor-pointer hover:bg-zinc-200 transition-colors py-1 px-3 text-sm font-medium"
+                onClick={() => {
+                  setCompanyName(sample);
+                  setTimeout(() => {
+                    const btn = document.querySelector('button:not([disabled])') as HTMLButtonElement;
+                    if(btn && btn.textContent?.includes('Analyze')) btn.click();
+                  }, 100);
+                }}
+              >
+                {sample}
+              </Badge>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Loading Skeleton */}
+      {isLoading && (
+        <div className="animate-pulse space-y-6">
+          <div className="h-24 bg-zinc-100 rounded-2xl w-full"></div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="h-[500px] bg-zinc-100 rounded-2xl w-full lg:col-span-2"></div>
+            <div className="h-[500px] bg-zinc-100 rounded-2xl w-full"></div>
+          </div>
+        </div>
+      )}
+
+      {/* Comprehensive Analytical Report */}
+      {profile && !isLoading && (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          
+          {/* Header Dashboard */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100">
+                <Building2 className="h-8 w-8 text-zinc-600" />
+              </div>
+              <div>
+                <h3 className="text-3xl font-black text-zinc-900 tracking-tight leading-tight">
+                  {profile.companyName}
+                </h3>
+                <p className="text-zinc-500 font-semibold mt-1 uppercase tracking-wider text-sm">{profile.industry} &bull; Target Lead</p>
+              </div>
+            </div>
+            <div className="flex flex-col md:items-end bg-zinc-50 p-4 rounded-xl border border-zinc-100 w-full md:w-auto">
+              <span className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Empirisys Score</span>
+              <Badge className={`text-2xl py-1.5 px-6 shadow-sm border-2 ${profile.overallScore < 70 ? 'bg-orange-50 text-orange-800 border-orange-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'}`}>
+                {profile.overallScore} <span className="text-lg opacity-50 ml-1 font-medium">/ 100</span>
+              </Badge>
+            </div>
+          </div>
+          
+          {/* Detailed Layout Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            {/* Column 1: Incident Dossier (Takes up 2 columns on lg) */}
+            <div className="lg:col-span-2 space-y-6">
+              
+              {profile.incident && (
+                <Card className="border-zinc-200 shadow-md overflow-hidden bg-white relative">
+                  <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+                    <ShieldAlert className="h-64 w-64 text-zinc-900" />
+                  </div>
+                  <div className="bg-red-50/50 border-b border-red-100 p-5 md:p-6 flex items-center gap-4">
+                    <div className="p-3 bg-red-100 rounded-xl shadow-sm">
+                      <AlertTriangle className="h-6 w-6 text-red-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-black text-red-950 tracking-tight">Critical Incident Intelligence</h4>
+                      <p className="text-sm text-red-700 font-medium mt-0.5">Classified Near-Miss Reconnaissance</p>
+                    </div>
+                  </div>
+                  <CardContent className="p-6 md:p-8 space-y-8 relative z-10">
                     
-                    {/* Detailed Pop-up Modal */}
-                    <DialogContent className="max-w-2xl">
-                      <DialogHeader>
-                        <div className="flex items-center gap-2 text-red-600 mb-2">
-                          <AlertTriangle className="h-5 w-5" />
-                          <span className="font-bold uppercase tracking-wider text-sm">HSE Intelligence Alert</span>
-                        </div>
-                        <DialogTitle className="text-2xl">{incident.incidentType}</DialogTitle>
-                        <DialogDescription className="text-base text-zinc-800 font-medium">
-                          {incident.clientDetails} &bull; {incident.scenario}
-                        </DialogDescription>
-                      </DialogHeader>
-                      
-                      <div className="space-y-6 py-4">
-                        <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
-                          <h5 className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Incident Description</h5>
-                          <p className="text-sm text-zinc-700 leading-relaxed">{incident.incidentDescription}</p>
+                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                      <div className="flex-1 space-y-6 w-full">
+                        <div>
+                          <h5 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Official Designation</h5>
+                          <p className="text-2xl font-bold text-zinc-900 leading-snug">{profile.incident.incidentType}</p>
                         </div>
                         
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
-                            <h5 className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2">Regulatory Notice</h5>
-                            <p className="text-sm text-amber-900 font-medium">{incident.regulatoryNotice}</p>
-                          </div>
-                          <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
-                            <h5 className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Incumbent Consultant</h5>
-                            <p className="text-sm text-zinc-800 font-bold flex items-center gap-2">
-                              <Briefcase className="h-4 w-4 text-zinc-400" /> {incident.consultantHired}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="bg-teal-50 border border-teal-200 p-5 rounded-lg shadow-sm">
-                          <h5 className="text-xs font-bold text-teal-800 uppercase tracking-wider mb-3 flex items-center gap-2">
-                            <Lightbulb className="h-4 w-4" /> Empirisys Pitch Strategy
-                          </h5>
-                          <p className="text-sm text-teal-900 leading-relaxed font-medium">
-                            {incident.pitchApproach}
-                          </p>
+                        <div className="bg-red-50/30 p-5 md:p-6 rounded-2xl border border-red-100">
+                          <h5 className="text-xs font-bold text-red-400 uppercase tracking-widest mb-3">Detailed Narrative</h5>
+                          <p className="text-zinc-800 leading-relaxed font-medium text-[15px]">{profile.incident.incidentDescription}</p>
                         </div>
                       </div>
-                    </DialogContent>
-                  </Dialog>
-                ))}
-              </div>
-            </ScrollArea>
-          )}
-        </Card>
-      </div>
 
-      {/* RIGHT COLUMN: Search Engine & HSE Profile */}
-      <div className="lg:col-span-2 space-y-6">
-        <Card className="border-border shadow-sm relative z-10">
-          <CardContent className="p-6">
-            <form onSubmit={analyzeLead} className="flex flex-col md:flex-row gap-4 items-center">
-              <div className="relative flex-1 w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Enter company name to analyze (e.g. BP, Shell)..."
-                  className="w-full pl-10 pr-4 py-3 bg-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal/20 transition-all text-sm"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-              </div>
-              <Button type="submit" disabled={isLoading || !query} className="bg-teal hover:bg-teal-bright text-white min-w-[150px] py-6">
-                {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Zap className="mr-2 h-5 w-5" />}
-                Analyze Lead
-              </Button>
-            </form>
-            
-            <div className="mt-4 flex items-center gap-2">
-              <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Try Samples:</span>
-              {sampleLeads.map(lead => (
-                <Badge 
-                  key={lead} 
-                  variant="outline" 
-                  className="cursor-pointer hover:bg-base text-xs transition-colors"
-                  onClick={() => { setQuery(lead); setProfile(null); }}
-                >
-                  {lead}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Dynamic Incident Notification for specific searched profile */}
-        {profile?.incident && !isLoading && (
-          <div className="animate-in slide-in-from-top-4 fade-in duration-500">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Card className="border-red-200 shadow-md bg-white overflow-hidden relative cursor-pointer hover:border-red-300 transition-colors group">
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-red-500"></div>
-                  <CardContent className="p-0">
-                    <div className="flex flex-col md:flex-row">
-                      <div className="bg-red-50 p-4 md:w-1/3 border-r border-red-100 flex flex-col justify-center">
-                        <div className="flex items-center gap-2 mb-2 text-red-700 font-bold text-sm uppercase tracking-wider">
-                          <AlertTriangle className="h-4 w-4" /> Detected Near-Miss
+                      <div className="w-full lg:w-72 space-y-4 shrink-0">
+                        <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-200 shadow-sm">
+                          <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest block mb-2">Time of Event</span>
+                          <div className="flex items-center text-sm font-semibold text-zinc-800 bg-white p-3 rounded-lg border border-zinc-200 shadow-sm">
+                            <Clock className="h-4 w-4 mr-3 text-zinc-400" />
+                            {new Date(profile.incident.dateTime).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+                          </div>
                         </div>
-                        <p className="text-red-900 font-medium text-sm leading-snug group-hover:underline">
-                          {profile.incident.incidentType}
-                        </p>
-                        <p className="text-xs text-red-700 mt-2 font-semibold">Click for details & pitch</p>
+                        <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-200 shadow-sm">
+                          <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest block mb-2">Operating Scenario</span>
+                          <div className="flex items-center text-sm font-semibold text-zinc-800 bg-white p-3 rounded-lg border border-zinc-200 shadow-sm">
+                            <Activity className="h-4 w-4 mr-3 text-zinc-400 shrink-0" />
+                            <span className="line-clamp-2">{profile.incident.scenario}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="p-4 md:w-2/3 flex flex-col md:flex-row gap-4 items-center">
-                        <div className="flex-1 bg-zinc-50 rounded-md p-3 border border-zinc-100 w-full">
-                          <div className="flex items-center gap-2 mb-1 text-zinc-500 text-xs font-semibold uppercase tracking-wider">
-                            <Briefcase className="h-3.5 w-3.5" /> Incumbent Consultant
-                          </div>
-                          <p className="text-zinc-800 text-sm font-medium">{profile.incident.consultantHired}</p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-orange-50 to-white border border-orange-100 rounded-2xl p-6 shadow-sm relative overflow-hidden">
+                      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-400"></div>
+                      <div className="flex items-start gap-4">
+                        <div className="p-2 bg-orange-100 rounded-lg shrink-0">
+                          <ShieldAlert className="h-6 w-6 text-orange-600" />
                         </div>
-                        <div className="flex-1 bg-teal-50/50 rounded-md p-3 border border-teal-100 w-full">
-                          <div className="flex items-center gap-2 mb-1 text-teal-700 text-xs font-semibold uppercase tracking-wider">
-                            <Lightbulb className="h-3.5 w-3.5" /> Empirisys Pitch
-                          </div>
-                          <p className="text-teal-900 text-sm font-medium line-clamp-2">{profile.incident.pitchApproach}</p>
+                        <div>
+                          <h5 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-2">Regulatory & Enforcement Action</h5>
+                          <p className="text-zinc-800 font-semibold text-[15px] leading-snug">{profile.incident.regulatoryNotice}</p>
                         </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <div className="flex items-center gap-2 text-red-600 mb-2">
-                    <AlertTriangle className="h-5 w-5" />
-                    <span className="font-bold uppercase tracking-wider text-sm">Target Intelligence Alert</span>
-                  </div>
-                  <DialogTitle className="text-2xl">{profile.incident.incidentType}</DialogTitle>
-                  <DialogDescription className="text-base text-zinc-800 font-medium">
-                    {profile.incident.clientDetails} &bull; {profile.incident.scenario}
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-6 py-4">
-                  <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
-                    <h5 className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Incident Description</h5>
-                    <p className="text-sm text-zinc-700 leading-relaxed">{profile.incident.incidentDescription}</p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
-                      <h5 className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2">Regulatory Notice</h5>
-                      <p className="text-sm text-amber-900 font-medium">{profile.incident.regulatoryNotice}</p>
+              )}
+
+            </div>
+
+            {/* Column 2: Empirisys Strategy Board */}
+            <div className="space-y-6">
+              
+              <Card className="border-emerald-100 shadow-lg bg-gradient-to-b from-emerald-50/80 to-white overflow-hidden ring-1 ring-emerald-200/50">
+                <CardHeader className="pb-5 border-b border-emerald-100/50 bg-white/50 backdrop-blur-sm p-6">
+                  <CardTitle className="text-emerald-950 flex items-center gap-3 text-xl font-black tracking-tight">
+                    <Target className="h-6 w-6 text-emerald-600" />
+                    Empirisys Strategy
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 space-y-8">
+                  
+                  {/* Recommended Product */}
+                  <div className="bg-white border border-emerald-200 rounded-2xl p-6 shadow-md relative overflow-hidden">
+                    <div className="absolute -right-4 -bottom-4 opacity-[0.04]">
+                      <Zap className="h-32 w-32" />
                     </div>
-                    <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
-                      <h5 className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Incumbent Consultant</h5>
-                      <p className="text-sm text-zinc-800 font-bold flex items-center gap-2">
-                        <Briefcase className="h-4 w-4 text-zinc-400" /> {profile.incident.consultantHired}
+                    <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">Target Solution fit</span>
+                    <div className="text-4xl font-black text-emerald-800 mt-2 tracking-tight">{profile.recommendedProduct}</div>
+                    <p className="text-sm text-zinc-600 mt-4 leading-relaxed font-medium">{profile.rationale}</p>
+                  </div>
+
+                  {/* Competitor Intel */}
+                  <div className="space-y-3">
+                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                      <Briefcase className="h-4 w-4" /> Incumbent Consultant
+                    </span>
+                    <div className="bg-zinc-50 px-5 py-4 rounded-xl border border-zinc-200 shadow-sm">
+                      <p className="font-bold text-zinc-800 text-lg">{profile.incident?.consultantHired || "Unknown"}</p>
+                    </div>
+                  </div>
+
+                  {/* The Pitch */}
+                  <div className="space-y-3">
+                    <span className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
+                      <Lightbulb className="h-4 w-4" /> Recommended Pitch Angle
+                    </span>
+                    <div className="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-inner">
+                      <p className="text-[15px] text-amber-950 font-bold leading-relaxed">
+                        "{profile.incident?.pitchApproach}"
                       </p>
                     </div>
                   </div>
-                  <div className="bg-teal-50 border border-teal-200 p-5 rounded-lg shadow-sm">
-                    <h5 className="text-xs font-bold text-teal-800 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <Lightbulb className="h-4 w-4" /> Empirisys Pitch Strategy
-                    </h5>
-                    <p className="text-sm text-teal-900 leading-relaxed font-medium">
-                      {profile.incident.pitchApproach}
-                    </p>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
-        )}
 
-        {/* Results Section */}
-        {isLoading ? (
-          <Card className="border-dashed border-2 bg-base/50">
-            <CardContent className="flex flex-col items-center justify-center py-20 gap-4">
-              <div className="w-12 h-12 rounded-full bg-teal/10 flex items-center justify-center">
-                <Loader2 className="h-6 w-6 animate-spin text-teal" />
-              </div>
-              <div className="text-center">
-                <h3 className="text-lg font-bold text-text-primary">Generating HSE Profile...</h3>
-                <p className="text-sm text-text-muted mt-1">Cross-referencing safety records, market signals, and industry trends.</p>
-              </div>
-            </CardContent>
-          </Card>
-        ) : profile ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in duration-700 delay-150">
-            {/* Main Score Card */}
-            <Card className="md:col-span-1 shadow-md border-teal/20 overflow-hidden relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal to-teal-bright"></div>
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <Badge variant="secondary" className="mb-2 bg-teal-light text-teal">{profile.industry}</Badge>
-                    <CardTitle className="text-2xl font-bold">{profile.companyName}</CardTitle>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="mt-4 flex flex-col items-center justify-center p-6 bg-base rounded-xl border border-border">
-                  <div className="text-5xl font-black text-text-primary mb-2">
-                    {profile.overallScore}
-                    <span className="text-2xl text-text-muted">/100</span>
-                  </div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-text-muted">Target Score</div>
-                  
-                  <div className="w-full mt-6 space-y-2">
-                    <div className="flex justify-between text-xs font-medium">
-                      <span className="text-text-secondary">AI Confidence</span>
-                      <span className="text-teal">{profile.confidenceLevel}%</span>
-                    </div>
-                    <div className="w-full bg-border h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-teal h-full rounded-full" style={{ width: `${profile.confidenceLevel}%` }}></div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            {/* Analysis & Recommendation */}
-            <Card className="md:col-span-2 shadow-sm border-border">
-              <CardHeader className="border-b border-border bg-base/30 pb-4">
-                <div className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-primary" />
-                  <CardTitle className="text-lg">Strategic Recommendation</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-6 space-y-6">
-                
-                {/* Product Match */}
-                <div>
-                  <h4 className="text-sm font-bold text-text-primary uppercase tracking-wide mb-3 flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Recommended Product Fit
-                  </h4>
-                  <div className="flex items-center gap-3 p-4 rounded-lg bg-emerald-50/50 border border-emerald-100">
-                    <Badge className="bg-emerald-500 text-white text-sm px-3 py-1">
-                      {profile.recommendedProduct}
-                    </Badge>
-                    <p className="text-sm text-text-secondary">
-                      {profile.rationale}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Identified Risks */}
-                <div>
-                  <h4 className="text-sm font-bold text-text-primary uppercase tracking-wide mb-3 flex items-center gap-2">
-                    <ShieldAlert className="h-4 w-4 text-amber-500" /> Key Safety & Cultural Blind Spots
-                  </h4>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {profile.keyRiskFactors.map((risk, idx) => (
-                      <li key={idx} className="flex items-start gap-2 bg-base p-3 rounded-md border border-border">
-                        <div className="mt-0.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></div>
-                        <span className="text-sm text-text-secondary leading-snug">{risk}</span>
+              {/* Risk Factors List */}
+              <Card className="shadow-md border-zinc-200 bg-white overflow-hidden">
+                <CardHeader className="pb-4 border-b border-zinc-100 bg-zinc-50/50 p-6">
+                  <CardTitle className="text-sm font-bold text-zinc-800 uppercase tracking-widest">Identified Risk Factors</CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <ul className="space-y-4">
+                    {profile.keyRiskFactors.map((factor, i) => (
+                      <li key={i} className="flex items-start gap-3 text-[15px] text-zinc-700 font-semibold leading-snug">
+                        <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
+                        <span>{factor}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
+                </CardContent>
+              </Card>
 
-              </CardContent>
-            </Card>
+            </div>
           </div>
-        ) : null}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
