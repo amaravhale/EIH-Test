@@ -47,13 +47,10 @@ export function SynexisSidebar({
     <aside className="flex flex-col w-64 h-full bg-white dark:bg-[#1A1525] text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200 dark:border-white/5 transition-colors duration-300">
       
       {/* Brand Logo Area */}
-      <div className="flex items-center gap-3 px-2 mb-10">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-blue-600 text-white font-black text-xl shadow-[0_4px_14px_rgba(37,99,235,0.4)]">
-          E
-        </div>
-        <div className="flex flex-col">
-          <span className="text-[20px] font-bold tracking-tight leading-none text-zinc-900 dark:text-white">Empirisys</span>
-          <span className="text-[9px] font-bold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mt-0.5">Intelligence</span>
+      <div className="flex items-center px-2 mb-10">
+        <div className="relative flex flex-col items-center text-[#0F292E] dark:text-white">
+          <span className="absolute -top-3 left-[50%] -translate-x-1/2 text-[26px] font-bold">∞</span>
+          <span className="text-[32px] font-bold tracking-tighter lowercase mt-2">empirisys</span>
         </div>
       </div>
 
