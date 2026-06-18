@@ -37,6 +37,7 @@ Each object must perfectly match this interface:
   };
   status: 'pending_validation' | 'approved';
   deltaStatus: 'new' | 'intensified' | 'faded' | 'stable';
+  timestamp: string; (Realistic ISO 8601 string representing when this theme was aggregated, e.g. some 30 mins ago, some 12 hours ago, some 3 days ago)
 }`
         },
         {

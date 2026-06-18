@@ -38,4 +38,5 @@ export interface AggregatedTheme {
   interpretation: StrategicInterpretation;
   status: 'pending_validation' | 'approved' | 'rejected';
   deltaStatus: 'new' | 'intensified' | 'faded' | 'stable';
+  timestamp: string;
 }

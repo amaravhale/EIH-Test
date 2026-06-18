@@ -43,11 +43,11 @@ Output strictly in JSON format matching this exact interface:
     incidentType: string;
     consultantHired: string; (e.g. McKinsey, ERM, dss+, or unknown)
     pitchApproach: string; (How to disrupt the incumbent consultant using Empirisys tools)
-    incidentDescription: string; (A highly realistic hypothetical or historical near-miss event at this company)
+    incidentDescription: string; (A HIGHLY AUTHENTIC narrative of a REAL, RECENT incident or regulatory issue this company faced based on real news/web data)
     regulatoryNotice: string;
     clientDetails: string;
     scenario: string;
-    dateTime: string; (ISO string)
+    dateTime: string; (A realistic ISO string reflecting when this real event occurred)
   }
 }`
         },

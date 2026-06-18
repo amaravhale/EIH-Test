@@ -8,6 +8,7 @@ export default function DashboardPage() {
   const [themes, setThemes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"market" | "cai">("market");
+  const [activeTimeframe, setActiveTimeframe] = useState<"1H" | "24H" | "7D" | "ALL">("ALL");
   
   // Live counters
   const [processedSignals, setProcessedSignals] = useState(12845392);
@@ -49,7 +50,22 @@ export default function DashboardPage() {
   };
 
   const pendingThemes = themes.filter(t => t.status === 'pending_validation');
-  const approvedThemes = themes.filter(t => t.status === 'approved');
+  
+  // Filter based on activeTimeframe
+  const now = Date.now();
+  const approvedThemes = themes.filter(t => {
+    if (t.status !== 'approved') return false;
+    if (activeTimeframe === 'ALL') return true;
+    
+    const themeTime = new Date(t.timestamp || now).getTime();
+    const hoursDiff = (now - themeTime) / (1000 * 60 * 60);
+    
+    if (activeTimeframe === '1H') return hoursDiff <= 1;
+    if (activeTimeframe === '24H') return hoursDiff <= 24;
+    if (activeTimeframe === '7D') return hoursDiff <= 24 * 7;
+    return true;
+  });
+  
   const topActions = approvedThemes.slice(0, 3);
 
   return (
@@ -166,9 +182,22 @@ export default function DashboardPage() {
                   <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-1">Validated intelligence patterns and trends</p>
                 </div>
                   <div className="flex gap-2">
-                    <button className="px-3 py-1 rounded-md text-[11px] font-bold bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400">1H</button>
-                    <button className="px-3 py-1 rounded-md text-[11px] font-bold bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400">24H</button>
-                    <button className="px-3 py-1 rounded-md text-[11px] font-bold bg-zinc-900 text-white dark:bg-white dark:text-zinc-900">7D</button>
+                    <button 
+                      onClick={() => setActiveTimeframe("1H")}
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '1H' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400'}`}
+                    >1H</button>
+                    <button 
+                      onClick={() => setActiveTimeframe("24H")}
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '24H' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400'}`}
+                    >24H</button>
+                    <button 
+                      onClick={() => setActiveTimeframe("7D")}
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '7D' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400'}`}
+                    >7D</button>
+                    <button 
+                      onClick={() => setActiveTimeframe("ALL")}
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === 'ALL' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400'}`}
+                    >ALL</button>
                   </div>
                 </div>
 
@@ -236,7 +265,16 @@ export default function DashboardPage() {
                         <div>
                           <div className="flex justify-between items-start mb-1">
                             <h5 className="text-[13px] font-bold text-zinc-900 dark:text-zinc-100 leading-tight pr-4">{theme.title}</h5>
-                            <span className="text-[10px] text-zinc-500 shrink-0">Just now</span>
+                            <span className="text-[10px] text-zinc-500 shrink-0">
+                              {theme.timestamp ? (
+                                (() => {
+                                  const hoursDiff = (Date.now() - new Date(theme.timestamp).getTime()) / (1000 * 60 * 60);
+                                  if (hoursDiff < 1) return '< 1h ago';
+                                  if (hoursDiff < 24) return `${Math.floor(hoursDiff)}h ago`;
+                                  return `${Math.floor(hoursDiff / 24)}d ago`;
+                                })()
+                              ) : 'Just now'}
+                            </span>
                           </div>
                           <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-2">{theme.description}</p>
                           <div className="flex gap-2">

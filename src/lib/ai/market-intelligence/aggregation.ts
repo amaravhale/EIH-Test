@@ -23,7 +23,8 @@ export class ThemeAggregator {
           suggestedAction: ''
         },
         status: 'pending_validation',
-        deltaStatus: 'new'
+        deltaStatus: 'new',
+        timestamp: new Date().toISOString()
       }
     ];
   }
