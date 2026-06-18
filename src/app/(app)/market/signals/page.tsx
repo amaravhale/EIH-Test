@@ -5,7 +5,7 @@ import { SignalCard } from "@/components/domain/signal-card";
 import { FilterBar } from "@/components/data/filter-bar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
-import { Download, RefreshCw, Radio } from "lucide-react";
+import { RefreshCw, Radio } from "lucide-react";
 import { IntelligenceSignal } from "@/app/api/agent/signals/route";
 
 export default function SignalsFeedPage() {
@@ -62,18 +62,6 @@ export default function SignalsFeedPage() {
     setFilteredSignals(result);
   }, [signals, activeCategory, activeStatus, activeScore, searchQuery]);
 
-  const handleExport = () => {
-    const dataStr = JSON.stringify(filteredSignals, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `neural-signals-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -96,9 +84,6 @@ export default function SignalsFeedPage() {
         </div>
         
         <div className="flex gap-3">
-          <Button variant="outline" className="bg-white dark:bg-[#1A1525] border-zinc-200 dark:border-white/10 hover:bg-zinc-50 dark:hover:bg-white/5" onClick={handleExport}>
-            <Download className="mr-2 h-4 w-4" /> Export JSON
-          </Button>
           <Button 
             onClick={fetchSignals} 
             disabled={isLoading}
