@@ -170,27 +170,6 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Bottom Banner */}
-              <div className="bg-gradient-to-r from-[#1A1525] to-[#2A233D] dark:from-[#110D17] dark:to-[#1C1628] rounded-[24px] p-6 shadow-xl flex items-center justify-between border border-violet-500/20">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-full bg-violet-500/20 text-cyan-400">
-                    <Zap className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-bold text-[16px]">Instant Model Launch</h4>
-                    <p className="text-zinc-400 text-[12px]">Initialize a pre-trained market instance in 4.2 seconds</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                   <div className="flex gap-2">
-                      <span className="h-8 w-8 rounded-full border border-white/20 flex items-center justify-center text-[10px] text-white font-bold">5s</span>
-                      <span className="h-8 w-8 rounded-full border border-white/20 flex items-center justify-center text-[10px] text-white font-bold">GPT</span>
-                   </div>
-                   <button className="px-6 py-2.5 bg-gradient-to-r from-cyan-400 to-violet-500 text-white font-bold text-[13px] rounded-full shadow-[0_0_15px_rgba(139,92,246,0.5)]">
-                     Launch Dashboard
-                   </button>
-                </div>
-              </div>
 
             </div>
 
@@ -231,18 +210,6 @@ export default function DashboardPage() {
                       </div>
                     ))
                   )}
-                </div>
-
-                {/* Synexis Glowing Orb Widget */}
-                <div className="mt-6 flex flex-col items-center justify-center pt-6 border-t border-zinc-100 dark:border-white/5 relative z-10">
-                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 p-1 shadow-[0_0_30px_rgba(139,92,246,0.6)] mb-6 animate-pulse">
-                     <div className="w-full h-full rounded-full border-2 border-white/50 flex items-center justify-center">
-                       <Sparkles className="h-6 w-6 text-white" />
-                     </div>
-                   </div>
-                   <button className="w-full py-3 rounded-xl border border-zinc-200 dark:border-white/10 text-[11px] font-bold tracking-widest text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors uppercase">
-                     View System Logs
-                   </button>
                 </div>
               </div>
             </div>

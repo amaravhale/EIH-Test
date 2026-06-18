@@ -48,8 +48,8 @@ export function SynexisSidebar({
       
       {/* Brand Logo Area */}
       <div className="flex items-center gap-3 px-2 mb-10">
-        <div className="flex items-center justify-center h-10 w-10 rounded-[14px] bg-gradient-to-br from-violet-500 to-cyan-400 text-white font-bold text-lg shadow-[0_4px_14px_rgba(139,92,246,0.4)]">
-          <Sparkles className="h-5 w-5 text-white" />
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-blue-600 text-white font-black text-xl shadow-[0_4px_14px_rgba(37,99,235,0.4)]">
+          E
         </div>
         <div className="flex flex-col">
           <span className="text-[20px] font-bold tracking-tight leading-none text-zinc-900 dark:text-white">Empirisys</span>
@@ -86,10 +86,6 @@ export function SynexisSidebar({
 
       {/* Action Button */}
       <div className="mt-6 mb-8 px-2">
-        <button className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-violet-500 to-cyan-400 text-white rounded-2xl text-[15px] font-bold shadow-[0_4px_20px_rgba(139,92,246,0.4)] hover:shadow-[0_6px_25px_rgba(139,92,246,0.6)] transition-all transform hover:-translate-y-0.5">
-          <PlusCircle className="h-5 w-5" />
-          New Project
-        </button>
       </div>
 
       {/* Bottom Navigation */}
@@ -111,24 +107,6 @@ export function SynexisSidebar({
 
       {/* Upgrade Card */}
       <div className="px-1">
-        <div className="relative rounded-[24px] p-5 overflow-hidden bg-gradient-to-br from-violet-500/10 to-cyan-400/10 dark:from-[#2A233D] dark:to-[#221D35] border border-violet-500/20 dark:border-white/5 text-center">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-24 bg-cyan-400/20 dark:bg-violet-500/30 rounded-full blur-[30px] pointer-events-none" />
-          
-          <div className="flex justify-center mb-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-b from-white to-violet-100 dark:from-white/10 dark:to-white/5 shadow-sm border border-white/20">
-               <Sparkles className="h-5 w-5 text-violet-500 dark:text-cyan-400" />
-            </div>
-          </div>
-          
-          <h4 className="text-zinc-900 dark:text-white font-bold text-[15px] mb-1.5">Upgrade To Premium!</h4>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-snug mb-4">
-            Upgrade your account and unlock all of the benefits
-          </p>
-          
-          <button className="w-full py-2 bg-gradient-to-r from-violet-500 to-cyan-400 text-white rounded-xl text-[12px] font-bold shadow-md transition-transform hover:scale-105">
-            Upgrade to premium
-          </button>
-        </div>
       </div>
 
     </aside>
