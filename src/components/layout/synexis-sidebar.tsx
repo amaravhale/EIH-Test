@@ -13,7 +13,9 @@ import {
   PlusCircle,
   Cpu,
   User,
-  Sparkles
+  Sparkles,
+  Bot,
+  PenTool
 } from "lucide-react";
 import Link from "next/link";
 
@@ -25,14 +27,16 @@ export interface SynexisSidebarProps {
 const mainNavItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
   { id: "analytics", label: "Analytics", icon: BarChart3, href: "/analytics" },
-  { id: "models", label: "Models", icon: Cpu, href: "/models" },
-  { id: "signals", label: "Deployment", icon: Radio, href: "/deployment" },
-  { id: "settings", label: "Settings", icon: Settings, href: "/settings" },
+  { id: "signals", label: "Signals", icon: Radio, href: "/signals" },
+  { id: "threats", label: "Threat Monitor", icon: Shield, href: "/threats" },
+  { id: "competitors", label: "Competitors", icon: Users, href: "/competitors" },
+  { id: "assistant", label: "AI Assistant", icon: Bot, href: "/assistant" },
+  { id: "content", label: "Content Studio", icon: PenTool, href: "/content/ideas" },
 ];
 
 const bottomNavItems = [
-  { id: "support", label: "Support", icon: HelpCircle, href: "/help" },
-  { id: "account", label: "Account", icon: User, href: "/account" },
+  { id: "settings", label: "Settings", icon: Settings, href: "/settings" },
+  { id: "help", label: "Help & Docs", icon: HelpCircle, href: "/help" },
 ];
 
 export function SynexisSidebar({

@@ -33,10 +33,8 @@ export function SynexisHeader({ user, isDarkMode, onToggleTheme }: SynexisHeader
 
       {/* Middle: Links */}
       <div className="flex-1 flex justify-center items-center gap-8 hidden md:flex">
-        <Link href="/docs" className="text-sm font-semibold text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Docs</Link>
-        <Link href="/api" className="text-sm font-semibold text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">API</Link>
-        <Link href="/community" className="text-sm font-semibold text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Community</Link>
       </div>
+
 
       {/* Right side: Actions & Profile */}
       <div className="flex-1 flex items-center justify-end gap-6">
