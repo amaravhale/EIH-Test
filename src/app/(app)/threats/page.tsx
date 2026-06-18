@@ -7,10 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { FilterBar } from "@/components/data/filter-bar";
 import { ShieldAlert, Activity, ArrowRight, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 
 export default function ThreatsPage() {
   const [threats, setThreats] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedThreat, setSelectedThreat] = useState<any | null>(null);
 
   const fetchThreats = async () => {
     setIsLoading(true);
@@ -125,7 +127,10 @@ export default function ThreatsPage() {
                         <div className="flex gap-4 mt-3 text-xs text-zinc-500 font-medium">
                           <span>Detected: {threat.timeAgo}</span>
                           <span>Source: {threat.source}</span>
-                          <button className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1">
+                          <button 
+                            onClick={() => setSelectedThreat(threat)}
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1"
+                          >
                             View analysis <ArrowRight className="h-3 w-3" />
                           </button>
                         </div>
@@ -138,6 +143,42 @@ export default function ThreatsPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={!!selectedThreat} onOpenChange={(open) => !open && setSelectedThreat(null)}>
+        <DialogContent className="sm:max-w-[600px] bg-white dark:bg-[#1A1525] border-zinc-200 dark:border-white/10">
+          <DialogHeader>
+            <div className="flex items-center gap-2 mb-2">
+              {selectedThreat?.level === "critical" ? (
+                <Badge variant="destructive">Critical Threat</Badge>
+              ) : (
+                <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900">High Priority</Badge>
+              )}
+              <span className="text-xs text-zinc-500">Source: {selectedThreat?.source}</span>
+            </div>
+            <DialogTitle className="text-xl">{selectedThreat?.title}</DialogTitle>
+            <DialogDescription className="text-zinc-600 dark:text-zinc-400 pt-2">
+              {selectedThreat?.description}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="mt-4 space-y-4">
+            <div className="bg-zinc-50 dark:bg-white/5 p-4 rounded-lg border border-zinc-100 dark:border-white/5">
+              <h4 className="font-semibold text-sm mb-2 text-zinc-900 dark:text-white flex items-center gap-2">
+                <Activity className="h-4 w-4 text-violet-500" />
+                AI Strategy Recommendation
+              </h4>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                The neural engine suggests immediate cross-functional review of this signal. Recommended actions include auditing compliance with the new parameters mentioned, preparing a responsive PR strategy, and monitoring primary competitors for reactionary moves.
+              </p>
+            </div>
+          </div>
+          
+          <DialogFooter className="mt-6">
+            <Button variant="outline" onClick={() => setSelectedThreat(null)}>Close</Button>
+            <Button className="bg-violet-600 hover:bg-violet-700 text-white">Generate Full Report</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
