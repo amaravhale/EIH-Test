@@ -1,72 +1,73 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { SignalCard } from "@/components/domain/signal-card";
 import { FilterBar } from "@/components/data/filter-bar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
-import { Download, RefreshCw } from "lucide-react";
-
-const MOCK_SIGNALS = [
-  {
-    id: "sig-1",
-    title: "OSHA Proposes Updates to PSM Standard",
-    source: "Federal Register",
-    category: "regulation",
-    time: "2 hours ago",
-    summary: "The Occupational Safety and Health Administration (OSHA) is proposing to update the Process Safety Management (PSM) of Highly Hazardous Chemicals standard to better protect workers...",
-    score: 95,
-    status: "actionable"
-  },
-  {
-    id: "sig-2",
-    title: "SafeTech Wins £2M Contract with North Sea Operator",
-    source: "Industry News",
-    category: "competitive",
-    time: "5 hours ago",
-    summary: "SafeTech Solutions has secured a major contract to deploy their AI-driven Process Hazard Analysis tool across 5 offshore platforms in the North Sea...",
-    score: 82,
-    status: "reviewed"
-  },
-  {
-    id: "sig-3",
-    title: "New AI standard for industrial applications drafted by ISO",
-    source: "ISO Technical Committee",
-    category: "technology",
-    time: "1 day ago",
-    summary: "A new draft standard outlines requirements for integrating artificial intelligence into safety-critical industrial processes, including specific clauses for process safety management.",
-    score: 75,
-    status: "discovered"
-  },
-  {
-    id: "sig-4",
-    title: "Incident Alert: Explosion at Texas Chemical Plant",
-    source: "CSB Alerts",
-    category: "industry",
-    time: "2 days ago",
-    summary: "Chemical Safety Board is investigating an explosion at a petrochemical facility. Initial reports suggest a failure in the pressure relief systems.",
-    score: 88,
-    status: "actionable"
-  }
-];
+import { Download, RefreshCw, Radio } from "lucide-react";
+import { IntelligenceSignal } from "@/app/api/agent/signals/route";
 
 export default function SignalsFeedPage() {
+  const [signals, setSignals] = useState<IntelligenceSignal[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchSignals = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/agent/signals");
+      const data = await res.json();
+      if (data.signals) {
+        setSignals(data.signals);
+      }
+    } catch (error) {
+      console.error("Failed to fetch signals:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSignals();
+  }, []);
+
   return (
-    <div className="space-y-6">
-      <PageHeader 
-        title="Intelligence Signals Feed" 
-        description="Real-time stream of market, competitor, and regulatory signals scored by AI."
-        actions={
-          <div className="flex gap-2">
-            <Button variant="outline">
-              <Download className="mr-2 h-4 w-4" /> Export
-            </Button>
-            <Button>
-              <RefreshCw className="mr-2 h-4 w-4" /> Refresh Feed
-            </Button>
+    <div className="space-y-8 animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400">
+              <Radio className="h-3.5 w-3.5" />
+            </span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">Live AI Feed Active</span>
+            <span className="relative flex h-2 w-2 ml-1">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
+            </span>
           </div>
-        }
-      />
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">Neural Signals Feed</h1>
+          <p className="text-zinc-500 dark:text-zinc-400 mt-1">
+            Real-time stream of market, competitor, and regulatory signals scored by the Anthropic engine.
+          </p>
+        </div>
+        
+        <div className="flex gap-3">
+          <Button variant="outline" className="bg-white dark:bg-[#1A1525] border-zinc-200 dark:border-white/10 hover:bg-zinc-50 dark:hover:bg-white/5">
+            <Download className="mr-2 h-4 w-4" /> Export JSON
+          </Button>
+          <Button 
+            onClick={fetchSignals} 
+            disabled={isLoading}
+            className="bg-violet-600 hover:bg-violet-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-all"
+          >
+            <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
+            {isLoading ? "Scanning..." : "Force Deep Scan"}
+          </Button>
+        </div>
+      </div>
       
       <FilterBar 
-        searchPlaceholder="Search signals..."
+        searchPlaceholder="Search raw signals..."
         filters={[
           {
             id: "category",
@@ -104,9 +105,31 @@ export default function SignalsFeedPage() {
       />
       
       <div className="space-y-4 max-w-4xl">
-        {MOCK_SIGNALS.map(signal => (
-          <SignalCard key={signal.id} signal={signal} />
-        ))}
+        {isLoading ? (
+          // Skeleton loaders
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-48 rounded-xl bg-zinc-100 dark:bg-[#1A1525] border border-zinc-200 dark:border-white/5 animate-pulse relative overflow-hidden">
+               <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent"></div>
+               <div className="p-6">
+                 <div className="flex justify-between">
+                   <div className="space-y-3 w-2/3">
+                     <div className="h-4 w-32 bg-zinc-200 dark:bg-white/10 rounded-full"></div>
+                     <div className="h-6 w-full bg-zinc-200 dark:bg-white/10 rounded-md"></div>
+                   </div>
+                   <div className="h-16 w-16 bg-zinc-200 dark:bg-white/10 rounded-xl"></div>
+                 </div>
+                 <div className="space-y-2 mt-6">
+                   <div className="h-3 w-full bg-zinc-200 dark:bg-white/10 rounded-full"></div>
+                   <div className="h-3 w-5/6 bg-zinc-200 dark:bg-white/10 rounded-full"></div>
+                 </div>
+               </div>
+            </div>
+          ))
+        ) : (
+          signals.map(signal => (
+            <SignalCard key={signal.id} signal={signal} />
+          ))
+        )}
       </div>
     </div>
   );
