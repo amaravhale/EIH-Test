@@ -1,13 +1,51 @@
 import { NextResponse } from 'next/server';
-import { MarketIntelligencePipeline } from '@/lib/ai/market-intelligence/pipeline';
+import OpenAI from 'openai';
+import { AggregatedTheme } from '@/lib/ai/market-intelligence/types';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function GET() {
   try {
-    const pipeline = new MarketIntelligencePipeline();
-    const themes = await pipeline.runPipeline();
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is not configured.");
+    }
 
-    // To simulate a system with history, we mock one 'approved' theme
-    // and let the pipeline return the 'pending_validation' theme.
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: `You are an elite HSE Market Intelligence AI for Empirisys Ltd. 
+Your task is to analyze current European (UK/Netherlands) process safety trends and generate 2 highly relevant "AggregatedThemes" based on current events.
+Output strictly in JSON format as an object with a "themes" array containing exactly 2 objects.
+Each object must perfectly match this interface:
+{
+  id: string; (e.g. "theme-ai-1")
+  title: string;
+  description: string;
+  signals: []; (leave this empty for now)
+  interpretation: {
+    impact: string;
+    relevantProduct: 'Sense' | 'Boost' | 'Insight360' | 'Leadership360' | 'Both';
+    suggestedAction: string;
+  };
+  status: 'pending_validation' | 'approved';
+  deltaStatus: 'new' | 'intensified' | 'faded' | 'stable';
+}`
+        },
+        {
+          role: "user",
+          content: "Generate the latest 2 aggregated market themes."
+        }
+      ]
+    });
+
+    const parsedContent = JSON.parse(completion.choices[0].message.content || '{"themes": []}');
+    const themes: AggregatedTheme[] = parsedContent.themes;
+
     const mockApprovedThemes = [
       {
         id: 'theme-0',
@@ -16,11 +54,11 @@ export async function GET() {
         signals: [],
         interpretation: {
           impact: 'High opportunity for enterprise-wide deployments in the Netherlands.',
-          relevantProduct: 'Leadership360',
+          relevantProduct: 'Leadership360' as const,
           suggestedAction: 'Research target accounts at Rotterdam port for Leadership360 entry.'
         },
-        status: 'approved',
-        deltaStatus: 'intensified'
+        status: 'approved' as const,
+        deltaStatus: 'intensified' as const
       }
     ];
 

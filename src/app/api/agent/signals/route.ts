@@ -1,4 +1,9 @@
 import { NextResponse } from 'next/server';
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export interface IntelligenceSignal {
   id: string;
@@ -15,77 +20,47 @@ export interface IntelligenceSignal {
 
 export async function GET() {
   try {
-    // Simulate AI extraction and scoring delay
-    await new Promise(resolve => setTimeout(resolve, 1200));
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is not configured.");
+    }
 
-    const signals: IntelligenceSignal[] = [
-      {
-        id: "sig-ai-1",
-        title: "OSHA Proposes Updates to PSM Standard",
-        source: "Federal Register NLP Extraction",
-        category: "regulation",
-        time: "12 mins ago",
-        summary: "The Occupational Safety and Health Administration (OSHA) is proposing to update the Process Safety Management (PSM) of Highly Hazardous Chemicals standard. Neural analysis indicates an 85% overlap with Empirisys' compliance modules.",
-        score: 95,
-        status: "actionable",
-        confidence: 98,
-        strategicTags: ["Compliance Gap", "PSM Audit"]
-      },
-      {
-        id: "sig-ai-2",
-        title: "ERM Wins £2.4M Culture Transformation Contract",
-        source: "Market Tender Sweep",
-        category: "competitive",
-        time: "45 mins ago",
-        summary: "ERM has secured a major contract to deploy their cultural transformation framework across offshore platforms. Sentiment analysis of their pitch suggests a vulnerability to predictive data models like BOOST.",
-        score: 88,
-        status: "reviewed",
-        confidence: 91,
-        strategicTags: ["Competitor Win", "Vulnerability Identified"]
-      },
-      {
-        id: "sig-ai-3",
-        title: "Incident Alert: Confined Space Near-Miss at BP",
-        source: "HSE Incident Feed",
-        category: "industry",
-        time: "1 hour ago",
-        summary: "An unreported high-potential near miss was extracted from scattered safety observation reports, indicating a failure in frontline reporting culture at BP's onshore facility.",
-        score: 92,
-        status: "actionable",
-        confidence: 85,
-        strategicTags: ["Target Client", "Lead Gen"]
-      },
-      {
-        id: "sig-ai-4",
-        title: "Draft EU AI Act Implications for Predictive Safety",
-        source: "EU Parliament Docs",
-        category: "regulation",
-        time: "3 hours ago",
-        summary: "Draft regulation may impact how employee safety data is stored and processed for predictive analytics. Impact on SENSE module requires review.",
-        score: 75,
-        status: "discovered",
-        confidence: 89,
-        strategicTags: ["Data Privacy", "Product Strategy"]
-      },
-      {
-        id: "sig-ai-5",
-        title: "New Wearable Tech Standard Drafted by ISO",
-        source: "ISO Technical Committee",
-        category: "technology",
-        time: "4 hours ago",
-        summary: "A new draft standard outlines requirements for integrating IoT wearables into safety-critical industrial processes.",
-        score: 62,
-        status: "discovered",
-        confidence: 76,
-        strategicTags: ["Integration Opportunity"]
-      }
-    ];
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: `You are an elite HSE (Health, Safety, and Environment) Market Intelligence AI. 
+Your job is to scrape simulated real-time data and generate 5 highly realistic, up-to-the-minute market signals relevant to process safety, industrial risk, and HSE consulting in Europe (especially UK/Netherlands).
+Output strictly in JSON format as an object with a "signals" array containing exactly 5 objects.
+Each object must perfectly match this TypeScript interface:
+{
+  id: string; (e.g., "sig-live-xyz")
+  title: string;
+  source: string; (e.g., "HSE Executive", "EU Parliament", "Market Sweep")
+  category: 'regulation' | 'competitive' | 'industry' | 'technology' | 'tender';
+  time: string; (e.g., "12 mins ago", "2 hours ago")
+  summary: string; (A 2-sentence summary of the event and its strategic impact)
+  score: number; (0-100 relevance score)
+  status: 'discovered' | 'reviewed' | 'actionable';
+  confidence: number; (0-100)
+  strategicTags: string[]; (2-3 short tags like "Lead Gen", "Compliance", "Competitor Threat")
+}`
+        },
+        {
+          role: "user",
+          content: "Generate the latest 5 live HSE intelligence signals for the Empirisys dashboard."
+        }
+      ]
+    });
 
-    return NextResponse.json({ signals });
+    const parsedContent = JSON.parse(completion.choices[0].message.content || '{"signals": []}');
+
+    return NextResponse.json({ signals: parsedContent.signals });
   } catch (error) {
-    console.error('Signals agent error:', error);
+    console.error('Signals agent live error:', error);
     return NextResponse.json(
-      { error: 'Failed to process market signals' },
+      { error: 'Failed to process live market signals via OpenAI' },
       { status: 500 }
     );
   }
