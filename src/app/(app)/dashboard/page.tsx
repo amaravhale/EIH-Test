@@ -84,13 +84,13 @@ export default function DashboardPage() {
         <div className="flex bg-zinc-100 dark:bg-[#110D17] p-1.5 rounded-full border border-zinc-200 dark:border-white/5">
           <button 
             onClick={() => setActiveTab("market")}
-            className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all duration-300 flex items-center gap-2 ${activeTab === 'market' ? 'bg-gradient-to-r from-violet-500 to-cyan-400 text-white shadow-lg' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+            className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all duration-300 flex items-center gap-2 ${activeTab === 'market' ? 'bg-gradient-to-r from-teal-500 to-cyan-400 text-white shadow-lg' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
           >
             <Network className="h-4 w-4" /> Market Signals
           </button>
           <button 
             onClick={() => setActiveTab("cai")}
-            className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all duration-300 flex items-center gap-2 ${activeTab === 'cai' ? 'bg-gradient-to-r from-violet-500 to-cyan-400 text-white shadow-lg' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+            className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all duration-300 flex items-center gap-2 ${activeTab === 'cai' ? 'bg-gradient-to-r from-teal-500 to-cyan-400 text-white shadow-lg' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
           >
             <Target className="h-4 w-4" /> Client Acquisition
           </button>
@@ -106,8 +106,8 @@ export default function DashboardPage() {
                   <div className="flex justify-between items-start mb-6">
                     <span className="text-[11px] font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase flex items-center">
                        <span className="relative flex h-2 w-2 mr-2">
-                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                         <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
+                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                         <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
                        </span>
                        ACTION-REQUIRED ITEMS
                     </span>
@@ -122,11 +122,11 @@ export default function DashboardPage() {
                   <span className="text-[12px] font-bold text-zinc-500 dark:text-zinc-400">Items requiring immediate attention</span>
               {/* Animated bar chart visual */}
               <div className="absolute bottom-0 left-0 w-full flex items-end justify-between px-6 h-12 gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-                <div className="w-full bg-violet-500/20 rounded-t-sm h-[30%] animate-pulse" style={{ animationDuration: '1.2s' }}></div>
-                <div className="w-full bg-violet-500/20 rounded-t-sm h-[50%] animate-pulse" style={{ animationDuration: '2.1s' }}></div>
-                <div className="w-full bg-violet-500/20 rounded-t-sm h-[20%] animate-pulse" style={{ animationDuration: '1.5s' }}></div>
-                <div className="w-full bg-violet-500/50 rounded-t-sm h-[80%] animate-pulse" style={{ animationDuration: '2.5s' }}></div>
-                <div className="w-full bg-violet-500/30 rounded-t-sm h-[60%] animate-pulse" style={{ animationDuration: '1.8s' }}></div>
+                <div className="w-full bg-teal-500/20 rounded-t-sm h-[30%] animate-pulse" style={{ animationDuration: '1.2s' }}></div>
+                <div className="w-full bg-teal-500/20 rounded-t-sm h-[50%] animate-pulse" style={{ animationDuration: '2.1s' }}></div>
+                <div className="w-full bg-teal-500/20 rounded-t-sm h-[20%] animate-pulse" style={{ animationDuration: '1.5s' }}></div>
+                <div className="w-full bg-teal-500/50 rounded-t-sm h-[80%] animate-pulse" style={{ animationDuration: '2.5s' }}></div>
+                <div className="w-full bg-teal-500/30 rounded-t-sm h-[60%] animate-pulse" style={{ animationDuration: '1.8s' }}></div>
               </div>
             </div>
 
@@ -184,19 +184,19 @@ export default function DashboardPage() {
                   <div className="flex gap-2">
                     <button 
                       onClick={() => setActiveTimeframe("1H")}
-                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '1H' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400'}`}
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '1H' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#062A30] text-zinc-500 dark:text-zinc-400'}`}
                     >1H</button>
                     <button 
                       onClick={() => setActiveTimeframe("24H")}
-                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '24H' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400'}`}
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '24H' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#062A30] text-zinc-500 dark:text-zinc-400'}`}
                     >24H</button>
                     <button 
                       onClick={() => setActiveTimeframe("7D")}
-                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '7D' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400'}`}
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === '7D' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#062A30] text-zinc-500 dark:text-zinc-400'}`}
                     >7D</button>
                     <button 
                       onClick={() => setActiveTimeframe("ALL")}
-                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === 'ALL' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400'}`}
+                      className={`px-3 py-1 rounded-md text-[11px] font-bold ${activeTimeframe === 'ALL' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-[#062A30] text-zinc-500 dark:text-zinc-400'}`}
                     >ALL</button>
                   </div>
                 </div>
@@ -212,18 +212,18 @@ export default function DashboardPage() {
                     </div>
                   ) : (
                     approvedThemes.map((theme, idx) => (
-                      <div key={theme.id} className="p-5 rounded-[20px] bg-zinc-50 dark:bg-[#1A1525] border border-zinc-100 dark:border-white/5 flex gap-4 animate-in slide-in-from-left-4 fade-in duration-500" style={{ animationDelay: `${idx * 100}ms`, animationFillMode: 'both' }}>
-                        <div className="w-1.5 h-full bg-gradient-to-b from-violet-500 to-cyan-400 rounded-full shrink-0"></div>
+                      <div key={theme.id} className="p-5 rounded-[20px] bg-zinc-50 dark:bg-[#062A30] border border-zinc-100 dark:border-white/5 flex gap-4 animate-in slide-in-from-left-4 fade-in duration-500" style={{ animationDelay: `${idx * 100}ms`, animationFillMode: 'both' }}>
+                        <div className="w-1.5 h-full bg-gradient-to-b from-teal-500 to-cyan-400 rounded-full shrink-0"></div>
                         <div className="flex-1">
                           <div className="flex justify-between items-start mb-2">
                             <h4 className="text-[15px] font-bold text-zinc-900 dark:text-white">{theme.title}</h4>
-                            <span className="text-[10px] px-2 py-1 rounded bg-violet-500/10 text-violet-600 dark:text-violet-400 font-bold uppercase">{theme.deltaStatus}</span>
+                            <span className="text-[10px] px-2 py-1 rounded bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold uppercase">{theme.deltaStatus}</span>
                           </div>
                           <p className="text-[13px] text-zinc-600 dark:text-zinc-400 mb-4">{theme.description}</p>
                           <div className="p-3 rounded-xl bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5">
                             <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider block mb-1">Strategic Action</span>
                             <p className="text-[12px] text-zinc-700 dark:text-zinc-300">{theme.interpretation.suggestedAction}</p>
-                            <div className="mt-3 text-[11px] font-semibold text-zinc-500">Target Module: <span className="text-violet-500 font-bold">{theme.interpretation.relevantProduct}</span></div>
+                            <div className="mt-3 text-[11px] font-semibold text-zinc-500">Target Module: <span className="text-teal-500 font-bold">{theme.interpretation.relevantProduct}</span></div>
                           </div>
                         </div>
                       </div>
@@ -248,7 +248,7 @@ export default function DashboardPage() {
                   <h3 className="text-[16px] font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                     <Shield className="h-5 w-5 text-orange-500" /> Pending Review
                   </h3>
-                  <button onClick={fetchMarketData} className="text-zinc-400 hover:text-violet-500 transition-colors">
+                  <button onClick={fetchMarketData} className="text-zinc-400 hover:text-teal-500 transition-colors">
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                   </button>
                 </div>

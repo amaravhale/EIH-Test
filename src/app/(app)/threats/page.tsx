@@ -145,7 +145,7 @@ export default function ThreatsPage() {
       </div>
 
       <Dialog open={!!selectedThreat} onOpenChange={(open) => !open && setSelectedThreat(null)}>
-        <DialogContent className="sm:max-w-[600px] bg-white dark:bg-[#1A1525] border-zinc-200 dark:border-white/10">
+        <DialogContent className="sm:max-w-[600px] bg-white dark:bg-[#062A30] border-zinc-200 dark:border-white/10">
           <DialogHeader>
             <div className="flex items-center gap-2 mb-2">
               {selectedThreat?.level === "critical" ? (
@@ -164,7 +164,7 @@ export default function ThreatsPage() {
           <div className="mt-4 space-y-4">
             <div className="bg-zinc-50 dark:bg-white/5 p-4 rounded-lg border border-zinc-100 dark:border-white/5">
               <h4 className="font-semibold text-sm mb-2 text-zinc-900 dark:text-white flex items-center gap-2">
-                <Activity className="h-4 w-4 text-violet-500" />
+                <Activity className="h-4 w-4 text-teal-500" />
                 AI Strategy Recommendation
               </h4>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
@@ -175,7 +175,7 @@ export default function ThreatsPage() {
           
           <DialogFooter className="mt-6">
             <Button variant="outline" onClick={() => setSelectedThreat(null)}>Close</Button>
-            <Button className="bg-violet-600 hover:bg-violet-700 text-white">Generate Full Report</Button>
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white">Generate Full Report</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

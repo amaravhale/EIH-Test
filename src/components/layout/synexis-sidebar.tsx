@@ -58,7 +58,7 @@ export function SynexisSidebar({
   onNavigate,
 }: SynexisSidebarProps) {
   return (
-    <aside className="flex flex-col w-64 h-full bg-white dark:bg-[#1A1525] text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200 dark:border-white/5 transition-colors duration-300">
+    <aside className="flex flex-col w-64 h-full bg-white dark:bg-[#062A30] text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200 dark:border-white/5 transition-colors duration-300">
       
       {/* Brand Logo Area */}
       <div className="flex items-center px-2 mb-10">
@@ -86,7 +86,7 @@ export function SynexisSidebar({
                 )}
               >
                 {isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-400 opacity-100 z-0" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-cyan-400 opacity-100 z-0" />
                 )}
                 <Icon className={cn("h-[20px] w-[20px] shrink-0 relative z-10", isActive ? "text-white" : "")} />
                 <span className="relative z-10">{item.label}</span>

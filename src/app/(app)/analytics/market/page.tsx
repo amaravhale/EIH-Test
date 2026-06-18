@@ -60,7 +60,7 @@ export default function MarketAnalyticsPage() {
           <Button 
             onClick={fetchTrends} 
             disabled={isLoading}
-            className="bg-violet-600 hover:bg-violet-700 text-white transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)]"
+            className="bg-teal-600 hover:bg-teal-700 text-white transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)]"
           >
             <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
             {isLoading ? "Analyzing..." : "Refresh Intelligence"}
@@ -128,7 +128,7 @@ export default function MarketAnalyticsPage() {
           <div className="h-[400px] w-full relative">
              {isLoading && (
                <div className="absolute inset-0 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
-                 <RefreshCw className="h-8 w-8 text-violet-500 animate-spin" />
+                 <RefreshCw className="h-8 w-8 text-teal-500 animate-spin" />
                </div>
              )}
             <ResponsiveContainer width="100%" height="100%">

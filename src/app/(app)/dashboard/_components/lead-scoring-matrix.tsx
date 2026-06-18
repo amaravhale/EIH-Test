@@ -61,12 +61,12 @@ export function LeadScoringMatrix() {
       {/* Search Engine (Synexis Neural Search) */}
       <div className="rounded-[32px] overflow-hidden bg-white dark:bg-[#241E32] shadow-sm border border-zinc-100 dark:border-white/5 relative">
         <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-400/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-500/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-teal-500/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4 pointer-events-none" />
 
         <div className="p-10 relative z-10 flex flex-col items-center text-center">
           <div className="flex justify-center mb-6">
-            <div className="h-16 w-16 rounded-[20px] bg-gradient-to-br from-violet-500/20 to-cyan-400/20 flex items-center justify-center border border-violet-500/30 dark:border-white/10 shadow-[0_0_30px_rgba(139,92,246,0.3)]">
-               <Network className="h-8 w-8 text-violet-500 dark:text-cyan-400" />
+            <div className="h-16 w-16 rounded-[20px] bg-gradient-to-br from-teal-500/20 to-cyan-400/20 flex items-center justify-center border border-teal-500/30 dark:border-white/10 shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+               <Network className="h-8 w-8 text-teal-500 dark:text-cyan-400" />
             </div>
           </div>
           <h3 className="text-[28px] font-bold text-zinc-900 dark:text-white mb-2">Client Acquisition Intelligence (CAI)</h3>
@@ -75,8 +75,8 @@ export function LeadScoringMatrix() {
           </p>
 
           <div className="w-full max-w-2xl mx-auto mt-8 relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 to-cyan-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative flex items-center bg-zinc-50 dark:bg-[#1A1525] rounded-2xl border border-zinc-200 dark:border-white/10 p-2">
+            <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 to-cyan-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+            <div className="relative flex items-center bg-zinc-50 dark:bg-[#062A30] rounded-2xl border border-zinc-200 dark:border-white/10 p-2">
               <Search className="h-6 w-6 text-zinc-400 ml-4 mr-2" />
               <input 
                 type="text"
@@ -92,7 +92,7 @@ export function LeadScoringMatrix() {
                 </button>
               )}
               <button 
-                className="px-6 py-3 bg-gradient-to-r from-violet-500 to-cyan-400 text-white font-bold rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(139,92,246,0.6)] transition-all flex items-center shrink-0"
+                className="px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-400 text-white font-bold rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(139,92,246,0.6)] transition-all flex items-center shrink-0"
                 onClick={() => handleAnalyze()}
                 disabled={isLoading || !companyName.trim()}
               >
@@ -133,7 +133,7 @@ export function LeadScoringMatrix() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="flex items-center justify-between">
              <div className="flex items-center gap-3">
-               <div className="flex items-center justify-center h-8 w-8 rounded-full bg-violet-500/20 text-cyan-500 border border-violet-500/30">
+               <div className="flex items-center justify-center h-8 w-8 rounded-full bg-teal-500/20 text-cyan-500 border border-teal-500/30">
                  <Activity className="h-4 w-4 animate-pulse" />
                </div>
                <h3 className="text-[20px] font-bold text-zinc-900 dark:text-white">Active Signal Feed</h3>
@@ -151,7 +151,7 @@ export function LeadScoringMatrix() {
 
               return (
                 <div key={incident.id} className="bg-white dark:bg-[#241E32] rounded-[24px] p-6 shadow-sm border border-zinc-100 dark:border-white/5 relative flex flex-col group overflow-hidden">
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-cyan-400 to-violet-500"></div>
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-cyan-400 to-teal-500"></div>
                   
                   <div className="flex justify-between items-start mb-4">
                     <div>
@@ -161,14 +161,14 @@ export function LeadScoringMatrix() {
                       </h4>
                       <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">{timeString}</span>
                     </div>
-                    <span className="px-2 py-1 rounded bg-violet-500/10 text-violet-600 dark:text-violet-400 font-bold text-[10px] uppercase border border-violet-500/20">{incident.incidentType}</span>
+                    <span className="px-2 py-1 rounded bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold text-[10px] uppercase border border-teal-500/20">{incident.incidentType}</span>
                   </div>
                   
                   <p className="text-[13px] text-zinc-600 dark:text-zinc-400 mb-5 line-clamp-3 leading-relaxed flex-1">
                     {incident.incidentDescription}
                   </p>
                   
-                  <div className="bg-zinc-50 dark:bg-[#1A1525] rounded-xl p-4 border border-zinc-100 dark:border-white/5 mb-5 flex items-center gap-3">
+                  <div className="bg-zinc-50 dark:bg-[#062A30] rounded-xl p-4 border border-zinc-100 dark:border-white/5 mb-5 flex items-center gap-3">
                      <Briefcase className="h-4 w-4 text-zinc-400" />
                      <div>
                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold block mb-0.5">Assigned Contractor</span>
@@ -202,8 +202,8 @@ export function LeadScoringMatrix() {
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-[#241E32] p-6 rounded-[24px] border border-zinc-100 dark:border-white/5 shadow-sm gap-4">
             <div className="flex items-center gap-4">
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-cyan-400/20 flex items-center justify-center border border-violet-500/30 dark:border-white/10">
-                <Building2 className="h-7 w-7 text-violet-500 dark:text-cyan-400" />
+              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-teal-500/20 to-cyan-400/20 flex items-center justify-center border border-teal-500/30 dark:border-white/10">
+                <Building2 className="h-7 w-7 text-teal-500 dark:text-cyan-400" />
               </div>
               <div>
                 <h3 className="text-[24px] font-bold text-zinc-900 dark:text-white leading-none mb-1">
@@ -214,7 +214,7 @@ export function LeadScoringMatrix() {
             </div>
             
             <div className="flex items-center gap-4 w-full md:w-auto">
-              <div className="flex flex-col items-end bg-zinc-50 dark:bg-[#1A1525] p-3 rounded-xl border border-zinc-100 dark:border-white/5">
+              <div className="flex flex-col items-end bg-zinc-50 dark:bg-[#062A30] p-3 rounded-xl border border-zinc-100 dark:border-white/5">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-1">Entry Probability</span>
                 <div className="flex items-center gap-2">
                    <div className="text-[24px] font-bold text-cyan-600 dark:text-cyan-400 leading-none">{profile.overallScore}</div>
@@ -258,21 +258,21 @@ export function LeadScoringMatrix() {
                           <p className="text-[20px] font-bold text-zinc-900 dark:text-white leading-snug">{profile.incident.incidentType}</p>
                         </div>
                         
-                        <div className="bg-zinc-50 dark:bg-[#1A1525] p-6 rounded-2xl border border-zinc-100 dark:border-white/5">
+                        <div className="bg-zinc-50 dark:bg-[#062A30] p-6 rounded-2xl border border-zinc-100 dark:border-white/5">
                           <h5 className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest mb-3">Event Narrative</h5>
                           <p className="text-[14px] text-zinc-700 dark:text-zinc-300 leading-relaxed">{profile.incident.incidentDescription}</p>
                         </div>
                       </div>
 
                       <div className="w-full lg:w-72 space-y-4 shrink-0">
-                        <div className="bg-zinc-50 dark:bg-[#1A1525] p-5 rounded-2xl border border-zinc-100 dark:border-white/5">
+                        <div className="bg-zinc-50 dark:bg-[#062A30] p-5 rounded-2xl border border-zinc-100 dark:border-white/5">
                           <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block mb-2">Timestamp</span>
                           <div className="flex items-center text-[13px] font-bold text-zinc-900 dark:text-white">
-                            <Clock className="h-4 w-4 mr-2 text-violet-500" />
+                            <Clock className="h-4 w-4 mr-2 text-teal-500" />
                             {new Date(profile.incident.dateTime).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
                           </div>
                         </div>
-                        <div className="bg-zinc-50 dark:bg-[#1A1525] p-5 rounded-2xl border border-zinc-100 dark:border-white/5">
+                        <div className="bg-zinc-50 dark:bg-[#062A30] p-5 rounded-2xl border border-zinc-100 dark:border-white/5">
                           <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block mb-2">Operating Scenario</span>
                           <div className="flex items-center text-[13px] font-bold text-zinc-900 dark:text-white">
                             <Activity className="h-4 w-4 mr-2 text-cyan-500 shrink-0" />
@@ -304,7 +304,7 @@ export function LeadScoringMatrix() {
             <div className="space-y-6">
               
               <div className="bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5 shadow-sm rounded-[32px] overflow-hidden">
-                <div className="bg-zinc-50 dark:bg-[#1A1525] p-6 border-b border-zinc-100 dark:border-white/5 flex items-center gap-3">
+                <div className="bg-zinc-50 dark:bg-[#062A30] p-6 border-b border-zinc-100 dark:border-white/5 flex items-center gap-3">
                   <Target className="h-5 w-5 text-cyan-500" />
                   <h3 className="text-[16px] font-bold text-zinc-900 dark:text-white">Deployment Strategy</h3>
                 </div>
@@ -312,7 +312,7 @@ export function LeadScoringMatrix() {
                 <div className="p-6 space-y-8">
                   
                   {/* Recommended Product */}
-                  <div className="bg-gradient-to-br from-violet-500/10 to-cyan-400/10 border border-violet-500/20 rounded-2xl p-6 relative overflow-hidden text-center">
+                  <div className="bg-gradient-to-br from-teal-500/10 to-cyan-400/10 border border-teal-500/20 rounded-2xl p-6 relative overflow-hidden text-center">
                     <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block mb-2">Target Module</span>
                     <div className="text-[24px] font-bold text-zinc-900 dark:text-white leading-tight">{profile.recommendedProduct}</div>
                     <p className="text-[12px] text-zinc-600 dark:text-zinc-300 mt-3">{profile.rationale}</p>
@@ -322,7 +322,7 @@ export function LeadScoringMatrix() {
                     <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
                       <Briefcase className="h-3 w-3" /> Incumbent Contractor
                     </span>
-                    <div className="bg-zinc-50 dark:bg-[#1A1525] px-4 py-3 rounded-xl border border-zinc-100 dark:border-white/5">
+                    <div className="bg-zinc-50 dark:bg-[#062A30] px-4 py-3 rounded-xl border border-zinc-100 dark:border-white/5">
                       <p className="font-bold text-[14px] text-zinc-900 dark:text-white">{profile.incident?.consultantHired || "Unknown"}</p>
                     </div>
                   </div>
@@ -347,7 +347,7 @@ export function LeadScoringMatrix() {
                 <ul className="space-y-3">
                   {profile.keyRiskFactors.map((factor, i) => (
                     <li key={i} className="flex items-start gap-3 text-[13px] text-zinc-700 dark:text-zinc-300 font-medium">
-                      <CheckCircle2 className="h-4 w-4 text-violet-500 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-teal-500 shrink-0 mt-0.5" />
                       <span>{factor}</span>
                     </li>
                   ))}

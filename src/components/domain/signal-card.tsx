@@ -36,9 +36,9 @@ export function SignalCard({ signal }: SignalCardProps) {
   };
 
   return (
-    <Card className="group relative overflow-hidden bg-white dark:bg-[#1A1525] border-zinc-200 dark:border-white/5 hover:border-violet-500/50 transition-all duration-300">
+    <Card className="group relative overflow-hidden bg-white dark:bg-[#062A30] border-zinc-200 dark:border-white/5 hover:border-teal-500/50 transition-all duration-300">
       {/* Background glow effect on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-500/0 via-transparent to-cyan-500/0 group-hover:from-violet-500/5 group-hover:to-cyan-500/5 transition-all duration-500 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-br from-teal-500/0 via-transparent to-cyan-500/0 group-hover:from-teal-500/5 group-hover:to-cyan-500/5 transition-all duration-500 z-0" />
       
       <CardHeader className="pb-3 relative z-10">
         <div className="flex justify-between items-start gap-4">
@@ -57,13 +57,13 @@ export function SignalCard({ signal }: SignalCardProps) {
                 <Clock className="h-3.5 w-3.5" /> {signal.time}
               </span>
               <span className="text-zinc-300 dark:text-zinc-600">•</span>
-              <span className="flex items-center gap-1 text-violet-600 dark:text-violet-400">
+              <span className="flex items-center gap-1 text-teal-600 dark:text-teal-400">
                 <Activity className="h-3.5 w-3.5" /> {signal.source}
               </span>
             </div>
             
             <Link href={`/market/signals/${signal.id}`} className="block group/link">
-              <h3 className="text-[17px] font-semibold leading-snug text-zinc-900 dark:text-zinc-100 group-hover/link:text-violet-600 dark:group-hover/link:text-violet-400 transition-colors">
+              <h3 className="text-[17px] font-semibold leading-snug text-zinc-900 dark:text-zinc-100 group-hover/link:text-teal-600 dark:group-hover/link:text-teal-400 transition-colors">
                 {signal.title}
               </h3>
             </Link>
@@ -92,7 +92,7 @@ export function SignalCard({ signal }: SignalCardProps) {
                 {tag}
               </span>
             ))}
-            <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-semibold bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-200 dark:border-violet-500/20">
+            <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-semibold bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-200 dark:border-teal-500/20">
               {signal.confidence}% Confidence
             </span>
           </div>
@@ -104,7 +104,7 @@ export function SignalCard({ signal }: SignalCardProps) {
           <Button 
             variant="default" 
             size="sm" 
-            className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]"
+            className="h-8 text-xs bg-teal-600 hover:bg-teal-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]"
             onClick={() => {
               if (typeof window !== "undefined") {
                 const { toast } = require("sonner");
