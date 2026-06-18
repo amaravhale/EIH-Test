@@ -1,85 +1,61 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-
-const NAV_ITEMS = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: "📊",
-  },
-  {
-    label: "Competitors",
-    href: "/competitors",
-    icon: "🎯",
-    children: [
-      { label: "Profiles", href: "/competitors/profiles" },
-      { label: "Compare", href: "/competitors/compare" },
-      { label: "Threats", href: "/competitors/threats" },
-    ],
-  },
-  {
-    label: "Market",
-    href: "/market",
-    icon: "📡",
-    children: [
-      { label: "Signals", href: "/market/signals" },
-      { label: "Tenders", href: "/market/tenders" },
-      { label: "Regulations", href: "/market/regulations" },
-      { label: "Programmes", href: "/market/programmes" },
-    ],
-  },
-  {
-    label: "Knowledge",
-    href: "/knowledge",
-    icon: "🧠",
-  },
-  {
-    label: "Content",
-    href: "/content",
-    icon: "✍️",
-    children: [
-      { label: "Ideas", href: "/content/ideas" },
-      { label: "Trending", href: "/content/trending" },
-      { label: "Library", href: "/content/library" },
-    ],
-  },
-  {
-    label: "Settings",
-    href: "/settings",
-    icon: "⚙️",
-  },
-];
-
-import { Sidebar } from "@/components/layout/sidebar";
-import { Header } from "@/components/layout/header";
+import { useState, useEffect } from "react";
+import { SynexisSidebar } from "@/components/layout/synexis-sidebar";
+import { SynexisHeader } from "@/components/layout/synexis-header";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-  // We can pass user info to Header
-  const mockUser = {
-    name: "Jane Doe",
-    email: "jane@empirisys.com",
-    role: "Senior Process Safety Engineer",
+  useEffect(() => {
+    setMounted(true);
+    const savedTheme = localStorage.getItem("synexis-theme");
+    if (savedTheme === "light") {
+      setIsDarkMode(false);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDarkMode(prev => {
+      const newVal = !prev;
+      localStorage.setItem("synexis-theme", newVal ? "dark" : "light");
+      return newVal;
+    });
   };
 
+  const mockUser = {
+    name: "Alex Rivera",
+    role: "Pro Plan",
+    // We can use a placeholder avatar
+    avatarUrl: "https://i.pravatar.cc/150?u=a042581f4e29026704d", 
+  };
+
+  // Prevent hydration mismatch flash
+  if (!mounted) {
+    return <div className="h-screen w-full bg-[#1A1525]"></div>;
+  }
+
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
-      <Sidebar 
+    <div className={`flex h-screen w-full overflow-hidden ${isDarkMode ? 'dark bg-[#1A1525]' : 'bg-[#F8F9FB]'} text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-300`}>
+      <SynexisSidebar 
         activePath={pathname}
         onNavigate={(href) => router.push(href)}
       />
       
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Header 
+        <SynexisHeader 
           user={mockUser}
+          isDarkMode={isDarkMode}
+          onToggleTheme={toggleTheme}
         />
-        <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-7xl p-6">
+        
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className="mx-auto w-full p-8 pt-4 pb-20">
             {children}
           </div>
         </main>

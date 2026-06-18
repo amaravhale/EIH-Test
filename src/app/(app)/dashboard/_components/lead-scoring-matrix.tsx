@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
-import { Loader2, Search, Target, Zap, CheckCircle2, ShieldAlert, AlertTriangle, Briefcase, Lightbulb, Clock, Activity, Building2, X } from "lucide-react";
+import { Loader2, Search, Target, Zap, CheckCircle2, ShieldAlert, AlertTriangle, Briefcase, Lightbulb, Clock, Activity, Building2, X, Network } from "lucide-react";
 import { LeadScoreProfile, IncidentIntelligence } from "@/types/domain";
 
 export function LeadScoringMatrix() {
@@ -36,7 +32,7 @@ export function LeadScoringMatrix() {
     
     setCompanyName(targetCompany);
     setIsLoading(true);
-    setProfile(null); // Clear existing report before fetching
+    setProfile(null); 
     try {
       const res = await fetch('/api/agent/lead-scoring', {
         method: 'POST',
@@ -61,128 +57,139 @@ export function LeadScoringMatrix() {
 
   return (
     <div className="space-y-8 pb-10">
-      {/* Search Engine */}
-      <Card className="border-0 shadow-lg bg-white overflow-hidden ring-1 ring-zinc-200">
-        <div className="bg-gradient-to-r from-emerald-900 to-teal-800 p-8 text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-            <Target className="w-32 h-32" />
+      
+      {/* Search Engine (Synexis Neural Search) */}
+      <div className="rounded-[32px] overflow-hidden bg-white dark:bg-[#241E32] shadow-sm border border-zinc-100 dark:border-white/5 relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-400/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-500/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+
+        <div className="p-10 relative z-10 flex flex-col items-center text-center">
+          <div className="flex justify-center mb-6">
+            <div className="h-16 w-16 rounded-[20px] bg-gradient-to-br from-violet-500/20 to-cyan-400/20 flex items-center justify-center border border-violet-500/30 dark:border-white/10 shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+               <Network className="h-8 w-8 text-violet-500 dark:text-cyan-400" />
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white mb-2 relative z-10">Client Acquisition Intelligence</h3>
-          <p className="text-emerald-100 max-w-2xl mx-auto relative z-10">Enter a target client to instantly aggregate HSE records, uncover near-miss incidents, and generate a customized Empirisys pitch strategy.</p>
-        </div>
-        <CardContent className="p-8">
-          <div className="flex flex-col md:flex-row gap-3 max-w-3xl mx-auto">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
+          <h3 className="text-[28px] font-bold text-zinc-900 dark:text-white mb-2">Target Acquisition Network</h3>
+          <p className="text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto text-[14px]">
+            Input a target node to initiate deep-scan neural analysis of HSE records, incident data, and calculate strategic Empirisys entry vectors.
+          </p>
+
+          <div className="w-full max-w-2xl mx-auto mt-8 relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 to-cyan-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+            <div className="relative flex items-center bg-zinc-50 dark:bg-[#1A1525] rounded-2xl border border-zinc-200 dark:border-white/10 p-2">
+              <Search className="h-6 w-6 text-zinc-400 ml-4 mr-2" />
               <input 
                 type="text"
-                placeholder="Enter company name to analyze (e.g. BP, Shell)..."
-                className="w-full pl-12 pr-12 py-4 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-lg shadow-sm transition-shadow"
+                placeholder="Enter target node identifier (e.g. BP, Shell)..."
+                className="w-full bg-transparent border-none outline-none text-[16px] text-zinc-900 dark:text-white placeholder:text-zinc-400 p-2"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
               />
               {companyName && (
-                <button 
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-600 rounded-full hover:bg-zinc-100 transition-colors"
-                  onClick={clearReport}
-                  title="Clear Search"
-                >
+                <button onClick={clearReport} className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-white mr-2">
                   <X className="h-5 w-5" />
                 </button>
               )}
+              <button 
+                className="px-6 py-3 bg-gradient-to-r from-violet-500 to-cyan-400 text-white font-bold rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(139,92,246,0.6)] transition-all flex items-center shrink-0"
+                onClick={() => handleAnalyze()}
+                disabled={isLoading || !companyName.trim()}
+              >
+                {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Zap className="mr-2 h-5 w-5 fill-white" />}
+                Initiate Scan
+              </button>
             </div>
-            <Button 
-              size="lg" 
-              className="py-4 px-8 h-auto rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg shadow-md transition-all hover:shadow-lg w-full md:w-auto"
-              onClick={() => handleAnalyze()}
-              disabled={isLoading || !companyName.trim()}
-            >
-              {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Zap className="mr-2 h-5 w-5 fill-white" />}
-              Analyze Client
-            </Button>
           </div>
-          <div className="flex flex-wrap items-center justify-center mt-6 gap-3 text-sm text-zinc-500">
-            <span className="font-semibold uppercase tracking-wider text-xs">Try Samples:</span>
+
+          <div className="flex items-center justify-center gap-3 mt-6">
+            <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Priority Targets:</span>
             {["BP", "Shell", "Balfour Beatty"].map((sample) => (
-              <Badge 
+              <button 
                 key={sample} 
-                variant="secondary" 
-                className="cursor-pointer hover:bg-zinc-200 transition-colors py-1 px-3 text-sm font-medium"
+                className="px-3 py-1 rounded-full bg-zinc-100 dark:bg-[#2A233D] text-[11px] font-bold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-colors"
                 onClick={() => handleAnalyze(sample)}
               >
                 {sample}
-              </Badge>
+              </button>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Loading Skeleton */}
       {isLoading && (
         <div className="animate-pulse space-y-6">
-          <div className="h-24 bg-zinc-100 rounded-2xl w-full"></div>
+          <div className="h-24 bg-white dark:bg-[#241E32] rounded-[24px] w-full"></div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="h-[500px] bg-zinc-100 rounded-2xl w-full lg:col-span-2"></div>
-            <div className="h-[500px] bg-zinc-100 rounded-2xl w-full"></div>
+            <div className="h-[500px] bg-white dark:bg-[#241E32] rounded-[32px] w-full lg:col-span-2"></div>
+            <div className="h-[500px] bg-white dark:bg-[#241E32] rounded-[32px] w-full"></div>
           </div>
         </div>
       )}
 
-      {/* Live Incident Feed (Empty State) */}
+      {/* Live Incident Feed */}
       {!profile && !isLoading && (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="flex items-center gap-3 border-b border-zinc-200 pb-4">
-            <Activity className="h-6 w-6 text-red-500 animate-pulse" />
-            <h3 className="text-2xl font-bold text-zinc-900 tracking-tight">Live Near-Miss Feed</h3>
-            <Badge variant="outline" className="ml-2 bg-red-50 text-red-700 border-red-200">Automatically Updating</Badge>
+          <div className="flex items-center justify-between">
+             <div className="flex items-center gap-3">
+               <div className="flex items-center justify-center h-8 w-8 rounded-full bg-violet-500/20 text-cyan-500 border border-violet-500/30">
+                 <Activity className="h-4 w-4 animate-pulse" />
+               </div>
+               <h3 className="text-[20px] font-bold text-zinc-900 dark:text-white">Active Signal Feed</h3>
+             </div>
+             <div className="px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-[11px] font-bold text-cyan-600 dark:text-cyan-400 flex items-center gap-2">
+               <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></div> Live Scanning
+             </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {liveIncidents.map((incident) => {
               const hoursAgo = Math.floor((Date.now() - new Date(incident.dateTime).getTime()) / (1000 * 60 * 60));
-              const timeString = hoursAgo < 24 ? `${Math.max(1, hoursAgo)} hours ago` : `${Math.floor(hoursAgo / 24)} days ago`;
+              const timeString = hoursAgo < 24 ? `${Math.max(1, hoursAgo)}h ago` : `${Math.floor(hoursAgo / 24)}d ago`;
               const baseCompany = incident.clientDetails.split('-')[0].trim();
 
               return (
-                <Card key={incident.id} className="border-zinc-200 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden flex flex-col bg-white">
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-orange-400"></div>
-                  <CardContent className="p-6 flex-1 flex flex-col">
-                    <div className="flex justify-between items-start mb-4 gap-4">
-                      <div>
-                        <h4 className="font-black text-zinc-900 text-xl flex items-center gap-2 tracking-tight">
-                          <Building2 className="h-5 w-5 text-zinc-400" />
-                          {baseCompany}
-                        </h4>
-                        <span className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">{timeString}</span>
-                      </div>
-                      <Badge className="bg-red-50 text-red-700 border-red-200 shadow-sm text-xs font-bold text-center leading-tight py-1">{incident.incidentType}</Badge>
+                <div key={incident.id} className="bg-white dark:bg-[#241E32] rounded-[24px] p-6 shadow-sm border border-zinc-100 dark:border-white/5 relative flex flex-col group overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-cyan-400 to-violet-500"></div>
+                  
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 className="font-bold text-[18px] text-zinc-900 dark:text-white flex items-center gap-2">
+                        <Building2 className="h-4 w-4 text-cyan-500" />
+                        {baseCompany}
+                      </h4>
+                      <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">{timeString}</span>
                     </div>
-                    <p className="text-zinc-600 mb-5 line-clamp-3 flex-1 text-[15px] leading-relaxed font-medium">
-                      {incident.incidentDescription}
-                    </p>
-                    <div className="bg-zinc-50 rounded-xl p-4 border border-zinc-100 mb-5 flex items-center gap-3">
-                       <Briefcase className="h-5 w-5 text-zinc-400 shrink-0" />
-                       <div>
-                         <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-black block mb-0.5">Incumbent Consultant</span>
-                         <span className="text-sm font-bold text-zinc-800">{incident.consultantHired}</span>
-                       </div>
-                    </div>
-                    <Button 
-                      className="w-full bg-white border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-600 hover:text-white font-bold shadow-sm transition-all text-sm py-5"
-                      onClick={() => handleAnalyze(baseCompany)}
-                    >
-                      <Zap className="h-4 w-4 mr-2" /> Analyse Client Details
-                    </Button>
-                  </CardContent>
-                </Card>
+                    <span className="px-2 py-1 rounded bg-violet-500/10 text-violet-600 dark:text-violet-400 font-bold text-[10px] uppercase border border-violet-500/20">{incident.incidentType}</span>
+                  </div>
+                  
+                  <p className="text-[13px] text-zinc-600 dark:text-zinc-400 mb-5 line-clamp-3 leading-relaxed flex-1">
+                    {incident.incidentDescription}
+                  </p>
+                  
+                  <div className="bg-zinc-50 dark:bg-[#1A1525] rounded-xl p-4 border border-zinc-100 dark:border-white/5 mb-5 flex items-center gap-3">
+                     <Briefcase className="h-4 w-4 text-zinc-400" />
+                     <div>
+                       <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold block mb-0.5">Assigned Contractor</span>
+                       <span className="text-[13px] font-bold text-zinc-900 dark:text-zinc-200">{incident.consultantHired}</span>
+                     </div>
+                  </div>
+                  
+                  <button 
+                    className="w-full py-3 bg-zinc-100 dark:bg-[#2A233D] hover:bg-zinc-200 dark:hover:bg-[#322A4A] text-zinc-900 dark:text-white font-bold rounded-xl transition-all text-[13px] flex items-center justify-center border border-transparent dark:border-white/5"
+                    onClick={() => handleAnalyze(baseCompany)}
+                  >
+                    <Target className="h-4 w-4 mr-2 text-cyan-500" /> Establish Target Lock
+                  </button>
+                </div>
               );
             })}
             
             {liveIncidents.length === 0 && (
-              <div className="col-span-2 text-center py-12 text-zinc-500 font-medium">
-                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-zinc-300" />
-                Listening for incoming intelligence signals...
+              <div className="col-span-2 text-center py-20 text-[13px] text-zinc-500 font-bold">
+                <Loader2 className="h-6 w-6 animate-spin mx-auto mb-3 text-cyan-500" />
+                Scanning global networks for anomalies...
               </div>
             )}
           </div>
@@ -193,171 +200,159 @@ export function LeadScoringMatrix() {
       {profile && !isLoading && (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
           
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-[#241E32] p-6 rounded-[24px] border border-zinc-100 dark:border-white/5 shadow-sm gap-4">
             <div className="flex items-center gap-4">
-              <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100">
-                <Building2 className="h-8 w-8 text-zinc-600" />
+              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-cyan-400/20 flex items-center justify-center border border-violet-500/30 dark:border-white/10">
+                <Building2 className="h-7 w-7 text-violet-500 dark:text-cyan-400" />
               </div>
               <div>
-                <h3 className="text-3xl font-black text-zinc-900 tracking-tight leading-tight">
+                <h3 className="text-[24px] font-bold text-zinc-900 dark:text-white leading-none mb-1">
                   {profile.companyName}
                 </h3>
-                <p className="text-zinc-500 font-semibold mt-1 uppercase tracking-wider text-sm">{profile.industry} &bull; Target Lead</p>
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest">{profile.industry} &bull; Verified Target</p>
               </div>
             </div>
+            
             <div className="flex items-center gap-4 w-full md:w-auto">
-              <div className="flex flex-col items-end bg-zinc-50 p-4 rounded-xl border border-zinc-100 flex-1 md:flex-none">
-                <span className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Empirisys Score</span>
-                <Badge className={`text-2xl py-1.5 px-6 shadow-sm border-2 ${profile.overallScore < 70 ? 'bg-orange-50 text-orange-800 border-orange-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'}`}>
-                  {profile.overallScore} <span className="text-lg opacity-50 ml-1 font-medium">/ 100</span>
-                </Badge>
+              <div className="flex flex-col items-end bg-zinc-50 dark:bg-[#1A1525] p-3 rounded-xl border border-zinc-100 dark:border-white/5">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-1">Entry Probability</span>
+                <div className="flex items-center gap-2">
+                   <div className="text-[24px] font-bold text-cyan-600 dark:text-cyan-400 leading-none">{profile.overallScore}</div>
+                   <div className="text-[12px] text-zinc-500 font-bold">/ 100</div>
+                </div>
               </div>
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="h-full px-4 rounded-xl border-zinc-200 text-zinc-400 hover:text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors"
+              <button 
+                className="p-3 rounded-xl bg-zinc-100 dark:bg-[#2A233D] text-zinc-500 hover:text-red-500 dark:text-zinc-400 dark:hover:text-red-400 transition-colors border border-transparent dark:border-white/5"
                 onClick={clearReport}
-                title="Close Report & Return to Feed"
               >
-                <X className="h-6 w-6" />
-              </Button>
+                <X className="h-5 w-5" />
+              </button>
             </div>
           </div>
           
-          {/* Detailed Layout Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            {/* Column 1: Incident Dossier (Takes up 2 columns on lg) */}
+            {/* Column 1: Incident Dossier */}
             <div className="lg:col-span-2 space-y-6">
-              
               {profile.incident && (
-                <Card className="border-zinc-200 shadow-md overflow-hidden bg-white relative">
-                  <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
-                    <ShieldAlert className="h-64 w-64 text-zinc-900" />
+                <div className="bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5 rounded-[32px] overflow-hidden shadow-sm relative">
+                  <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+                    <ShieldAlert className="h-64 w-64 text-zinc-900 dark:text-white" />
                   </div>
-                  <div className="bg-red-50/50 border-b border-red-100 p-5 md:p-6 flex items-center gap-4">
-                    <div className="p-3 bg-red-100 rounded-xl shadow-sm">
-                      <AlertTriangle className="h-6 w-6 text-red-600" />
+                  
+                  <div className="p-6 md:p-8 relative z-10">
+                    <div className="flex items-center gap-3 mb-8">
+                       <div className="flex items-center justify-center h-10 w-10 rounded-[14px] bg-red-500/10 text-red-500 border border-red-500/20">
+                         <AlertTriangle className="h-5 w-5" />
+                       </div>
+                       <div>
+                         <h4 className="text-[18px] font-bold text-zinc-900 dark:text-white">Anomaly Log Detected</h4>
+                         <p className="text-[12px] text-zinc-500 dark:text-zinc-400">Classified Near-Miss Reconnaissance</p>
+                       </div>
                     </div>
-                    <div>
-                      <h4 className="text-xl font-black text-red-950 tracking-tight">Critical Incident Intelligence</h4>
-                      <p className="text-sm text-red-700 font-medium mt-0.5">Classified Near-Miss Reconnaissance</p>
-                    </div>
-                  </div>
-                  <CardContent className="p-6 md:p-8 space-y-8 relative z-10">
                     
-                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                    <div className="flex flex-col lg:flex-row gap-8 items-start mb-8">
                       <div className="flex-1 space-y-6 w-full">
                         <div>
-                          <h5 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Official Designation</h5>
-                          <p className="text-2xl font-bold text-zinc-900 leading-snug">{profile.incident.incidentType}</p>
+                          <h5 className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Official Designation</h5>
+                          <p className="text-[20px] font-bold text-zinc-900 dark:text-white leading-snug">{profile.incident.incidentType}</p>
                         </div>
                         
-                        <div className="bg-red-50/30 p-5 md:p-6 rounded-2xl border border-red-100">
-                          <h5 className="text-xs font-bold text-red-400 uppercase tracking-widest mb-3">Detailed Narrative</h5>
-                          <p className="text-zinc-800 leading-relaxed font-medium text-[15px]">{profile.incident.incidentDescription}</p>
+                        <div className="bg-zinc-50 dark:bg-[#1A1525] p-6 rounded-2xl border border-zinc-100 dark:border-white/5">
+                          <h5 className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest mb-3">Event Narrative</h5>
+                          <p className="text-[14px] text-zinc-700 dark:text-zinc-300 leading-relaxed">{profile.incident.incidentDescription}</p>
                         </div>
                       </div>
 
                       <div className="w-full lg:w-72 space-y-4 shrink-0">
-                        <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-200 shadow-sm">
-                          <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest block mb-2">Time of Event</span>
-                          <div className="flex items-center text-sm font-semibold text-zinc-800 bg-white p-3 rounded-lg border border-zinc-200 shadow-sm">
-                            <Clock className="h-4 w-4 mr-3 text-zinc-400" />
+                        <div className="bg-zinc-50 dark:bg-[#1A1525] p-5 rounded-2xl border border-zinc-100 dark:border-white/5">
+                          <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block mb-2">Timestamp</span>
+                          <div className="flex items-center text-[13px] font-bold text-zinc-900 dark:text-white">
+                            <Clock className="h-4 w-4 mr-2 text-violet-500" />
                             {new Date(profile.incident.dateTime).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
                           </div>
                         </div>
-                        <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-200 shadow-sm">
-                          <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest block mb-2">Operating Scenario</span>
-                          <div className="flex items-center text-sm font-semibold text-zinc-800 bg-white p-3 rounded-lg border border-zinc-200 shadow-sm">
-                            <Activity className="h-4 w-4 mr-3 text-zinc-400 shrink-0" />
+                        <div className="bg-zinc-50 dark:bg-[#1A1525] p-5 rounded-2xl border border-zinc-100 dark:border-white/5">
+                          <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block mb-2">Operating Scenario</span>
+                          <div className="flex items-center text-[13px] font-bold text-zinc-900 dark:text-white">
+                            <Activity className="h-4 w-4 mr-2 text-cyan-500 shrink-0" />
                             <span className="line-clamp-2">{profile.incident.scenario}</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-r from-orange-50 to-white border border-orange-100 rounded-2xl p-6 shadow-sm relative overflow-hidden">
-                      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-400"></div>
+                    <div className="bg-gradient-to-r from-orange-500/10 to-transparent border border-orange-500/20 rounded-2xl p-6 relative overflow-hidden">
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-orange-500"></div>
                       <div className="flex items-start gap-4">
-                        <div className="p-2 bg-orange-100 rounded-lg shrink-0">
-                          <ShieldAlert className="h-6 w-6 text-orange-600" />
+                        <div className="p-2 bg-orange-500/20 rounded-lg shrink-0 text-orange-500">
+                          <ShieldAlert className="h-5 w-5" />
                         </div>
                         <div>
-                          <h5 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-2">Regulatory & Enforcement Action</h5>
-                          <p className="text-zinc-800 font-semibold text-[15px] leading-snug">{profile.incident.regulatoryNotice}</p>
+                          <h5 className="text-[11px] font-bold text-orange-600 dark:text-orange-400 uppercase tracking-widest mb-1">Regulatory Intervention</h5>
+                          <p className="text-[13px] text-zinc-900 dark:text-white font-bold leading-snug">{profile.incident.regulatoryNotice}</p>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              )}
 
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Column 2: Empirisys Strategy Board */}
             <div className="space-y-6">
               
-              <Card className="border-emerald-100 shadow-lg bg-gradient-to-b from-emerald-50/80 to-white overflow-hidden ring-1 ring-emerald-200/50">
-                <CardHeader className="pb-5 border-b border-emerald-100/50 bg-white/50 backdrop-blur-sm p-6">
-                  <CardTitle className="text-emerald-950 flex items-center gap-3 text-xl font-black tracking-tight">
-                    <Target className="h-6 w-6 text-emerald-600" />
-                    Empirisys Strategy
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-8">
+              <div className="bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5 shadow-sm rounded-[32px] overflow-hidden">
+                <div className="bg-zinc-50 dark:bg-[#1A1525] p-6 border-b border-zinc-100 dark:border-white/5 flex items-center gap-3">
+                  <Target className="h-5 w-5 text-cyan-500" />
+                  <h3 className="text-[16px] font-bold text-zinc-900 dark:text-white">Deployment Strategy</h3>
+                </div>
+                
+                <div className="p-6 space-y-8">
                   
                   {/* Recommended Product */}
-                  <div className="bg-white border border-emerald-200 rounded-2xl p-6 shadow-md relative overflow-hidden">
-                    <div className="absolute -right-4 -bottom-4 opacity-[0.04]">
-                      <Zap className="h-32 w-32" />
-                    </div>
-                    <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">Target Solution fit</span>
-                    <div className="text-4xl font-black text-emerald-800 mt-2 tracking-tight">{profile.recommendedProduct}</div>
-                    <p className="text-sm text-zinc-600 mt-4 leading-relaxed font-medium">{profile.rationale}</p>
+                  <div className="bg-gradient-to-br from-violet-500/10 to-cyan-400/10 border border-violet-500/20 rounded-2xl p-6 relative overflow-hidden text-center">
+                    <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block mb-2">Target Module</span>
+                    <div className="text-[24px] font-bold text-zinc-900 dark:text-white leading-tight">{profile.recommendedProduct}</div>
+                    <p className="text-[12px] text-zinc-600 dark:text-zinc-300 mt-3">{profile.rationale}</p>
                   </div>
 
-                  {/* Competitor Intel */}
-                  <div className="space-y-3">
-                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
-                      <Briefcase className="h-4 w-4" /> Incumbent Consultant
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                      <Briefcase className="h-3 w-3" /> Incumbent Contractor
                     </span>
-                    <div className="bg-zinc-50 px-5 py-4 rounded-xl border border-zinc-200 shadow-sm">
-                      <p className="font-bold text-zinc-800 text-lg">{profile.incident?.consultantHired || "Unknown"}</p>
+                    <div className="bg-zinc-50 dark:bg-[#1A1525] px-4 py-3 rounded-xl border border-zinc-100 dark:border-white/5">
+                      <p className="font-bold text-[14px] text-zinc-900 dark:text-white">{profile.incident?.consultantHired || "Unknown"}</p>
                     </div>
                   </div>
 
-                  {/* The Pitch */}
-                  <div className="space-y-3">
-                    <span className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
-                      <Lightbulb className="h-4 w-4" /> Recommended Pitch Angle
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+                      <Lightbulb className="h-3 w-3" /> Synthesis Angle
                     </span>
-                    <div className="bg-amber-50 border border-amber-200 p-5 rounded-xl shadow-inner">
-                      <p className="text-[15px] text-amber-950 font-bold leading-relaxed">
+                    <div className="bg-cyan-400/5 border border-cyan-400/20 p-5 rounded-xl">
+                      <p className="text-[13px] text-zinc-800 dark:text-zinc-200 font-semibold italic leading-relaxed">
                         "{profile.incident?.pitchApproach}"
                       </p>
                     </div>
                   </div>
 
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* Risk Factors List */}
-              <Card className="shadow-md border-zinc-200 bg-white overflow-hidden">
-                <CardHeader className="pb-4 border-b border-zinc-100 bg-zinc-50/50 p-6">
-                  <CardTitle className="text-sm font-bold text-zinc-800 uppercase tracking-widest">Identified Risk Factors</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <ul className="space-y-4">
-                    {profile.keyRiskFactors.map((factor, i) => (
-                      <li key={i} className="flex items-start gap-3 text-[15px] text-zinc-700 font-semibold leading-snug">
-                        <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
-                        <span>{factor}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <div className="bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5 shadow-sm rounded-[24px] p-6">
+                <h3 className="text-[12px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Calculated Risk Vectors</h3>
+                <ul className="space-y-3">
+                  {profile.keyRiskFactors.map((factor, i) => (
+                    <li key={i} className="flex items-start gap-3 text-[13px] text-zinc-700 dark:text-zinc-300 font-medium">
+                      <CheckCircle2 className="h-4 w-4 text-violet-500 shrink-0 mt-0.5" />
+                      <span>{factor}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
             </div>
           </div>
