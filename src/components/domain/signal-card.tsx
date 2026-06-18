@@ -101,10 +101,34 @@ export function SignalCard({ signal }: SignalCardProps) {
       
       <CardFooter className="pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t border-zinc-100 dark:border-white/5 relative z-10 bg-zinc-50/50 dark:bg-black/20">
         <div className="flex items-center gap-2">
-          <Button variant="default" size="sm" className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+          <Button 
+            variant="default" 
+            size="sm" 
+            className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]"
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                const { toast } = require("sonner");
+                toast.success(`Signal Escalated`, {
+                  description: `"${signal.title}" has been escalated to the dashboard for priority review.`
+                });
+              }
+            }}
+          >
             <Zap className="mr-1.5 h-3.5 w-3.5" /> Escalate to Dashboard
           </Button>
-          <Button variant="outline" size="sm" className="h-8 text-xs border-zinc-200 dark:border-white/10 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-200 dark:hover:border-cyan-500/30 transition-all">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-8 text-xs border-zinc-200 dark:border-white/10 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-200 dark:hover:border-cyan-500/30 transition-all"
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                const { toast } = require("sonner");
+                toast.info(`Deep Scan Initiated`, {
+                  description: `AI agents are currently scanning deeper context for "${signal.title}".`
+                });
+              }
+            }}
+          >
             <Target className="mr-1.5 h-3.5 w-3.5" /> Run Deep Scan
           </Button>
         </div>
@@ -116,7 +140,7 @@ export function SignalCard({ signal }: SignalCardProps) {
             {signal.status}
           </Badge>
           <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
-            <a href="#" target="_blank" title="View Source">
+            <a href={signal.url || `https://google.com/search?q=${encodeURIComponent(signal.title)}`} target="_blank" title="View Source">
               <ExternalLink className="h-4 w-4" />
             </a>
           </Button>

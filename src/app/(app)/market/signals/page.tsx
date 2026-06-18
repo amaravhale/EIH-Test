@@ -10,7 +10,14 @@ import { IntelligenceSignal } from "@/app/api/agent/signals/route";
 
 export default function SignalsFeedPage() {
   const [signals, setSignals] = useState<IntelligenceSignal[]>([]);
+  const [filteredSignals, setFilteredSignals] = useState<IntelligenceSignal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Filter state
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [activeStatus, setActiveStatus] = useState<string>("all");
+  const [activeScore, setActiveScore] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const fetchSignals = async () => {
     setIsLoading(true);
@@ -19,6 +26,7 @@ export default function SignalsFeedPage() {
       const data = await res.json();
       if (data.signals) {
         setSignals(data.signals);
+        setFilteredSignals(data.signals);
       }
     } catch (error) {
       console.error("Failed to fetch signals:", error);
@@ -30,6 +38,42 @@ export default function SignalsFeedPage() {
   useEffect(() => {
     fetchSignals();
   }, []);
+
+  useEffect(() => {
+    let result = signals;
+    if (activeCategory !== "all") {
+      result = result.filter(s => s.category.toLowerCase() === activeCategory.toLowerCase());
+    }
+    if (activeStatus !== "all") {
+      result = result.filter(s => s.status.toLowerCase() === activeStatus.toLowerCase());
+    }
+    if (activeScore !== "all") {
+      const minScore = parseInt(activeScore, 10);
+      result = result.filter(s => s.score >= minScore);
+    }
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(s => 
+        s.title.toLowerCase().includes(q) || 
+        s.summary.toLowerCase().includes(q) ||
+        s.source.toLowerCase().includes(q)
+      );
+    }
+    setFilteredSignals(result);
+  }, [signals, activeCategory, activeStatus, activeScore, searchQuery]);
+
+  const handleExport = () => {
+    const dataStr = JSON.stringify(filteredSignals, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `neural-signals-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -52,7 +96,7 @@ export default function SignalsFeedPage() {
         </div>
         
         <div className="flex gap-3">
-          <Button variant="outline" className="bg-white dark:bg-[#1A1525] border-zinc-200 dark:border-white/10 hover:bg-zinc-50 dark:hover:bg-white/5">
+          <Button variant="outline" className="bg-white dark:bg-[#1A1525] border-zinc-200 dark:border-white/10 hover:bg-zinc-50 dark:hover:bg-white/5" onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" /> Export JSON
           </Button>
           <Button 
@@ -68,6 +112,12 @@ export default function SignalsFeedPage() {
       
       <FilterBar 
         searchPlaceholder="Search raw signals..."
+        onSearchChange={setSearchQuery}
+        onFilterChange={(filterId, value) => {
+          if (filterId === "category") setActiveCategory(value);
+          if (filterId === "status") setActiveStatus(value);
+          if (filterId === "score") setActiveScore(value);
+        }}
         filters={[
           {
             id: "category",
@@ -125,8 +175,10 @@ export default function SignalsFeedPage() {
                </div>
             </div>
           ))
+        ) : filteredSignals.length === 0 ? (
+          <div className="text-center py-10 text-zinc-500">No signals match your filters.</div>
         ) : (
-          signals.map(signal => (
+          filteredSignals.map(signal => (
             <SignalCard key={signal.id} signal={signal} />
           ))
         )}

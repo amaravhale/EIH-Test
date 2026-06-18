@@ -19,6 +19,7 @@ export interface IntelligenceSignal {
   status: 'discovered' | 'reviewed' | 'actionable';
   confidence: number;
   strategicTags: string[];
+  url?: string;
 }
 
 export async function GET() {
@@ -48,6 +49,7 @@ Each object must perfectly match this TypeScript interface:
   status: 'discovered' | 'reviewed' | 'actionable';
   confidence: number; (0-100)
   strategicTags: string[]; (2-3 short tags like "Lead Gen", "Compliance", "Competitor Threat")
+  url: string; (A realistic URL pointing to the source material, e.g., "https://www.hse.gov.uk/news" or "https://reuters.com/...")
 }`
         },
         {
