@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Loader2, RefreshCw, Activity, Target, Network, Zap, CheckCircle2, XCircle, Sparkles } from "lucide-react";
+import { Loader2, RefreshCw, Activity, Target, Network, Zap, CheckCircle2, XCircle, Sparkles, Shield } from "lucide-react";
 import { LeadScoringMatrix } from "./_components/lead-scoring-matrix";
 
 export default function DashboardPage() {
@@ -46,12 +46,12 @@ export default function DashboardPage() {
       
       {/* Top Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
-        <div>
-          <h2 className="text-[28px] font-bold tracking-tight text-zinc-900 dark:text-white mb-2">Systems Overview</h2>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400">
-            Neural network throughput is currently operating at <span className="text-cyan-500 font-semibold">98.4% efficiency</span>. All clusters are stable.
-          </p>
-        </div>
+        <div className="mb-10">
+        <h1 className="text-[36px] font-bold text-zinc-900 dark:text-white tracking-tight mb-2">Market Intelligence</h1>
+        <p className="text-[15px] text-zinc-500 dark:text-zinc-400">
+          AI-driven analysis of emerging HSE trends and opportunities.
+        </p>
+      </div>
         
         {/* Synexis Toggle Pills */}
         <div className="flex bg-zinc-100 dark:bg-[#110D17] p-1.5 rounded-full border border-zinc-200 dark:border-white/5">
@@ -76,12 +76,17 @@ export default function DashboardPage() {
           {/* Top KPI Cards (Synexis Style) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white dark:bg-[#241E32] rounded-[24px] p-6 shadow-sm border border-zinc-100 dark:border-white/5 relative overflow-hidden">
-              <div className="flex justify-between items-start mb-6">
-                <span className="text-[11px] font-bold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase">Active Themes</span>
-                <span className="text-[11px] font-bold text-cyan-500 flex items-center gap-1"><Activity className="h-3 w-3" /> +12%</span>
-              </div>
-              <div className="text-[40px] font-bold text-zinc-900 dark:text-white leading-none mb-2">{approvedThemes.length + pendingThemes.length}</div>
-              <p className="text-[12px] text-zinc-500 dark:text-zinc-400">Total verified intelligence nodes</p>
+                  <div className="flex justify-between items-start mb-6">
+                    <span className="text-[11px] font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase">ACTION-REQUIRED ITEMS</span>
+                    <span className="text-[13px] font-bold text-cyan-500 flex items-center">
+                      <Activity className="h-3 w-3 mr-1" />
+                      +{topActions.length} New
+                    </span>
+                  </div>
+                  <div className="text-[48px] font-bold text-zinc-900 dark:text-white leading-none tracking-tighter mb-2">
+                    {topActions.length}
+                  </div>
+                  <span className="text-[12px] font-bold text-zinc-500 dark:text-zinc-400">Items requiring immediate attention</span>
               {/* Fake bar chart visual */}
               <div className="absolute bottom-0 left-0 w-full flex items-end justify-between px-6 h-12 gap-2 opacity-50">
                 <div className="w-full bg-violet-500/20 rounded-t-sm h-[30%]"></div>
@@ -93,12 +98,17 @@ export default function DashboardPage() {
             </div>
 
             <div className="bg-white dark:bg-[#241E32] rounded-[24px] p-6 shadow-sm border border-zinc-100 dark:border-white/5 relative overflow-hidden">
-              <div className="flex justify-between items-start mb-6">
-                <span className="text-[11px] font-bold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase">Signals Ingested</span>
-                <span className="text-[11px] font-bold text-cyan-500 flex items-center gap-1"><Activity className="h-3 w-3" /> +4.2M</span>
-              </div>
-              <div className="text-[40px] font-bold text-zinc-900 dark:text-white leading-none mb-2">12.8M</div>
-              <p className="text-[12px] text-zinc-500 dark:text-zinc-400">Global market token usage</p>
+                  <div className="flex justify-between items-start mb-6">
+                    <span className="text-[11px] font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase">TOTAL PROCESSED SIGNALS</span>
+                    <span className="text-[13px] font-bold text-cyan-500 flex items-center">
+                      <Activity className="h-3 w-3 mr-1" />
+                      +4.2M
+                    </span>
+                  </div>
+                  <div className="text-[48px] font-bold text-zinc-900 dark:text-white leading-none tracking-tighter mb-2">
+                    12.8M
+                  </div>
+                  <span className="text-[12px] font-bold text-zinc-500 dark:text-zinc-400">Across all monitored channels</span>
               {/* Fake bar chart visual */}
               <div className="absolute bottom-0 left-0 w-full flex items-end justify-between px-6 h-12 gap-2 opacity-50">
                 <div className="w-full bg-cyan-400/20 rounded-t-sm h-[40%]"></div>
@@ -134,10 +144,10 @@ export default function DashboardPage() {
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-white dark:bg-[#241E32] rounded-[32px] p-8 shadow-sm border border-zinc-100 dark:border-white/5 h-[500px] overflow-y-auto custom-scrollbar">
                 <div className="flex items-center justify-between mb-8">
-                  <div>
-                    <h3 className="text-[18px] font-bold text-zinc-900 dark:text-white">Active Market Intelligence</h3>
-                    <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mt-1">Validated neural processing outputs</p>
-                  </div>
+                <div>
+                  <h3 className="text-[24px] font-bold text-zinc-900 dark:text-white">Active Theme Matrix</h3>
+                  <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-1">Validated intelligence patterns and trends</p>
+                </div>
                   <div className="flex gap-2">
                     <button className="px-3 py-1 rounded-md text-[11px] font-bold bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400">1H</button>
                     <button className="px-3 py-1 rounded-md text-[11px] font-bold bg-zinc-100 dark:bg-[#1A1525] text-zinc-500 dark:text-zinc-400">24H</button>
@@ -177,7 +187,7 @@ export default function DashboardPage() {
             <div className="lg:col-span-1">
               <div className="bg-white dark:bg-[#241E32] rounded-[32px] p-6 shadow-sm border border-zinc-100 dark:border-white/5 h-[500px] flex flex-col relative overflow-hidden">
                 <div className="flex items-center justify-between mb-6 relative z-10">
-                  <h3 className="text-[16px] font-bold text-zinc-900 dark:text-white">Neural Activity</h3>
+                  <h3 className="text-[16px] font-bold text-zinc-900 dark:text-white flex items-center gap-2"><Shield className="h-5 w-5 text-orange-500" /> Pending Review</h3>
                   <button onClick={fetchMarketData} className="text-zinc-400 hover:text-white transition-colors">
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                   </button>
