@@ -69,9 +69,9 @@ export function LeadScoringMatrix() {
                <Network className="h-8 w-8 text-violet-500 dark:text-cyan-400" />
             </div>
           </div>
-          <h3 className="text-[28px] font-bold text-zinc-900 dark:text-white mb-2">Target Acquisition Network</h3>
+          <h3 className="text-[28px] font-bold text-zinc-900 dark:text-white mb-2">Client Acquisition Intelligence (CAI)</h3>
           <p className="text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto text-[14px]">
-            Input a target node to initiate deep-scan neural analysis of HSE records, incident data, and calculate strategic Empirisys entry vectors.
+            Search for a prospective client to instantly generate an AI-driven profile covering HSE compliance, strategic entry points, and competitive intelligence.
           </p>
 
           <div className="w-full max-w-2xl mx-auto mt-8 relative group">
@@ -80,7 +80,7 @@ export function LeadScoringMatrix() {
               <Search className="h-6 w-6 text-zinc-400 ml-4 mr-2" />
               <input 
                 type="text"
-                placeholder="Enter target node identifier (e.g. BP, Shell)..."
+                placeholder="e.g. Shell, BP, Balfour Beatty..."
                 className="w-full bg-transparent border-none outline-none text-[16px] text-zinc-900 dark:text-white placeholder:text-zinc-400 p-2"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
@@ -97,7 +97,7 @@ export function LeadScoringMatrix() {
                 disabled={isLoading || !companyName.trim()}
               >
                 {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Zap className="mr-2 h-5 w-5 fill-white" />}
-                Initiate Scan
+                Analyse Client
               </button>
             </div>
           </div>
@@ -180,7 +180,7 @@ export function LeadScoringMatrix() {
                     className="w-full py-3 bg-zinc-100 dark:bg-[#2A233D] hover:bg-zinc-200 dark:hover:bg-[#322A4A] text-zinc-900 dark:text-white font-bold rounded-xl transition-all text-[13px] flex items-center justify-center border border-transparent dark:border-white/5"
                     onClick={() => handleAnalyze(baseCompany)}
                   >
-                    <Target className="h-4 w-4 mr-2 text-cyan-500" /> Establish Target Lock
+                    <Target className="h-4 w-4 mr-2 text-cyan-500" /> Analyse Client
                   </button>
                 </div>
               );

@@ -26,12 +26,26 @@ export interface SynexisSidebarProps {
 
 const mainNavItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-  { id: "analytics", label: "Analytics", icon: BarChart3, href: "/analytics" },
+  { 
+    id: "analytics", label: "Analytics", icon: BarChart3, href: "/analytics",
+    subItems: [
+      { id: "market", label: "Market Trends", href: "/analytics/market" },
+      { id: "competitor", label: "Competitor Intel", href: "/analytics/competitor" },
+      { id: "sentiment", label: "Sentiment Analysis", href: "/analytics/sentiment" },
+    ]
+  },
   { id: "signals", label: "Signals", icon: Radio, href: "/signals" },
   { id: "threats", label: "Threat Monitor", icon: Shield, href: "/threats" },
   { id: "competitors", label: "Competitors", icon: Users, href: "/competitors" },
   { id: "assistant", label: "AI Assistant", icon: Bot, href: "/assistant" },
-  { id: "content", label: "Content Studio", icon: PenTool, href: "/content/ideas" },
+  { 
+    id: "content", label: "Content Studio", icon: PenTool, href: "/content",
+    subItems: [
+      { id: "ideas", label: "Content Ideas", href: "/content/ideas" },
+      { id: "trending", label: "Trending Topics", href: "/content/trending" },
+      { id: "library", label: "Content Library", href: "/content/library" }
+    ]
+  },
 ];
 
 const bottomNavItems = [
@@ -61,22 +75,45 @@ export function SynexisSidebar({
           const Icon = item.icon;
           
           return (
-            <button
-              key={item.id}
-              onClick={() => onNavigate?.(item.href)}
-              className={cn(
-                "flex items-center w-full gap-3.5 px-4 py-3 rounded-2xl transition-all duration-300 text-[15px] font-semibold group relative overflow-hidden",
-                isActive 
-                  ? "text-white shadow-[0_4px_20px_rgba(139,92,246,0.3)]" 
-                  : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200"
+            <div key={item.id} className="flex flex-col mb-1">
+              <button
+                onClick={() => onNavigate?.(item.href)}
+                className={cn(
+                  "flex items-center w-full gap-3.5 px-4 py-3 rounded-2xl transition-all duration-300 text-[15px] font-semibold group relative overflow-hidden",
+                  isActive 
+                    ? "text-white shadow-[0_4px_20px_rgba(139,92,246,0.3)]" 
+                    : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200"
+                )}
+              >
+                {isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-400 opacity-100 z-0" />
+                )}
+                <Icon className={cn("h-[20px] w-[20px] shrink-0 relative z-10", isActive ? "text-white" : "")} />
+                <span className="relative z-10">{item.label}</span>
+              </button>
+              
+              {item.subItems && (
+                <div className="flex flex-col ml-11 mt-1 border-l border-zinc-200 dark:border-white/10 space-y-1">
+                  {item.subItems.map(subItem => {
+                    const isSubActive = activePath === subItem.href;
+                    return (
+                      <button
+                        key={subItem.id}
+                        onClick={() => onNavigate?.(subItem.href)}
+                        className={cn(
+                          "flex items-center w-full text-left pl-4 py-2 rounded-xl transition-all duration-200 text-[13px] font-medium",
+                          isSubActive
+                            ? "text-cyan-600 dark:text-cyan-400 font-bold bg-cyan-50 dark:bg-cyan-500/10"
+                            : "text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+                        )}
+                      >
+                        {subItem.label}
+                      </button>
+                    );
+                  })}
+                </div>
               )}
-            >
-              {isActive && (
-                <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-400 opacity-100 z-0" />
-              )}
-              <Icon className={cn("h-[20px] w-[20px] shrink-0 relative z-10", isActive ? "text-white" : "")} />
-              <span className="relative z-10">{item.label}</span>
-            </button>
+            </div>
           );
         })}
       </nav>
