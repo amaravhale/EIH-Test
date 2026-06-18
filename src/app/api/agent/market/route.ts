@@ -3,6 +3,7 @@ import OpenAI from 'openai';
 import { AggregatedTheme } from '@/lib/ai/market-intelligence/types';
 
 export const maxDuration = 60; // Prevent Vercel timeouts for LLM calls
+export const dynamic = 'force-dynamic';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
