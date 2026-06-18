@@ -24,7 +24,8 @@ export default function ProfileSettingsPage() {
         <CardContent className="space-y-6">
           <div className="flex items-center gap-6">
             <Avatar className="h-20 w-20">
-              <AvatarFallback className="text-2xl">JD</AvatarFallback>
+              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Alex Rivera" />
+              <AvatarFallback className="text-2xl">AR</AvatarFallback>
             </Avatar>
             <div className="space-y-2">
               <Button variant="outline" size="sm">Change Avatar</Button>
@@ -35,15 +36,15 @@ export default function ProfileSettingsPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="firstName">First name</Label>
-              <Input id="firstName" defaultValue="Jane" />
+              <Input id="firstName" defaultValue="Alex" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last name</Label>
-              <Input id="lastName" defaultValue="Doe" />
+              <Input id="lastName" defaultValue="Rivera" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" defaultValue="jane@empirisys.com" disabled />
+              <Input id="email" type="email" defaultValue="alex.rivera@empirisys.com" disabled />
             </div>
             <div className="space-y-2">
               <Label htmlFor="role">Role</Label>
