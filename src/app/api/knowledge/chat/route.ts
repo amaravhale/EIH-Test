@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import OpenAI from "openai";
+
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req: Request) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!process.env.OPENAI_API_KEY) {
+      return new NextResponse("Missing OPENAI_API_KEY", { status: 500 });
     }
 
     const { messages } = await req.json();
@@ -16,24 +20,33 @@ export async function POST(req: Request) {
       return new NextResponse("Missing or invalid messages", { status: 400 });
     }
 
-    // In a real implementation with Anthropic SDK:
-    // 1. Convert messages to Anthropic format
-    // 2. Perform vector similarity search on Supabase (RAG)
-    // 3. Inject context into system prompt
-    // 4. Return streaming response using AI SDK or standard Response
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        { 
+          role: "system", 
+          content: "You are the elite Empirisys AI Intelligence Assistant. Provide deep, concise, strategic answers regarding HSE (Health, Safety, Environment) markets, predictive analytics, and process safety." 
+        },
+        ...messages
+      ],
+      stream: true,
+    });
 
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
-        const mockResponse = "This is a mock streaming response from the Empirisys AI Assistant. In the production environment, this will stream responses from the Anthropic Claude API utilizing the pgvector data we retrieve from your organization's context.";
-        
-        // Simulate streaming chunks
-        const chunks = mockResponse.split(" ");
-        for (const chunk of chunks) {
-          controller.enqueue(encoder.encode(chunk + " "));
-          await new Promise((resolve) => setTimeout(resolve, 50));
+        try {
+          for await (const chunk of completion) {
+            const content = chunk.choices[0]?.delta?.content || "";
+            if (content) {
+              controller.enqueue(encoder.encode(content));
+            }
+          }
+        } catch (e) {
+          console.error("Streaming error:", e);
+        } finally {
+          controller.close();
         }
-        controller.close();
       },
     });
 
