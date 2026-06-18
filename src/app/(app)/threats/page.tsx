@@ -1,26 +1,59 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FilterBar } from "@/components/data/filter-bar";
-import { ShieldAlert, Activity, ArrowRight } from "lucide-react";
+import { ShieldAlert, Activity, ArrowRight, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ThreatsPage() {
+  const [threats, setThreats] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchThreats = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/agent/threats");
+      const data = await res.json();
+      if (data.threats) {
+        setThreats(data.threats);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchThreats();
+  }, []);
+
+  const criticalThreatsCount = threats.filter(t => t.level === "critical").length;
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Threat Monitor"
-        description="Active tracking of high-priority competitor moves and regulatory risks."
-      />
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <PageHeader
+          title="Threat Monitor"
+          description="Live AI tracking of high-priority competitor moves and regulatory risks."
+        />
+        <Button 
+          onClick={fetchThreats} 
+          disabled={isLoading}
+          className="bg-red-600 hover:bg-red-700 text-white transition-all shadow-[0_0_15px_rgba(220,38,38,0.3)]"
+        >
+          <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
+          {isLoading ? "Scanning Horizons..." : "Force Threat Scan"}
+        </Button>
+      </div>
 
       <FilterBar
         filters={[
           { id: "status", label: "Status", type: "select", options: [{ value: "critical", label: "Critical" }, { value: "high", label: "High" }] }
         ]}
-        onSearchChange={() => {}}
-        onFilterChange={() => {}}
       />
 
       <div className="grid gap-6 md:grid-cols-4">
@@ -32,7 +65,11 @@ export default function ThreatsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold text-red-700 dark:text-red-400">2</div>
+            {isLoading ? (
+              <div className="h-10 w-16 bg-red-200/50 dark:bg-red-900/50 animate-pulse rounded-md"></div>
+            ) : (
+              <div className="text-4xl font-bold text-red-700 dark:text-red-400">{criticalThreatsCount}</div>
+            )}
             <p className="text-sm text-red-600/80 mt-2">Require immediate action plan</p>
           </CardContent>
         </Card>
@@ -40,57 +77,63 @@ export default function ThreatsPage() {
         <Card className="md:col-span-3">
           <CardHeader>
             <CardTitle>Active Threats</CardTitle>
-            <CardDescription>Prioritized list of strategic risks identified by the AI.</CardDescription>
+            <CardDescription>Live prioritized list of strategic risks identified by the AI.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-start justify-between rounded-lg border border-zinc-200 p-4">
-                <div className="flex gap-4">
-                  <div className="mt-1">
-                    <Activity className="h-5 w-5 text-red-500" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-semibold text-zinc-900">ERM launches competing safety AI module</h4>
-                      <Badge variant="destructive">Critical</Badge>
-                    </div>
-                    <p className="text-sm text-zinc-600 mt-1">
-                      Press release indicates a direct competitor to the upcoming Empirisys predictive module. Features overlap by 80%.
-                    </p>
-                    <div className="flex gap-4 mt-3 text-xs text-zinc-500 font-medium">
-                      <span>Detected: 2 hours ago</span>
-                      <span>Source: PR Newswire</span>
-                      <button className="text-blue-600 hover:text-blue-700 flex items-center gap-1">
-                        View analysis <ArrowRight className="h-3 w-3" />
-                      </button>
+              {isLoading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-start justify-between rounded-lg border border-zinc-200 p-4 animate-pulse">
+                    <div className="flex gap-4 w-full">
+                      <div className="h-5 w-5 bg-zinc-200 rounded-full mt-1"></div>
+                      <div className="w-full">
+                        <div className="h-5 w-1/3 bg-zinc-200 rounded-md mb-2"></div>
+                        <div className="h-4 w-2/3 bg-zinc-200 rounded-md mb-4"></div>
+                        <div className="flex gap-4">
+                          <div className="h-3 w-24 bg-zinc-200 rounded-md"></div>
+                          <div className="h-3 w-32 bg-zinc-200 rounded-md"></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <div className="flex items-start justify-between rounded-lg border border-zinc-200 p-4">
-                <div className="flex gap-4">
-                  <div className="mt-1">
-                    <ShieldAlert className="h-5 w-5 text-amber-500" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-semibold text-zinc-900">New EU Data Privacy Regulation Draft</h4>
-                      <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">High</Badge>
+                ))
+              ) : threats.length === 0 ? (
+                <div className="text-center py-10 text-zinc-500">No active threats detected.</div>
+              ) : (
+                threats.map(threat => (
+                  <div key={threat.id} className="flex items-start justify-between rounded-lg border border-zinc-200 dark:border-white/10 p-4">
+                    <div className="flex gap-4">
+                      <div className="mt-1">
+                        {threat.level === "critical" ? (
+                          <Activity className="h-5 w-5 text-red-500" />
+                        ) : (
+                          <ShieldAlert className="h-5 w-5 text-amber-500" />
+                        )}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-white">{threat.title}</h4>
+                          {threat.level === "critical" ? (
+                            <Badge variant="destructive">Critical</Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900">High</Badge>
+                          )}
+                        </div>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
+                          {threat.description}
+                        </p>
+                        <div className="flex gap-4 mt-3 text-xs text-zinc-500 font-medium">
+                          <span>Detected: {threat.timeAgo}</span>
+                          <span>Source: {threat.source}</span>
+                          <button className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1">
+                            View analysis <ArrowRight className="h-3 w-3" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-sm text-zinc-600 mt-1">
-                      Draft regulation may impact how employee safety data is stored and processed across European regions.
-                    </p>
-                    <div className="flex gap-4 mt-3 text-xs text-zinc-500 font-medium">
-                      <span>Detected: 1 day ago</span>
-                      <span>Source: EU Parliament Docs</span>
-                      <button className="text-blue-600 hover:text-blue-700 flex items-center gap-1">
-                        View compliance check <ArrowRight className="h-3 w-3" />
-                      </button>
-                    </div>
                   </div>
-                </div>
-              </div>
+                ))
+              )}
             </div>
           </CardContent>
         </Card>

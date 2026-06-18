@@ -49,24 +49,8 @@ Each object must perfectly match this interface:
     const parsedContent = JSON.parse(completion.choices[0].message.content || '{"themes": []}');
     const themes: AggregatedTheme[] = parsedContent.themes;
 
-    const mockApprovedThemes = [
-      {
-        id: 'theme-0',
-        title: 'Rotterdam Refining Safety Capex Cycle',
-        description: 'Major operators in the Rotterdam area are initiating multi-year safety upgrades.',
-        signals: [],
-        interpretation: {
-          impact: 'High opportunity for enterprise-wide deployments in the Netherlands.',
-          relevantProduct: 'Leadership360' as const,
-          suggestedAction: 'Research target accounts at Rotterdam port for Leadership360 entry.'
-        },
-        status: 'approved' as const,
-        deltaStatus: 'intensified' as const
-      }
-    ];
-
     return NextResponse.json({
-      themes: [...mockApprovedThemes, ...themes]
+      themes: themes
     });
 
   } catch (error) {
