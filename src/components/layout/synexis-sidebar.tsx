@@ -63,7 +63,7 @@ export function SynexisSidebar({
       
       {/* Brand Logo Area */}
       <div className="flex items-center justify-center w-full px-2 mb-10">
-        <EmpirisysLogo textSize={32} iconSize={40} />
+        <EmpirisysLogo className="h-8 w-auto" />
       </div>
 
       {/* Main Navigation */}
