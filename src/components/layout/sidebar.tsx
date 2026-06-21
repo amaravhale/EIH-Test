@@ -167,7 +167,7 @@ export function Sidebar({
           ) : (
             <div className="flex items-center gap-2 overflow-hidden">
               {!collapsed ? (
-                <EmpirisysLogo className="h-6 w-auto" />
+                <EmpirisysLogo className="h-8 w-auto" />
               ) : (
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-sm">
                   E
