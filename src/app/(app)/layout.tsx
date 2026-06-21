@@ -36,11 +36,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   // Prevent hydration mismatch flash
   if (!mounted) {
-    return <div className="h-screen w-full bg-[#062A30]"></div>;
+    return <div className="h-screen w-full bg-[#1A1525]"></div>;
   }
 
   return (
-    <div className={`flex h-screen w-full overflow-hidden ${isDarkMode ? 'dark bg-[#062A30]' : 'bg-[#F8F9FB]'} text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-300`}>
+    <div className={`flex h-screen w-full overflow-hidden ${isDarkMode ? 'dark bg-[#1A1525]' : 'bg-[#F8F9FB]'} text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-300`}>
       <SynexisSidebar 
         activePath={pathname}
         onNavigate={(href) => router.push(href)}

@@ -68,13 +68,13 @@ export default function SignalsFeedPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400">
               <Radio className="h-3.5 w-3.5" />
             </span>
-            <span className="text-xs font-semibold uppercase tracking-wider text-teal-600 dark:text-teal-400">Live AI Feed Active</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">Live AI Feed Active</span>
             <span className="relative flex h-2 w-2 ml-1">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
             </span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">Neural Signals Feed</h1>
@@ -87,7 +87,7 @@ export default function SignalsFeedPage() {
           <Button 
             onClick={fetchSignals} 
             disabled={isLoading}
-            className="bg-teal-600 hover:bg-teal-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-all"
+            className="bg-violet-600 hover:bg-violet-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-all"
           >
             <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
             {isLoading ? "Scanning..." : "Force Deep Scan"}
@@ -143,7 +143,7 @@ export default function SignalsFeedPage() {
         {isLoading ? (
           // Skeleton loaders
           Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-48 rounded-xl bg-zinc-100 dark:bg-[#062A30] border border-zinc-200 dark:border-white/5 animate-pulse relative overflow-hidden">
+            <div key={i} className="h-48 rounded-xl bg-zinc-100 dark:bg-[#1A1525] border border-zinc-200 dark:border-white/5 animate-pulse relative overflow-hidden">
                <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent"></div>
                <div className="p-6">
                  <div className="flex justify-between">

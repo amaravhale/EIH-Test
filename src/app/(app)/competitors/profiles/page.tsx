@@ -41,7 +41,7 @@ export default function CompetitorsPage() {
           <Button 
             onClick={fetchCompetitors} 
             disabled={isLoading}
-            className="bg-teal-600 hover:bg-teal-700 text-white transition-all"
+            className="bg-violet-600 hover:bg-violet-700 text-white transition-all"
           >
             <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
             {isLoading ? "Generating Profiles..." : "Refresh Intelligence"}
@@ -84,7 +84,7 @@ export default function CompetitorsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-64 rounded-xl bg-zinc-100 dark:bg-[#062A30] border border-zinc-200 dark:border-white/5 animate-pulse relative overflow-hidden">
+            <div key={i} className="h-64 rounded-xl bg-zinc-100 dark:bg-[#1A1525] border border-zinc-200 dark:border-white/5 animate-pulse relative overflow-hidden">
                <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent"></div>
                <div className="p-6">
                  <div className="flex justify-between mb-4">
