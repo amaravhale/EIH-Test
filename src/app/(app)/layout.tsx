@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { SynexisSidebar } from "@/components/layout/synexis-sidebar";
 import { SynexisHeader } from "@/components/layout/synexis-header";
+import { useUser } from "@/contexts/user-context";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -27,12 +28,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const mockUser = {
-    name: "Alex Rivera",
-    role: "Pro Plan",
-    // We can use a placeholder avatar
-    avatarUrl: "https://i.pravatar.cc/150?u=a042581f4e29026704d", 
-  };
+  const { user } = useUser();
 
   // Prevent hydration mismatch flash
   if (!mounted) {
@@ -48,7 +44,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       
       <div className="flex flex-1 flex-col overflow-hidden">
         <SynexisHeader 
-          user={mockUser}
+          user={user}
           isDarkMode={isDarkMode}
           onToggleTheme={toggleTheme}
         />
