@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, createContext, useContext } from "react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { EmpirisysLogo } from "@/components/ui/empirisys-logo";
 import {
   ChevronLeft,
   ChevronRight,
@@ -159,18 +161,17 @@ export function Sidebar({
         )}
       >
         {/* Logo area */}
-        <div className="flex h-14 items-center border-b border-zinc-200 px-4 dark:border-zinc-800">
+        <div className="flex h-14 items-center justify-center border-b border-zinc-200 px-4 dark:border-zinc-800">
           {logo ? (
             logo
           ) : (
             <div className="flex items-center gap-2 overflow-hidden">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-sm">
-                E
-              </div>
-              {!collapsed && (
-                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
-                  Empirisys
-                </span>
+              {!collapsed ? (
+                <EmpirisysLogo textSize={24} iconSize={30} />
+              ) : (
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-sm">
+                  E
+                </div>
               )}
             </div>
           )}

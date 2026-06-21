@@ -18,6 +18,7 @@ import {
   PenTool
 } from "lucide-react";
 import Link from "next/link";
+import { EmpirisysLogo } from "@/components/ui/empirisys-logo";
 
 export interface SynexisSidebarProps {
   activePath?: string;
@@ -61,11 +62,8 @@ export function SynexisSidebar({
     <aside className="flex flex-col w-64 h-full bg-white dark:bg-[#1A1525] text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200 dark:border-white/5 transition-colors duration-300">
       
       {/* Brand Logo Area */}
-      <div className="flex items-center px-2 mb-10">
-        <div className="relative flex flex-col items-center text-[#0F292E] dark:text-white">
-          <span className="absolute -top-3 left-[50%] -translate-x-1/2 text-[26px] font-bold">∞</span>
-          <span className="text-[32px] font-bold tracking-tighter lowercase mt-2">empirisys</span>
-        </div>
+      <div className="flex items-center justify-center w-full px-2 mb-10">
+        <EmpirisysLogo textSize={32} iconSize={40} />
       </div>
 
       {/* Main Navigation */}
