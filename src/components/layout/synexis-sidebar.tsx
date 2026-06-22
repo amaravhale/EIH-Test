@@ -102,8 +102,8 @@ export function SynexisSidebar({
     <aside className="flex flex-col w-64 h-full bg-white dark:bg-[#1A1525] text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200 dark:border-white/5 transition-colors duration-300">
       
       {/* Brand Logo Area */}
-      <div className="flex items-center justify-center w-full px-2 mb-10">
-        <EmpirisysLogo className="h-10 w-auto" />
+      <div className="flex items-center justify-center w-full mt-4 mb-10">
+        <EmpirisysLogo className="w-full max-w-[165px] h-auto" />
       </div>
 
       {/* Main Navigation */}
