@@ -17,6 +17,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const savedTheme = localStorage.getItem("synexis-theme");
     if (savedTheme === "light") {
       setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
     }
   }, []);
 
@@ -24,6 +27,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     setIsDarkMode(prev => {
       const newVal = !prev;
       localStorage.setItem("synexis-theme", newVal ? "dark" : "light");
+      if (newVal) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
       return newVal;
     });
   };
@@ -32,7 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   // Prevent hydration mismatch flash
   if (!mounted) {
-    return <div className="h-screen w-full bg-[#1A1525]"></div>;
+    return <div className="h-screen w-full bg-white dark:bg-[#1A1525]"></div>;
   }
 
   return (
