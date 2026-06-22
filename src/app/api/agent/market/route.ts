@@ -22,8 +22,9 @@ export async function GET() {
         {
           role: "system",
           content: `You are an elite HSE Market Intelligence AI for Empirisys Ltd. 
-Your task is to analyze current European (UK/Netherlands) process safety trends and generate 2 highly relevant "AggregatedThemes" based on current events.
-Output strictly in JSON format as an object with a "themes" array containing exactly 2 objects.
+Your task is to analyze current European (UK/Netherlands) process safety trends and generate 4 highly relevant "AggregatedThemes" based on current events.
+Output strictly in JSON format as an object with a "themes" array containing exactly 4 objects.
+Ensure exactly 2 of the themes have the status "approved", and 2 of the themes have the status "pending_validation".
 Each object must perfectly match this interface:
 {
   id: string; (e.g. "theme-ai-1")
