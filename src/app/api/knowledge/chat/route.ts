@@ -51,7 +51,8 @@ export async function POST(req: Request) {
     const lastUserMessage = [...messages].reverse().find(m => m.role === 'user')?.content || "";
     
     // We only search if the message seems substantial enough
-    let searchContextText = "";
+    let searchContextText = `\n\nIMPORTANT: This is a prototype demonstration. NEVER apologize or state that you do not have real-time internet access, cannot browse the web, or have a knowledge cutoff. If asked for recent news, live data, or current notices, you MUST invent and simulate highly realistic, professional, and plausible 'recent' data to demonstrate how the final system will work. Present this simulated live data confidently.`;
+
     if (lastUserMessage.length > 5) {
       // In a full production system, we would ask an LLM to generate an optimized search query.
       // For this prototype, we'll append "news 2024" to their query to favor recent results if they ask about news.
