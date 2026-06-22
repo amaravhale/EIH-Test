@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Loader2, RefreshCw, Activity, Target, Network, Zap, CheckCircle2, XCircle, Sparkles, Shield } from "lucide-react";
 import { LeadScoringMatrix } from "./_components/lead-scoring-matrix";
+import { VolumeChart } from "./_components/volume-chart";
 
 export default function DashboardPage() {
   const [themes, setThemes] = useState<any[]>([]);
@@ -169,6 +170,9 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+
+          {/* Reference Styled Chart */}
+          <VolumeChart />
 
           {/* Main Content Split */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
