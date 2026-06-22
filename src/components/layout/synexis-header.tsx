@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Search, Bell, Moon, Sun } from "lucide-react";
 import Link from "next/link";
+import { toast } from "@/components/ui/toaster";
 
 export interface SynexisHeaderProps {
   user: {
@@ -17,16 +18,31 @@ export interface SynexisHeaderProps {
 
 export function SynexisHeader({ user, isDarkMode, onToggleTheme }: SynexisHeaderProps) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      toast({
+        title: "Search Initiated",
+        description: `Scanning neural patterns for "${searchQuery}"...`,
+      });
+      setSearchQuery("");
+    }
+  };
+
   return (
     <header className="flex h-20 items-center justify-between px-8 bg-transparent shrink-0">
       
       {/* Left side: Search Pill */}
       <div className="flex-1 flex items-center">
-        <div className="flex items-center w-full max-w-sm px-4 py-2.5 rounded-full bg-zinc-100/50 dark:bg-[#2A233D] border border-transparent dark:border-white/5 transition-colors">
+        <div className="flex items-center w-full max-w-sm px-4 py-2.5 rounded-full bg-zinc-100/50 dark:bg-[#2A233D] border border-transparent dark:border-white/5 transition-colors focus-within:ring-2 focus-within:ring-violet-500/50">
           <Search className="h-4 w-4 text-zinc-400 mr-2" />
           <input 
             type="text" 
             placeholder="Search neural patterns..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearch}
             className="bg-transparent border-none outline-none text-sm w-full text-zinc-900 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
           />
         </div>
