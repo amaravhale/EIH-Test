@@ -35,7 +35,7 @@ const mainNavItems = [
       { id: "market", label: "Market Trends", href: "/analytics/market" },
       { id: "competitor", label: "Competitor Intel", href: "/analytics/competitor" },
       { id: "sentiment", label: "Sentiment Analysis", href: "/analytics/sentiment" },
-      { id: "marketing", label: "Marketing Analyst", href: "/analytics/marketing" },
+      { id: "market-analyst", label: "Market Analyst", href: "/analytics/market-analyst" },
     ]
   },
   { id: "signals", label: "Signals", icon: Radio, href: "/market/signals" },

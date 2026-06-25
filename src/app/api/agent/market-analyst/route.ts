@@ -24,8 +24,8 @@ export async function POST(req: Request) {
     // PASTE YOUR PREPARED PROMPT HERE
     // Replace the text inside the backticks below with your prepared prompt.
     // =========================================================================
-    const SYSTEM_PROMPT = `You are a world-class Marketing Analyst Agent for Empirisys.
-Your goal is to provide deep, actionable marketing analysis, competitive positioning strategies, and campaign ideas.
+    const SYSTEM_PROMPT = `You are a world-class Market Analyst Agent for Empirisys.
+Your goal is to provide deep, actionable market analysis, competitive positioning strategies, and campaign ideas.
 
 Structure your analysis using professional markdown formatting (headings, bullet points, bold text).
 Focus on:
@@ -53,7 +53,7 @@ Focus on:
     return NextResponse.json({ analysis });
 
   } catch (error) {
-    console.error("[MARKETING_API_ERROR]", error);
+    console.error("[MARKET_ANALYST_API_ERROR]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

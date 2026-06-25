@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Zap, Copy, CheckCircle2 } from "lucide-react";
 import { toast } from "@/components/ui/toaster";
 
-export default function MarketingAnalyticsPage() {
+export default function MarketAnalystPage() {
   const [topic, setTopic] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
@@ -21,7 +21,7 @@ export default function MarketingAnalyticsPage() {
     setHasCopied(false);
     
     try {
-      const res = await fetch("/api/agent/marketing", {
+      const res = await fetch("/api/agent/market-analyst", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic }),
@@ -35,7 +35,7 @@ export default function MarketingAnalyticsPage() {
       setAnalysisResult(data.analysis);
       toast({
         title: "Analysis Complete",
-        description: "Your marketing analysis has been successfully generated.",
+        description: "Your market analysis has been successfully generated.",
       });
     } catch (e) {
       console.error(e);
@@ -64,8 +64,8 @@ export default function MarketingAnalyticsPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 max-w-5xl mx-auto">
       <PageHeader
-        title="Marketing Analyst"
-        description="Generate strategic marketing analysis and campaigns using the prepared agent."
+        title="Market Analyst"
+        description="Generate strategic market analysis and campaigns using the prepared agent."
       />
 
       <Card className="bg-white dark:bg-[#241E32] border-zinc-100 dark:border-white/5">
@@ -111,7 +111,7 @@ export default function MarketingAnalyticsPage() {
           <CardHeader className="flex flex-row items-center justify-between bg-zinc-50 dark:bg-[#1A1525] border-b border-zinc-100 dark:border-white/5">
             <div>
               <CardTitle>Generated Intelligence</CardTitle>
-              <CardDescription>AI-synthesized marketing analysis</CardDescription>
+              <CardDescription>AI-synthesized market analysis</CardDescription>
             </div>
             {analysisResult && (
               <Button variant="outline" size="sm" onClick={handleCopy} className="gap-2">
