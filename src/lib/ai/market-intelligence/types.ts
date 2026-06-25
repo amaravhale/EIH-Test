@@ -1,32 +1,55 @@
-// DEFERRED: Define true schemas when data layer is finalized.
-
+// Source tiers per Claude's workflow
 export type SourceTier = 'A' | 'B' | 'C' | 'D';
 
-export interface RawEvent {
-  id: string;
-  sourceUrl: string;
-  sourceTier: SourceTier;
-  rawText: string;
-  publishedAt: string;
-}
+export type EventType =
+  | 'incident'
+  | 'contract_award'
+  | 'regulatory_action'
+  | 'm_and_a'
+  | 'leadership_change'
+  | 'product_launch'
+  | 'partnership'
+  | 'capex_announcement';
 
-export interface ExtractedEvent extends RawEvent {
-  entity: string;
-  eventType: string;
-  date: string;
+export type EntityType = 'company' | 'facility' | 'regulator' | 'government';
+
+export type EventLifecycle =
+  | 'extracted'
+  | 'filtered'
+  | 'scored'
+  | 'aggregated'
+  | 'archived';
+
+export type ThemeValidation = 'pending_review' | 'approved' | 'rejected';
+
+export type DeltaStatus = 'new' | 'intensified' | 'faded' | 'stable';
+
+export type EmpProduct = 'Sense' | 'Boost' | 'Insight360' | 'Leadership360';
+
+export interface MarketEvent {
+  id: string;
+  entityName: string;
+  entityType: EntityType;
+  eventType: EventType;
+  title: string;
+  summary: string;
+  sourceUrl: string;
+  sourceName: string;
+  sourceTier: SourceTier;
   geography: string;
   sector: string;
-}
-
-export interface ScoredSignal extends ExtractedEvent {
-  strategicRelevance: number; // 0-100
-  evidenceStrength: number;   // 0-100
-  confidenceScore: number;    // Derived metric
+  eventDate: string; // ISO 8601
+  relevanceScore: number; // 0-100, deterministic
+  evidenceStrength: number; // 0-100, deterministic
+  confirmationCount: number;
+  isDuplicate: boolean;
+  lifecycleStatus: EventLifecycle;
+  rawContent?: string;
 }
 
 export interface StrategicInterpretation {
   impact: string;
-  relevantProduct: 'Sense' | 'Boost' | 'Insight360' | 'Leadership360' | 'None';
+  relevantProduct: EmpProduct;
   suggestedAction: string;
 }
 
@@ -34,9 +57,35 @@ export interface AggregatedTheme {
   id: string;
   title: string;
   description: string;
-  signals: ScoredSignal[];
+  events: MarketEvent[];
   interpretation: StrategicInterpretation;
-  status: 'pending_validation' | 'approved' | 'rejected';
-  deltaStatus: 'new' | 'intensified' | 'faded' | 'stable';
-  timestamp: string;
+  status: ThemeValidation;
+  deltaStatus: DeltaStatus;
+  relevanceScore: number;
+  timestamp: string; // ISO 8601
+}
+
+export interface DeltaReport {
+  generatedAt: string;
+  periodLabel: string;
+  newThemes: AggregatedTheme[];
+  intensifiedThemes: AggregatedTheme[];
+  fadedThemes: AggregatedTheme[];
+  stableThemes: AggregatedTheme[];
+  topActions: { theme: string; action: string; product: EmpProduct }[];
+}
+
+// LLM extraction output shape
+export interface LLMExtractedEvent {
+  entityName: string;
+  entityType: EntityType;
+  eventType: EventType;
+  title: string;
+  summary: string;
+  sourceUrl: string;
+  sourceName: string;
+  sourceTier: SourceTier;
+  geography: string;
+  sector: string;
+  eventDate: string;
 }

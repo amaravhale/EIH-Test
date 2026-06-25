@@ -1,59 +1,37 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { runMarketIntelligencePipeline } from '@/lib/ai/market-intelligence/pipeline';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
-    const { topic } = await req.json();
+    // Body is accepted but currently unused — reserved for future filter params
+    await req.json().catch(() => ({}));
 
-    if (!topic) {
-      return new NextResponse("Topic is required", { status: 400 });
-    }
+    const result = await runMarketIntelligencePipeline();
 
-    if (!process.env.OPENAI_API_KEY) {
-      return new NextResponse("Missing OPENAI_API_KEY", { status: 500 });
-    }
-
-    // =========================================================================
-    // PASTE YOUR PREPARED PROMPT HERE
-    // Replace the text inside the backticks below with your prepared prompt.
-    // =========================================================================
-    const SYSTEM_PROMPT = `You are a world-class Market Analyst Agent for Empirisys.
-Your goal is to provide deep, actionable market analysis, competitive positioning strategies, and campaign ideas.
-
-Structure your analysis using professional markdown formatting (headings, bullet points, bold text).
-Focus on:
-1. Market Positioning & Sentiment
-2. Competitive Strategy & Differentiation
-3. Proposed Campaign Angles & Deliverables
-4. Risk Factors & Mitigation`;
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: SYSTEM_PROMPT
-        },
-        {
-          role: "user",
-          content: `Please analyze the following topic/campaign: "${topic}"`
-        }
-      ],
+    return NextResponse.json({
+      events: result.events,
+      themes: result.themes,
+      meta: {
+        totalEventsExtracted: result.events.length,
+        totalThemes: result.themes.length,
+        generatedAt: new Date().toISOString(),
+      },
     });
-
-    const analysis = completion.choices[0].message.content || 'No analysis generated.';
-
-    return NextResponse.json({ analysis });
-
   } catch (error) {
-    console.error("[MARKET_ANALYST_API_ERROR]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    console.error('[MARKET_ANALYST_PIPELINE_ERROR]', error);
+    return new NextResponse('Pipeline execution failed', { status: 500 });
   }
+}
+
+// Health check
+export async function GET() {
+  return NextResponse.json({
+    status: 'ready',
+    agent: 'market-analyst',
+    pipeline:
+      'event-extraction → scoring → filtering → theme-aggregation → interpretation',
+  });
 }
