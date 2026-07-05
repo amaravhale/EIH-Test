@@ -320,15 +320,22 @@ export default function MarketAnalystPage() {
                 </h3>
                 <div className="h-72 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={result.metrics.trendVelocity}>
+                    <LineChart data={result.metrics.trendVelocity.map((d: any) => ({
+                      day: d.day || d.Day,
+                      legal: d.legal || d.Legal || 0,
+                      technological: d.technological || d.Technological || 0,
+                      environmental: d.environmental || d.Environmental || 0,
+                      economic: d.economic || d.Economic || 0,
+                    }))}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                       <XAxis dataKey="day" stroke="#71717a" fontSize={12} />
                       <YAxis stroke="#71717a" fontSize={12} />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                        itemStyle={{ fontSize: '12px' }}
+                        contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }}
+                        itemStyle={{ color: '#fff', fontSize: '12px' }}
+                        labelStyle={{ color: '#a1a1aa', fontWeight: 'bold', marginBottom: '4px' }}
                       />
-                      <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }} />
+                      <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '20px', color: '#e4e4e7' }} />
                       <Line type="monotone" dataKey="legal" stroke="#ef4444" strokeWidth={2} name="Legal" />
                       <Line type="monotone" dataKey="technological" stroke="#3b82f6" strokeWidth={2} name="Technological" />
                       <Line type="monotone" dataKey="environmental" stroke="#10b981" strokeWidth={2} name="Environmental" />
@@ -351,7 +358,10 @@ export default function MarketAnalystPage() {
                         <XAxis type="number" dataKey="marketShareScore" name="Market Share" domain={[0, 100]} stroke="#71717a" fontSize={12} />
                         <YAxis type="number" dataKey="innovationScore" name="Innovation" domain={[0, 100]} stroke="#71717a" fontSize={12} />
                         <ZAxis type="category" dataKey="competitorName" name="Competitor" />
-                        <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} />
+                        <Tooltip cursor={{ strokeDasharray: '3 3' }} 
+                          contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
+                          itemStyle={{ color: '#fff' }}
+                        />
                         <Scatter name="Competitors" data={result.metrics.competitorPositioning} fill="#8b5cf6">
                           {result.metrics.competitorPositioning.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.competitorName === 'Empirisys' ? '#06b6d4' : '#8b5cf6'} />
@@ -385,8 +395,11 @@ export default function MarketAnalystPage() {
                             return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
                           })}
                         </Pie>
-                        <Tooltip contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} />
-                        <Legend wrapperStyle={{ fontSize: '11px' }} />
+                        <Tooltip 
+                          contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
+                          itemStyle={{ color: '#fff' }}
+                        />
+                        <Legend wrapperStyle={{ fontSize: '11px', color: '#e4e4e7' }} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
