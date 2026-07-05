@@ -65,7 +65,15 @@ interface AggregatedTheme {
     impact: string;
     relevantProduct: string;
     suggestedAction: string;
-    scenarioForecast: string;
+    scenarioForecasts: {
+      bearCase: string;
+      baseCase: string;
+      bullCase: string;
+    };
+    stakeholderViews: {
+      ceoSummary: string;
+      ctoSummary: string;
+    };
     vrioAnalysis: {
       valuable: string;
       rare: string;
@@ -553,6 +561,7 @@ function ThemeCard({
   isPending?: boolean;
   validationOverride?: string;
 }) {
+  const [stakeholderView, setStakeholderView] = useState<"ceo" | "cto">("ceo");
   const delta = deltaLabels[theme.deltaStatus] || deltaLabels.stable;
   const status = validationOverride || theme.status;
 
@@ -624,24 +633,64 @@ function ThemeCard({
             <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider block mb-2">
               Strategic Interpretation
             </span>
-            <p className="text-[13px] text-zinc-700 dark:text-zinc-300 mb-3">
-              {theme.interpretation?.impact}
+            {/* Stakeholder View Toggle */}
+            <div className="flex bg-zinc-100 dark:bg-[#110D17] p-1 rounded-full w-fit mb-4 border border-zinc-200 dark:border-white/5">
+              <button
+                onClick={(e) => { e.stopPropagation(); setStakeholderView("ceo"); }}
+                className={`px-4 py-1.5 rounded-full text-[11px] font-bold transition-all ${
+                  stakeholderView === "ceo"
+                    ? "bg-violet-500 text-white shadow"
+                    : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+                }`}
+              >
+                CEO View
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setStakeholderView("cto"); }}
+                className={`px-4 py-1.5 rounded-full text-[11px] font-bold transition-all ${
+                  stakeholderView === "cto"
+                    ? "bg-cyan-500 text-white shadow"
+                    : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+                }`}
+              >
+                CTO View
+              </button>
+            </div>
+
+            <p className="text-[13px] text-zinc-700 dark:text-zinc-300 mb-3 font-medium bg-white/5 p-3 rounded-lg border border-white/5 border-l-4 border-l-violet-500">
+              {stakeholderView === "ceo" 
+                ? theme.interpretation?.stakeholderViews?.ceoSummary 
+                : theme.interpretation?.stakeholderViews?.ctoSummary}
             </p>
-            <div className="flex items-center gap-4 text-[11px] mb-3">
+
+            <div className="flex items-center gap-4 text-[11px] mb-4">
               <span className="text-zinc-500">
-                Target: <strong className="text-violet-500">{theme.interpretation?.relevantProduct}</strong>
+                Strategic Match: <strong className="text-violet-500">{theme.interpretation?.relevantProduct}</strong>
               </span>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+            {/* Scenarios & Action */}
+            <div className="grid grid-cols-1 gap-3 mb-4">
               <div className="p-3 rounded-lg bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5">
-                <span className="text-[10px] font-bold text-violet-500 uppercase tracking-wider block mb-1">
-                  18-Month Scenario Forecast
+                <span className="text-[10px] font-bold text-violet-500 uppercase tracking-wider block mb-2">
+                  18-Month Scenario Forecasts
                 </span>
-                <p className="text-[12px] text-zinc-700 dark:text-zinc-300">
-                  {theme.interpretation?.scenarioForecast}
-                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="bg-red-500/5 p-2 rounded border border-red-500/10">
+                    <span className="text-[9px] font-bold text-red-500 block mb-1">BEAR CASE</span>
+                    <p className="text-[11px] text-zinc-600 dark:text-zinc-400">{theme.interpretation?.scenarioForecasts?.bearCase}</p>
+                  </div>
+                  <div className="bg-blue-500/5 p-2 rounded border border-blue-500/10">
+                    <span className="text-[9px] font-bold text-blue-500 block mb-1">BASE CASE</span>
+                    <p className="text-[11px] text-zinc-600 dark:text-zinc-400">{theme.interpretation?.scenarioForecasts?.baseCase}</p>
+                  </div>
+                  <div className="bg-emerald-500/5 p-2 rounded border border-emerald-500/10">
+                    <span className="text-[9px] font-bold text-emerald-500 block mb-1">BULL CASE</span>
+                    <p className="text-[11px] text-zinc-600 dark:text-zinc-400">{theme.interpretation?.scenarioForecasts?.bullCase}</p>
+                  </div>
+                </div>
               </div>
+              
               <div className="p-3 rounded-lg bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5">
                 <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider block mb-1">
                   Suggested Action

@@ -12,7 +12,15 @@ export class StrategicInterpreter {
         impact: 'High risk of compliance breaches for major chemical operators lacking real-time AI monitoring.',
         relevantProduct: 'Sense',
         suggestedAction: 'Prepare positioning brief for Rotterdam port authorities highlighting Sense compliance features.',
-        scenarioForecast: 'Over the next 18 months, mid-sized operators will be forced to upgrade sensor arrays or face punitive fines.',
+        scenarioForecasts: {
+          bearCase: 'Minimal enforcement of regulations over the next 18 months.',
+          baseCase: 'Steady increase in fines for mid-sized operators.',
+          bullCase: 'Strict mandate forces widespread adoption of sensor arrays within 12 months.'
+        },
+        stakeholderViews: {
+          ceoSummary: 'Creates a clear market entry opportunity for Sense in the Netherlands.',
+          ctoSummary: 'Requires ensuring Sense integrates with legacy sensor types common in EU chemical plants.'
+        },
         vrioAnalysis: {
           valuable: 'Yes, Sense directly predicts compliance failures.',
           rare: 'Yes, predictive incident ML is rare in European HSE.',

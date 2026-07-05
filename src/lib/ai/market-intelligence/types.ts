@@ -54,7 +54,15 @@ export interface StrategicInterpretation {
   impact: string;
   relevantProduct: EmpProduct;
   suggestedAction: string;
-  scenarioForecast: string; // 12-18 month projection based on Scenario Planning
+  scenarioForecasts: {
+    bearCase: string;
+    baseCase: string;
+    bullCase: string;
+  };
+  stakeholderViews: {
+    ceoSummary: string;
+    ctoSummary: string;
+  };
   vrioAnalysis: {
     valuable: string;
     rare: string;

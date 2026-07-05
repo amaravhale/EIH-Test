@@ -62,9 +62,17 @@ Rules:
   - eventIds: Array of event IDs that support this theme
   - interpretation: {
       impact: What this means for the industry structure based on Porter's Five Forces.
-      relevantProduct: Which Empirisys product is most relevant: 'Sense', 'Boost', 'Insight360', or 'Leadership360'.
+      relevantProduct: Which Empirisys product is most relevant ('Sense', 'Boost', 'Insight360', or 'Leadership360'). You MUST justify this using authentic process-safety frameworks and terminology (e.g., CCPS Risk Based Process Safety elements, COMAH tiering, ATEX zoning, LOPA, BowTie methodology).
       suggestedAction: One specific, actionable next step.
-      scenarioForecast: A 12-18 month projection projecting how this trend alters the market.
+      scenarioForecasts: {
+        bearCase: "Worst-case 12-18 month projection for the market.",
+        baseCase: "Most likely 12-18 month projection.",
+        bullCase: "Best-case 12-18 month projection."
+      }
+      stakeholderViews: {
+        ceoSummary: "Why this matters for growth, market positioning, and revenue (Gus's perspective).",
+        ctoSummary: "Why this matters for the product roadmap and technical capabilities (Peter's perspective)."
+      }
       vrioAnalysis: {
         valuable: "Does Empirisys provide value here?",
         rare: "Is our capability rare?",
@@ -96,7 +104,15 @@ interface RawTheme {
     impact: string;
     relevantProduct: EmpProduct;
     suggestedAction: string;
-    scenarioForecast: string;
+    scenarioForecasts: {
+      bearCase: string;
+      baseCase: string;
+      bullCase: string;
+    };
+    stakeholderViews: {
+      ceoSummary: string;
+      ctoSummary: string;
+    };
     vrioAnalysis: {
       valuable: string;
       rare: string;
