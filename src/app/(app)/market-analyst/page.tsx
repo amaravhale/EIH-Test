@@ -18,7 +18,22 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { toast } from "@/components/ui/toaster";
-
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ScatterChart,
+  Scatter,
+  PieChart,
+  Pie,
+  Cell,
+  ZAxis,
+  Legend
+} from "recharts";
 // ─── Types matching pipeline output ───
 interface MarketEvent {
   id: string;
@@ -65,9 +80,16 @@ interface AggregatedTheme {
   timestamp: string;
 }
 
+export interface QuantitativeMetrics {
+  trendVelocity: any[];
+  competitorPositioning: any[];
+  budgetAllocation: any[];
+}
+
 interface PipelineResult {
   events: MarketEvent[];
   themes: AggregatedTheme[];
+  metrics: QuantitativeMetrics;
   meta: {
     totalEventsExtracted: number;
     totalThemes: number;
@@ -105,7 +127,7 @@ const eventTypeLabels: Record<string, string> = {
 export default function MarketAnalystPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PipelineResult | null>(null);
-  const [activeView, setActiveView] = useState<"themes" | "events">("themes");
+  const [activeView, setActiveView] = useState<"dashboard" | "themes" | "events">("dashboard");
   const [expandedTheme, setExpandedTheme] = useState<string | null>(null);
   const [validationState, setValidationState] = useState<Record<string, string>>({});
 
@@ -253,6 +275,17 @@ export default function MarketAnalystPage() {
           {/* View Toggle */}
           <div className="flex bg-zinc-100 dark:bg-[#110D17] p-1.5 rounded-full border border-zinc-200 dark:border-white/5 w-fit">
             <button
+              onClick={() => setActiveView("dashboard")}
+              className={`px-5 py-2 rounded-full text-[13px] font-bold transition-all duration-300 ${
+                activeView === "dashboard"
+                  ? "bg-gradient-to-r from-violet-500 to-cyan-400 text-white shadow-lg"
+                  : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+              }`}
+            >
+              <Activity className="h-3.5 w-3.5 inline mr-1.5" />
+              Strategic Dashboard
+            </button>
+            <button
               onClick={() => setActiveView("themes")}
               className={`px-5 py-2 rounded-full text-[13px] font-bold transition-all duration-300 ${
                 activeView === "themes"
@@ -271,10 +304,97 @@ export default function MarketAnalystPage() {
                   : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
               }`}
             >
-              <Activity className="h-3.5 w-3.5 inline mr-1.5" />
+              <Network className="h-3.5 w-3.5 inline mr-1.5" />
               Event Feed ({result.events.length})
             </button>
           </div>
+
+          {/* ═══════════════ DASHBOARD VIEW ═══════════════ */}
+          {activeView === "dashboard" && result.metrics && (
+            <div className="space-y-6">
+              
+              {/* STEEPLE Trend Velocity */}
+              <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-violet-500" /> STEEPLE Trend Velocity (7 Days)
+                </h3>
+                <div className="h-72 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={result.metrics.trendVelocity}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                      <XAxis dataKey="day" stroke="#71717a" fontSize={12} />
+                      <YAxis stroke="#71717a" fontSize={12} />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                        itemStyle={{ fontSize: '12px' }}
+                      />
+                      <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }} />
+                      <Line type="monotone" dataKey="legal" stroke="#ef4444" strokeWidth={2} name="Legal" />
+                      <Line type="monotone" dataKey="technological" stroke="#3b82f6" strokeWidth={2} name="Technological" />
+                      <Line type="monotone" dataKey="environmental" stroke="#10b981" strokeWidth={2} name="Environmental" />
+                      <Line type="monotone" dataKey="economic" stroke="#f59e0b" strokeWidth={2} name="Economic" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Competitor Positioning Matrix */}
+                <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
+                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-cyan-500" /> Competitive Positioning Matrix
+                  </h3>
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                        <XAxis type="number" dataKey="marketShareScore" name="Market Share" domain={[0, 100]} stroke="#71717a" fontSize={12} />
+                        <YAxis type="number" dataKey="innovationScore" name="Innovation" domain={[0, 100]} stroke="#71717a" fontSize={12} />
+                        <ZAxis type="category" dataKey="competitorName" name="Competitor" />
+                        <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} />
+                        <Scatter name="Competitors" data={result.metrics.competitorPositioning} fill="#8b5cf6">
+                          {result.metrics.competitorPositioning.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.competitorName === 'Empirisys' ? '#06b6d4' : '#8b5cf6'} />
+                          ))}
+                        </Scatter>
+                      </ScatterChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Budget Allocation */}
+                <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
+                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+                    <Network className="h-4 w-4 text-emerald-500" /> Budget CapEx Allocation
+                  </h3>
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={result.metrics.budgetAllocation}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={80}
+                          paddingAngle={5}
+                          dataKey="allocationPercentage"
+                          nameKey="category"
+                        >
+                          {result.metrics.budgetAllocation.map((entry, index) => {
+                            const colors = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+                            return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                          })}
+                        </Pie>
+                        <Tooltip contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} />
+                        <Legend wrapperStyle={{ fontSize: '11px' }} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          )}
 
           {/* ═══════════════ THEMES VIEW ═══════════════ */}
           {activeView === "themes" && (

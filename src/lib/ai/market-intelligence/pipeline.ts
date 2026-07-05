@@ -74,9 +74,14 @@ Rules:
       }
     }
   - deltaStatus: 'new', 'intensified', 'faded', or 'stable'
-  - status: Set all to 'pending_review'
+      - status: Set all to 'pending_review'
 
-Output strictly valid JSON: { "themes": [...] }`;
+- You must also generate a "metrics" object containing quantitative data representing the broader market over the last 7 days:
+  - trendVelocity: Array of 7 days (e.g. "Mon", "Tue"). For each day, provide realistic integers for STEEPLE categories (sociocultural, technological, economic, environmental, political, legal, ethical).
+  - competitorPositioning: Array of 5 competitors (including "Empirisys"). For each, provide 'innovationScore' (0-100), 'marketShareScore' (0-100), and 'threatLevel' (Low/Medium/High). Make sure Empirisys is well positioned based on the VRIO analysis.
+  - budgetAllocation: Array of budget categories (e.g., "Software & AI", "Legacy Hardware", "Consulting", "Safety Training") with 'allocationPercentage' (must sum to 100) and 'trend' (Increasing/Decreasing/Stable).
+
+Output strictly valid JSON: { "themes": [...], "metrics": { "trendVelocity": [...], "competitorPositioning": [...], "budgetAllocation": [...] } }`;
 
 // ────────────────────────────────────────────────────────────
 // LLM response shapes (raw JSON from OpenAI)
@@ -104,6 +109,15 @@ interface RawTheme {
   status: ThemeValidation;
 }
 
+interface RawAggregation {
+  themes: RawTheme[];
+  metrics: {
+    trendVelocity: any[];
+    competitorPositioning: any[];
+    budgetAllocation: any[];
+  };
+}
+
 // ────────────────────────────────────────────────────────────
 // Pipeline
 // ────────────────────────────────────────────────────────────
@@ -111,6 +125,7 @@ interface RawTheme {
 export interface PipelineResult {
   events: MarketEvent[];
   themes: AggregatedTheme[];
+  metrics: any; // Using 'any' locally to avoid circular imports, types.ts handles the strict interface
 }
 
 export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
@@ -179,7 +194,11 @@ export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
   const filteredEvents = scoredEvents.filter(shouldFilter);
 
   if (filteredEvents.length === 0) {
-    return { events: [], themes: [] };
+    return { 
+      events: [], 
+      themes: [], 
+      metrics: { trendVelocity: [], competitorPositioning: [], budgetAllocation: [] } 
+    };
   }
 
   // ── Step 5: Aggregate into themes via LLM ──────────────
@@ -215,15 +234,24 @@ export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
     throw new Error('LLM returned empty aggregation response');
   }
 
-  const parsedThemes: { themes: RawTheme[] } = JSON.parse(aggregationText);
-  if (!Array.isArray(parsedThemes.themes)) {
+  const parsedAggregation: RawAggregation = JSON.parse(aggregationText);
+  if (!parsedAggregation.themes || !Array.isArray(parsedAggregation.themes)) {
     throw new Error('LLM aggregation response missing "themes" array');
   }
+
+  // Fallback metrics if LLM fails to generate them properly
+  const defaultMetrics = {
+    trendVelocity: [],
+    competitorPositioning: [],
+    budgetAllocation: [],
+  };
+
+  const metrics = parsedAggregation.metrics || defaultMetrics;
 
   // ── Step 6 & 7: Link events, compute theme scores ─────
   const eventMap = new Map(filteredEvents.map((e) => [e.id, e]));
 
-  const themes: AggregatedTheme[] = parsedThemes.themes.map((raw) => {
+  const themes: AggregatedTheme[] = parsedAggregation.themes.map((raw) => {
     const linkedEvents = raw.eventIds
       .map((eid) => eventMap.get(eid))
       .filter((e): e is MarketEvent => e !== undefined);
@@ -249,5 +277,5 @@ export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
     };
   });
 
-  return { events: filteredEvents, themes };
+  return { events: filteredEvents, themes, metrics };
 }

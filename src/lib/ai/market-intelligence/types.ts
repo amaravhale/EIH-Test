@@ -86,6 +86,44 @@ export interface DeltaReport {
   topActions: { theme: string; action: string; product: EmpProduct }[];
 }
 
+// ─── NEW: Quantitative Dashboard Metrics ───
+
+export interface TrendVelocityDataPoint {
+  day: string;
+  sociocultural: number;
+  technological: number;
+  economic: number;
+  environmental: number;
+  political: number;
+  legal: number;
+  ethical: number;
+}
+
+export interface CompetitorScatterPoint {
+  competitorName: string;
+  innovationScore: number; // 0-100 (Y-axis)
+  marketShareScore: number; // 0-100 (X-axis)
+  threatLevel: 'Low' | 'Medium' | 'High';
+}
+
+export interface BudgetAllocationPoint {
+  category: string;
+  allocationPercentage: number;
+  trend: 'Increasing' | 'Decreasing' | 'Stable';
+}
+
+export interface QuantitativeMetrics {
+  trendVelocity: TrendVelocityDataPoint[];
+  competitorPositioning: CompetitorScatterPoint[];
+  budgetAllocation: BudgetAllocationPoint[];
+}
+
+export interface PipelineResult {
+  events: MarketEvent[];
+  themes: AggregatedTheme[];
+  metrics: QuantitativeMetrics;
+}
+
 // LLM extraction output shape
 export interface LLMExtractedEvent {
   entityName: string;

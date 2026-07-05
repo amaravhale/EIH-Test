@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       events: result.events,
       themes: result.themes,
+      metrics: result.metrics,
       meta: {
         totalEventsExtracted: result.events.length,
         totalThemes: result.themes.length,
