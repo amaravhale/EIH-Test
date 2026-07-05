@@ -91,6 +91,14 @@ interface RawTheme {
     impact: string;
     relevantProduct: EmpProduct;
     suggestedAction: string;
+    scenarioForecast: string;
+    vrioAnalysis: {
+      valuable: string;
+      rare: string;
+      inimitable: string;
+      organization: string;
+      competitiveImplication: string;
+    };
   };
   deltaStatus: DeltaStatus;
   status: ThemeValidation;
