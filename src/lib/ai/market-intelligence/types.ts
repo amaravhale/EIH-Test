@@ -26,11 +26,14 @@ export type DeltaStatus = 'new' | 'intensified' | 'faded' | 'stable';
 
 export type EmpProduct = 'Sense' | 'Boost' | 'Insight360' | 'Leadership360';
 
+export type SteepleCategory = 'Socio-cultural' | 'Technological' | 'Economic' | 'Environmental' | 'Political' | 'Legal' | 'Ethical';
+
 export interface MarketEvent {
   id: string;
   entityName: string;
   entityType: EntityType;
   eventType: EventType;
+  steepleCategory: SteepleCategory;
   title: string;
   summary: string;
   sourceUrl: string;
@@ -51,6 +54,14 @@ export interface StrategicInterpretation {
   impact: string;
   relevantProduct: EmpProduct;
   suggestedAction: string;
+  scenarioForecast: string; // 12-18 month projection based on Scenario Planning
+  vrioAnalysis: {
+    valuable: string;
+    rare: string;
+    inimitable: string;
+    organization: string;
+    competitiveImplication: string;
+  };
 }
 
 export interface AggregatedTheme {
@@ -80,6 +91,7 @@ export interface LLMExtractedEvent {
   entityName: string;
   entityType: EntityType;
   eventType: EventType;
+  steepleCategory: SteepleCategory;
   title: string;
   summary: string;
   sourceUrl: string;

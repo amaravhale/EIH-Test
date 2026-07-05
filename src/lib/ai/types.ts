@@ -39,4 +39,12 @@ export interface ExecutiveOutput {
     productRecommendation: 'BOOST' | 'DETECT';
     mitigationStrategy: string;
   };
+  meddicQualification: {
+    metrics: string;
+    economicBuyer: string;
+    decisionCriteria: string;
+    decisionProcess: string;
+    identifyPain: string;
+    champion: string;
+  };
 }

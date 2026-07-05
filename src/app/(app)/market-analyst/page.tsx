@@ -25,6 +25,7 @@ interface MarketEvent {
   entityName: string;
   entityType: string;
   eventType: string;
+  steepleCategory: string;
   title: string;
   summary: string;
   sourceUrl: string;
@@ -49,6 +50,14 @@ interface AggregatedTheme {
     impact: string;
     relevantProduct: string;
     suggestedAction: string;
+    scenarioForecast: string;
+    vrioAnalysis: {
+      valuable: string;
+      rare: string;
+      inimitable: string;
+      organization: string;
+      competitiveImplication: string;
+    };
   };
   status: string;
   deltaStatus: string;
@@ -349,6 +358,9 @@ export default function MarketAnalystPage() {
                       <span className="text-zinc-400">
                         📰 {event.sourceName}
                       </span>
+                      <span className="px-2 py-0.5 rounded border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 text-zinc-500 font-medium">
+                        {event.steepleCategory}
+                      </span>
                       <div className="flex gap-2 ml-auto">
                         <span className="px-2 py-0.5 rounded bg-violet-500/10 text-violet-500 font-bold">
                           Rel: {event.relevanceScore}
@@ -482,18 +494,41 @@ function ThemeCard({
             <p className="text-[13px] text-zinc-700 dark:text-zinc-300 mb-3">
               {theme.interpretation?.impact}
             </p>
-            <div className="flex items-center gap-4 text-[11px]">
+            <div className="flex items-center gap-4 text-[11px] mb-3">
               <span className="text-zinc-500">
                 Target: <strong className="text-violet-500">{theme.interpretation?.relevantProduct}</strong>
               </span>
             </div>
-            <div className="mt-3 p-3 rounded-lg bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5">
-              <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider block mb-1">
-                Suggested Action
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+              <div className="p-3 rounded-lg bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5">
+                <span className="text-[10px] font-bold text-violet-500 uppercase tracking-wider block mb-1">
+                  18-Month Scenario Forecast
+                </span>
+                <p className="text-[12px] text-zinc-700 dark:text-zinc-300">
+                  {theme.interpretation?.scenarioForecast}
+                </p>
+              </div>
+              <div className="p-3 rounded-lg bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5">
+                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider block mb-1">
+                  Suggested Action
+                </span>
+                <p className="text-[12px] text-zinc-700 dark:text-zinc-300">
+                  {theme.interpretation?.suggestedAction}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5">
+              <span className="text-[10px] font-bold text-cyan-500 uppercase tracking-wider block mb-2">
+                VRIO Competitive Analysis ({theme.interpretation?.vrioAnalysis?.competitiveImplication})
               </span>
-              <p className="text-[12px] text-zinc-700 dark:text-zinc-300">
-                {theme.interpretation?.suggestedAction}
-              </p>
+              <div className="grid grid-cols-2 gap-2 text-[11px] text-zinc-600 dark:text-zinc-400">
+                <div><strong className="text-zinc-900 dark:text-zinc-200">V:</strong> {theme.interpretation?.vrioAnalysis?.valuable}</div>
+                <div><strong className="text-zinc-900 dark:text-zinc-200">R:</strong> {theme.interpretation?.vrioAnalysis?.rare}</div>
+                <div><strong className="text-zinc-900 dark:text-zinc-200">I:</strong> {theme.interpretation?.vrioAnalysis?.inimitable}</div>
+                <div><strong className="text-zinc-900 dark:text-zinc-200">O:</strong> {theme.interpretation?.vrioAnalysis?.organization}</div>
+              </div>
             </div>
           </div>
 
