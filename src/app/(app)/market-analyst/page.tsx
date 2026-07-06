@@ -320,8 +320,69 @@ export default function MarketAnalystPage() {
           {/* ═══════════════ DASHBOARD VIEW ═══════════════ */}
           {activeView === "dashboard" && result.metrics && (
             <div className="space-y-6">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Budget Allocation (Donut) */}
+                <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
+                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+                    <Network className="h-4 w-4 text-emerald-500" /> Budget CapEx Allocation
+                  </h3>
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={result.metrics.budgetAllocation}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={80}
+                          paddingAngle={5}
+                          dataKey="allocationPercentage"
+                          nameKey="category"
+                        >
+                          {result.metrics.budgetAllocation.map((entry: any, index: number) => {
+                            const colors = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+                            return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                          })}
+                        </Pie>
+                        <Tooltip 
+                          contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
+                          itemStyle={{ color: '#fff' }}
+                        />
+                        <Legend wrapperStyle={{ fontSize: '11px', color: '#e4e4e7' }} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Competitor Positioning Matrix */}
+                <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
+                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-cyan-500" /> Competitive Positioning Matrix
+                  </h3>
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                        <XAxis type="number" dataKey="marketShareScore" name="Market Share" domain={[0, 100]} stroke="#71717a" fontSize={12} />
+                        <YAxis type="number" dataKey="innovationScore" name="Innovation" domain={[0, 100]} stroke="#71717a" fontSize={12} />
+                        <ZAxis type="category" dataKey="competitorName" name="Competitor" />
+                        <Tooltip cursor={{ strokeDasharray: '3 3' }} 
+                          contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
+                          itemStyle={{ color: '#fff' }}
+                        />
+                        <Scatter name="Competitors" data={result.metrics.competitorPositioning} fill="#8b5cf6">
+                          {result.metrics.competitorPositioning.map((entry: any, index: number) => (
+                            <Cell key={`cell-${index}`} fill={entry.competitorName === 'Empirisys' ? '#06b6d4' : '#8b5cf6'} />
+                          ))}
+                        </Scatter>
+                      </ScatterChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
               
-              {/* STEEPLE Trend Velocity */}
+              {/* STEEPLE Trend Velocity (Full Width, Below) */}
               <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
                 <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
                   <Activity className="h-4 w-4 text-violet-500" /> STEEPLE Trend Velocity (7 Days)
@@ -362,67 +423,6 @@ export default function MarketAnalystPage() {
                       <Line type="monotone" dataKey="ethical" stroke="#06b6d4" strokeWidth={2} name="Ethical" dot={{ r: 3 }} />
                     </LineChart>
                   </ResponsiveContainer>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Competitor Positioning Matrix */}
-                <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
-                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-cyan-500" /> Competitive Positioning Matrix
-                  </h3>
-                  <div className="h-64 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                        <XAxis type="number" dataKey="marketShareScore" name="Market Share" domain={[0, 100]} stroke="#71717a" fontSize={12} />
-                        <YAxis type="number" dataKey="innovationScore" name="Innovation" domain={[0, 100]} stroke="#71717a" fontSize={12} />
-                        <ZAxis type="category" dataKey="competitorName" name="Competitor" />
-                        <Tooltip cursor={{ strokeDasharray: '3 3' }} 
-                          contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
-                          itemStyle={{ color: '#fff' }}
-                        />
-                        <Scatter name="Competitors" data={result.metrics.competitorPositioning} fill="#8b5cf6">
-                          {result.metrics.competitorPositioning.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.competitorName === 'Empirisys' ? '#06b6d4' : '#8b5cf6'} />
-                          ))}
-                        </Scatter>
-                      </ScatterChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                {/* Budget Allocation */}
-                <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
-                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
-                    <Network className="h-4 w-4 text-emerald-500" /> Budget CapEx Allocation
-                  </h3>
-                  <div className="h-64 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={result.metrics.budgetAllocation}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
-                          paddingAngle={5}
-                          dataKey="allocationPercentage"
-                          nameKey="category"
-                        >
-                          {result.metrics.budgetAllocation.map((entry, index) => {
-                            const colors = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
-                            return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
-                          })}
-                        </Pie>
-                        <Tooltip 
-                          contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
-                          itemStyle={{ color: '#fff' }}
-                        />
-                        <Legend wrapperStyle={{ fontSize: '11px', color: '#e4e4e7' }} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
                 </div>
               </div>
 
