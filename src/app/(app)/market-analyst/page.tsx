@@ -328,13 +328,22 @@ export default function MarketAnalystPage() {
                 </h3>
                 <div className="h-72 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={result.metrics.trendVelocity.map((d: any) => ({
-                      day: d.day || d.Day,
-                      legal: d.legal || d.Legal || 0,
-                      technological: d.technological || d.Technological || 0,
-                      environmental: d.environmental || d.Environmental || 0,
-                      economic: d.economic || d.Economic || 0,
-                    }))}>
+                    <LineChart data={result.metrics.trendVelocity.map((d: any) => {
+                      const normalize = (keys: string[]) => {
+                        for (const k of keys) { if (d[k] !== undefined) return d[k]; }
+                        return 0;
+                      };
+                      return {
+                        day: d.day || d.Day || '',
+                        sociocultural: normalize(['sociocultural', 'Sociocultural', 'socio-cultural', 'Socio-cultural', 'socio_cultural']),
+                        technological: normalize(['technological', 'Technological']),
+                        economic: normalize(['economic', 'Economic']),
+                        environmental: normalize(['environmental', 'Environmental']),
+                        political: normalize(['political', 'Political']),
+                        legal: normalize(['legal', 'Legal']),
+                        ethical: normalize(['ethical', 'Ethical']),
+                      };
+                    })}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                       <XAxis dataKey="day" stroke="#71717a" fontSize={12} />
                       <YAxis stroke="#71717a" fontSize={12} />
@@ -344,10 +353,13 @@ export default function MarketAnalystPage() {
                         labelStyle={{ color: '#a1a1aa', fontWeight: 'bold', marginBottom: '4px' }}
                       />
                       <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '20px', color: '#e4e4e7' }} />
-                      <Line type="monotone" dataKey="legal" stroke="#ef4444" strokeWidth={2} name="Legal" />
-                      <Line type="monotone" dataKey="technological" stroke="#3b82f6" strokeWidth={2} name="Technological" />
-                      <Line type="monotone" dataKey="environmental" stroke="#10b981" strokeWidth={2} name="Environmental" />
-                      <Line type="monotone" dataKey="economic" stroke="#f59e0b" strokeWidth={2} name="Economic" />
+                      <Line type="monotone" dataKey="sociocultural" stroke="#f472b6" strokeWidth={2} name="Socio-cultural" dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="technological" stroke="#3b82f6" strokeWidth={2} name="Technological" dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="economic" stroke="#f59e0b" strokeWidth={2} name="Economic" dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="environmental" stroke="#10b981" strokeWidth={2} name="Environmental" dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="political" stroke="#a78bfa" strokeWidth={2} name="Political" dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="legal" stroke="#ef4444" strokeWidth={2} name="Legal" dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="ethical" stroke="#06b6d4" strokeWidth={2} name="Ethical" dot={{ r: 3 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>

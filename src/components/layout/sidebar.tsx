@@ -75,18 +75,6 @@ const defaultNavSections: NavSection[] = [
         href: "/signals",
         badge: "12",
       },
-      {
-        id: "threats",
-        label: "Threat Monitor",
-        icon: Shield,
-        href: "/threats",
-      },
-      {
-        id: "competitors",
-        label: "Competitors",
-        icon: Users,
-        href: "/competitors",
-      },
     ],
   },
   {

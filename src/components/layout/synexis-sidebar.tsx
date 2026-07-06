@@ -39,8 +39,6 @@ const mainNavItems = [
     ]
   },
   { id: "signals", label: "Signals", icon: Radio, href: "/market/signals" },
-  { id: "threats", label: "Threat Monitor", icon: Shield, href: "/threats" },
-  { id: "competitors", label: "Competitors", icon: Users, href: "/competitors" },
   { id: "assistant", label: "AI Assistant", icon: Bot, href: "/assistant" },
   { 
     id: "content", label: "Content Studio", icon: PenTool, href: "/content",
