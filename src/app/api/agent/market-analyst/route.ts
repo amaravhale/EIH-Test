@@ -11,6 +11,8 @@ export async function POST(req: Request) {
 
     const result = await runMarketIntelligencePipeline();
 
+    console.log('[MARKET_ANALYST] Pipeline completed. Metrics:', !!result.metrics);
+
     return NextResponse.json({
       events: result.events,
       themes: result.themes,
