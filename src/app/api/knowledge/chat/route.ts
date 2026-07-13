@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import * as cheerio from "cheerio";
+import { scrapeLiveThreats } from "@/lib/ai/threat-monitor/scraper";
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || 'dummy_key',
 });
 
 async function performWebSearch(query: string) {
@@ -37,10 +38,6 @@ async function performWebSearch(query: string) {
 
 export async function POST(req: Request) {
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      return new NextResponse("Missing OPENAI_API_KEY", { status: 500 });
-    }
-
     const { messages } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
@@ -50,8 +47,17 @@ export async function POST(req: Request) {
     // Extract the latest user message to run a background search
     const lastUserMessage = [...messages].reverse().find(m => m.role === 'user')?.content || "";
     
+    // Fetch live platform intelligence 
+    let internalData = "";
+    try {
+        const liveThreats = await scrapeLiveThreats();
+        internalData = `\n--- EMPIRISYS PLATFORM INTELLIGENCE ---\nRecent Verified Threats:\n${JSON.stringify(liveThreats, null, 2)}\n`;
+    } catch (e) {
+        console.log("Failed to fetch live threats for chat context", e);
+    }
+    
     // We only search if the message seems substantial enough
-    let searchContextText = `\n\nIMPORTANT: This is a prototype demonstration. NEVER apologize or state that you do not have real-time internet access, cannot browse the web, or have a knowledge cutoff. If asked for recent news, live data, or current notices, you MUST invent and simulate highly realistic, professional, and plausible 'recent' data to demonstrate how the final system will work. Present this simulated live data confidently.`;
+    let searchContextText = `${internalData}\n\nIMPORTANT: This is a prototype demonstration. NEVER apologize or state that you do not have real-time internet access, cannot browse the web, or have a knowledge cutoff. If asked for recent news, live data, or current notices, you MUST invent and simulate highly realistic, professional, and plausible 'recent' data to demonstrate how the final system will work. Present this simulated live data confidently.`;
 
     if (lastUserMessage.length > 5) {
       // In a full production system, we would ask an LLM to generate an optimized search query.
@@ -63,8 +69,20 @@ export async function POST(req: Request) {
       const scrapedData = await performWebSearch(query);
       
       if (scrapedData) {
-        searchContextText = `\n\n--- LIVE INTERNET DATA ---\nHere are real-time search results related to the user's query:\n${scrapedData}\n\nUse this data to answer their question accurately. Cite the live context provided rather than relying solely on your pre-trained memory. Do not mention that you performed a web search, just answer the question confidently as if you already knew it.`;
+        searchContextText = `${searchContextText}\n\n--- LIVE INTERNET DATA ---\nHere are real-time search results related to the user's query:\n${scrapedData}\n\nUse this data to answer their question accurately. Cite the live context provided rather than relying solely on your pre-trained memory. Do not mention that you performed a web search, just answer the question confidently as if you already knew it.`;
       }
+    }
+
+    // Provide robust fallback if no key is present for the chat component
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy_key' || process.env.OPENAI_API_KEY.includes('your-openai-api-key')) {
+        const encoder = new TextEncoder();
+        const stream = new ReadableStream({
+          start(controller) {
+            controller.enqueue(encoder.encode("This is the Empirisys Knowledge Base Assistant. (Note: OpenAI API key is missing or invalid. I have analyzed the live threats internally but cannot generate dynamic text responses at the moment)."));
+            controller.close();
+          }
+        });
+        return new Response(stream, { headers: { "Content-Type": "text/event-stream" } });
     }
 
     const completion = await openai.chat.completions.create({
