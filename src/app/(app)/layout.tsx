@@ -46,27 +46,38 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className={`flex h-screen w-full overflow-hidden ${isDarkMode ? 'dark bg-[#1A1525]' : 'bg-[#F8F9FB]'} text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-300`}>
-      <SynexisSidebar 
-        activePath={pathname}
-        onNavigate={(href) => router.push(href)}
-      />
+    <div className={`flex h-screen w-full overflow-hidden ${isDarkMode ? 'dark bg-[#0A0710]' : 'bg-[#F8F9FB]'} text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-300 relative`}>
       
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <SynexisHeader 
-          user={user}
-          isDarkMode={isDarkMode}
-          onToggleTheme={toggleTheme}
+      {/* Ambient Background Mesh to reveal Glassmorphism */}
+      {isDarkMode && (
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-violet-600/20 blur-[120px]" />
+          <div className="absolute top-[60%] -right-[10%] w-[40%] h-[40%] rounded-full bg-cyan-600/10 blur-[120px]" />
+        </div>
+      )}
+
+      <div className="relative z-10 flex h-full w-full">
+        <SynexisSidebar 
+          activePath={pathname}
+          onNavigate={(href) => router.push(href)}
         />
         
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto custom-scrollbar relative">
-          <AnimatePresence mode="wait">
-            <PageTransition key={pathname} className="mx-auto w-full p-8 pt-4 pb-20">
-              {children}
-            </PageTransition>
-          </AnimatePresence>
-        </main>
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <SynexisHeader 
+            user={user}
+            isDarkMode={isDarkMode}
+            onToggleTheme={toggleTheme}
+          />
+          
+          {/* Main Content Area */}
+          <main className="flex-1 overflow-y-auto custom-scrollbar relative">
+            <AnimatePresence mode="wait">
+              <PageTransition key={pathname} className="mx-auto w-full p-8 pt-4 pb-20">
+                {children}
+              </PageTransition>
+            </AnimatePresence>
+          </main>
+        </div>
       </div>
     </div>
   );
