@@ -17,6 +17,7 @@ import {
   Settings,
   HelpCircle,
   PenTool,
+  Target,
 } from "lucide-react";
 import { SidebarNav, type NavSection } from "./sidebar-nav";
 
@@ -43,6 +44,12 @@ const defaultNavSections: NavSection[] = [
         label: "Dashboard",
         icon: LayoutDashboard,
         href: "/dashboard",
+      },
+      {
+        id: "lead-scoring",
+        label: "Lead Scoring",
+        icon: Target,
+        href: "/lead-scoring",
       },
       {
         id: "analytics",

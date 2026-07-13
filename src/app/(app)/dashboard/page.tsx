@@ -2,12 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { Loader2, RefreshCw, Activity, Target, Network, Zap, CheckCircle2, XCircle, Sparkles, Shield } from "lucide-react";
-import { LeadScoringMatrix } from "./_components/lead-scoring-matrix";
 
 export default function DashboardPage() {
   const [themes, setThemes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"market" | "cai">("market");
   const [activeTimeframe, setActiveTimeframe] = useState<"1H" | "24H" | "7D" | "ALL">("ALL");
   
   // Live counters
@@ -80,25 +78,9 @@ export default function DashboardPage() {
         </p>
       </div>
         
-        {/* Synexis Toggle Pills */}
-        <div className="flex bg-zinc-100 dark:bg-[#110D17] p-1.5 rounded-full border border-zinc-200 dark:border-white/5">
-          <button 
-            onClick={() => setActiveTab("market")}
-            className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all duration-300 flex items-center gap-2 ${activeTab === 'market' ? 'bg-gradient-to-r from-violet-500 to-cyan-400 text-white shadow-lg' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
-          >
-            <Network className="h-4 w-4" /> Market Signals
-          </button>
-          <button 
-            onClick={() => setActiveTab("cai")}
-            className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all duration-300 flex items-center gap-2 ${activeTab === 'cai' ? 'bg-gradient-to-r from-violet-500 to-cyan-400 text-white shadow-lg' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
-          >
-            <Target className="h-4 w-4" /> Client Acquisition
-          </button>
-        </div>
       </div>
 
-      {activeTab === "market" && (
-        <div className="space-y-8">
+      <div className="space-y-8">
           
           {/* Top KPI Cards (Synexis Style) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -295,11 +277,6 @@ export default function DashboardPage() {
 
           </div>
         </div>
-      )}
-
-      {activeTab === "cai" && (
-        <LeadScoringMatrix />
-      )}
     </div>
   );
 }

@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Loader2, Search, Target, Zap, CheckCircle2, ShieldAlert, AlertTriangle, Briefcase, Lightbulb, Clock, Activity, Building2, X, Network } from "lucide-react";
-import { LeadScoreProfile, IncidentIntelligence } from "@/types/domain";
-
+import { IncidentIntelligence } from "@/types/domain";
+import { LeadScoreProfile } from "@/lib/ai/lead-scoring/types";
 export function LeadScoringMatrix() {
   const [companyName, setCompanyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -215,7 +215,7 @@ export function LeadScoringMatrix() {
             
             <div className="flex items-center gap-4 w-full md:w-auto">
               <div className="flex flex-col items-end bg-zinc-50 dark:bg-[#1A1525] p-3 rounded-xl border border-zinc-100 dark:border-white/5">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-1">Entry Probability</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-1">BANT Qualification</span>
                 <div className="flex items-center gap-2">
                    <div className="text-[24px] font-bold text-cyan-600 dark:text-cyan-400 leading-none">{profile.overallScore}</div>
                    <div className="text-[12px] text-zinc-500 font-bold">/ 100</div>
@@ -232,8 +232,34 @@ export function LeadScoringMatrix() {
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            {/* Column 1: Incident Dossier */}
+            {/* Column 1: Intelligence Dossier */}
             <div className="lg:col-span-2 space-y-6">
+              
+              {/* BANT Radial Metrics */}
+              {profile.bant && (
+                <div className="bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5 rounded-[32px] p-8 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
+                  <div className="text-center w-full">
+                    <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Budget</div>
+                    <div className="text-[28px] font-bold text-emerald-500">{profile.bant.budget}</div>
+                  </div>
+                  <div className="h-10 w-px bg-zinc-200 dark:bg-white/10 hidden md:block"></div>
+                  <div className="text-center w-full">
+                    <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Authority</div>
+                    <div className="text-[28px] font-bold text-violet-500">{profile.bant.authority}</div>
+                  </div>
+                  <div className="h-10 w-px bg-zinc-200 dark:bg-white/10 hidden md:block"></div>
+                  <div className="text-center w-full">
+                    <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Need</div>
+                    <div className="text-[28px] font-bold text-orange-500">{profile.bant.need}</div>
+                  </div>
+                  <div className="h-10 w-px bg-zinc-200 dark:bg-white/10 hidden md:block"></div>
+                  <div className="text-center w-full">
+                    <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Timing</div>
+                    <div className="text-[28px] font-bold text-cyan-500">{profile.bant.timing}</div>
+                  </div>
+                </div>
+              )}
+
               {profile.incident && (
                 <div className="bg-white dark:bg-[#241E32] border border-zinc-100 dark:border-white/5 rounded-[32px] overflow-hidden shadow-sm relative">
                   <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
@@ -318,25 +344,30 @@ export function LeadScoringMatrix() {
                     <p className="text-[12px] text-zinc-600 dark:text-zinc-300 mt-3">{profile.rationale}</p>
                   </div>
 
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
-                      <Briefcase className="h-3 w-3" /> Incumbent Contractor
-                    </span>
-                    <div className="bg-zinc-50 dark:bg-[#1A1525] px-4 py-3 rounded-xl border border-zinc-100 dark:border-white/5">
-                      <p className="font-bold text-[14px] text-zinc-900 dark:text-white">{profile.incident?.consultantHired || "Unknown"}</p>
-                    </div>
-                  </div>
+                  {profile.displacementStrategy && (
+                    <>
+                      <div className="space-y-2">
+                        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                          <Briefcase className="h-3 w-3" /> Incumbent Contractor
+                        </span>
+                        <div className="bg-zinc-50 dark:bg-[#1A1525] px-4 py-3 rounded-xl border border-zinc-100 dark:border-white/5">
+                          <p className="font-bold text-[14px] text-zinc-900 dark:text-white">{profile.displacementStrategy.incumbentConsultant}</p>
+                          <p className="text-[12px] text-zinc-500 mt-1">{profile.displacementStrategy.vulnerability}</p>
+                        </div>
+                      </div>
 
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest flex items-center gap-2">
-                      <Lightbulb className="h-3 w-3" /> Synthesis Angle
-                    </span>
-                    <div className="bg-cyan-400/5 border border-cyan-400/20 p-5 rounded-xl">
-                      <p className="text-[13px] text-zinc-800 dark:text-zinc-200 font-semibold italic leading-relaxed">
-                        "{profile.incident?.pitchApproach}"
-                      </p>
-                    </div>
-                  </div>
+                      <div className="space-y-2">
+                        <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+                          <Lightbulb className="h-3 w-3" /> Synthesis Angle
+                        </span>
+                        <div className="bg-cyan-400/5 border border-cyan-400/20 p-5 rounded-xl">
+                          <p className="text-[13px] text-zinc-800 dark:text-zinc-200 font-semibold italic leading-relaxed">
+                            "{profile.displacementStrategy.pitchAngle}"
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )}
 
                 </div>
               </div>
