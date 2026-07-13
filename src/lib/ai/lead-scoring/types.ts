@@ -27,6 +27,7 @@ export interface LeadScoreProfile {
     incidentType: string;
     incidentDescription: string;
     regulatoryNotice: string;
+    scenario: string;
     dateTime: string;
   };
 }

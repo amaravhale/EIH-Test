@@ -81,6 +81,7 @@ export async function runLeadScoringPipeline(companyName: string): Promise<LeadS
         incidentType: "Tier 1 Process Safety Event",
         incidentDescription: `A recent minor loss of primary containment at a regional ${industry.toLowerCase()} facility triggered a regulatory investigation, revealing gaps in barrier management.`,
         regulatoryNotice: "Improvement Notice issued by Competent Authority.",
+        scenario: "Start-up operations post-turnaround",
         dateTime: new Date(Date.now() - (simulatedData.daysSinceIncident * 24 * 60 * 60 * 1000)).toISOString()
       } : undefined
     };
@@ -118,6 +119,7 @@ Output strictly valid JSON matching this schema:
     "incidentType": "Brief type",
     "incidentDescription": "Realistic description of a recent HSE incident",
     "regulatoryNotice": "e.g., COMAH improvement notice",
+    "scenario": "e.g., Confined space entry, Start-up post-turnaround",
     "dateTime": "ISO8601 date"
   }
 }
