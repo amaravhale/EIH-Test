@@ -47,7 +47,7 @@ const defaultNavSections: NavSection[] = [
       },
       {
         id: "lead-scoring",
-        label: "Lead Scoring",
+        label: "Client Acquisition",
         icon: Target,
         href: "/lead-scoring",
       },
