@@ -9,6 +9,7 @@ export function LeadScoringMatrix() {
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState<LeadScoreProfile | null>(null);
   const [liveIncidents, setLiveIncidents] = useState<IncidentIntelligence[]>([]);
+  const [priorityTargets, setPriorityTargets] = useState<string[]>([]);
 
   useEffect(() => {
     fetchLiveIncidents();
@@ -20,6 +21,18 @@ export function LeadScoringMatrix() {
       const data = await res.json();
       if (data.incidents) {
         setLiveIncidents(data.incidents);
+        
+        // Extract unique companies from live incidents to populate Priority Targets dynamically
+        const companies = data.incidents
+          .map((inc: any) => inc.clientDetails.split('-')[0].trim())
+          .filter((val: string, ind: number, self: string[]) => self.indexOf(val) === ind)
+          .slice(0, 4); // Take up to 4 recent targets
+          
+        if (companies.length > 0) {
+          setPriorityTargets(companies);
+        } else {
+          setPriorityTargets(["BP", "Shell", "Balfour Beatty"]); // fallback
+        }
       }
     } catch (e) {
       console.error(e);
@@ -104,15 +117,19 @@ export function LeadScoringMatrix() {
 
           <div className="flex items-center justify-center gap-3 mt-6">
             <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Priority Targets:</span>
-            {["BP", "Shell", "Balfour Beatty"].map((sample) => (
-              <button 
-                key={sample} 
-                className="px-3 py-1 rounded-full bg-zinc-100 dark:bg-[#2A233D] text-[11px] font-bold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-colors"
-                onClick={() => handleAnalyze(sample)}
-              >
-                {sample}
-              </button>
-            ))}
+            {priorityTargets.length === 0 ? (
+              <span className="text-[11px] text-zinc-500 italic">Extracting targets from recent pipelines...</span>
+            ) : (
+              priorityTargets.map((sample) => (
+                <button 
+                  key={sample} 
+                  className="px-3 py-1 rounded-full bg-zinc-100 dark:bg-[#2A233D] text-[11px] font-bold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-colors"
+                  onClick={() => handleAnalyze(sample)}
+                >
+                  {sample}
+                </button>
+              ))
+            )}
           </div>
         </div>
       </div>

@@ -99,6 +99,11 @@ Empirisys sells:
 - Insight360 (Analytics dashboard)
 - Leadership360 (Leadership training)
 
+Your Objective:
+Analyze the target company based on recent industry signals, regulatory posture, and potential incumbent competitors (such as dss+, ERM, McKinsey, Sphera, Enablon, etc. - dynamically infer who the likely incumbent is). 
+Use world-class B2B SaaS sales methodologies (MEDDIC, Challenger Sale) and Deep Process Safety methodologies (CCPS RBPS, Hearts & Minds, Bradley Curve) to build a compelling displacement strategy. 
+You are NOT trained on one specific competitor. You must formulate strategies to beat ANY incumbent by attacking their generic weaknesses (e.g., manual consulting vs. scalable AI, lagging indicators vs. predictive leading indicators, generic checklists vs. tailored cultural diagnostics).
+
 Output strictly valid JSON matching this schema:
 {
   "companyName": "${companyName}",
@@ -108,11 +113,11 @@ Output strictly valid JSON matching this schema:
   "keyRiskFactors": ["risk1", "risk2", "risk3"],
   "recommendedProduct": "BOOST" | "SENSE" | "Both",
   "confidenceLevel": number (0-100),
-  "rationale": "Why Empirisys can win this client",
+  "rationale": "Why Empirisys can win this client (using Challenger Sale insights)",
   "displacementStrategy": {
-    "incumbentConsultant": "e.g., dss+, ERM, McKinsey",
-    "vulnerability": "Why the incumbent is weak",
-    "pitchAngle": "How to disrupt them"
+    "incumbentConsultant": "e.g., dss+, ERM, McKinsey, Sphera, Enablon - guess based on industry",
+    "vulnerability": "Why the incumbent's methodology is weak or outdated",
+    "pitchAngle": "How to disrupt them using Empirisys tools and modern safety data science"
   },
   "incident": {
     "id": "inc-123",
@@ -130,7 +135,7 @@ Note: The incident block is optional if no real incident applies.
     model: "gpt-4o",
     response_format: { type: "json_object" },
     messages: [
-      { role: "system", content: "You are an elite HSE B2B Sales Intelligence AI." },
+      { role: "system", content: "You are an elite HSE B2B Sales Intelligence AI with deep knowledge of MEDDIC, CCPS RBPS, and Challenger Sale methodologies." },
       { role: "user", content: prompt }
     ]
   });
