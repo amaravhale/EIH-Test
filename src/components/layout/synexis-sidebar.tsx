@@ -35,7 +35,6 @@ const mainNavItems = [
     subItems: [
       { id: "market", label: "Market Trends", href: "/analytics/market" },
       { id: "competitor", label: "Competitor Intel", href: "/analytics/competitor" },
-      { id: "sentiment", label: "Sentiment Analysis", href: "/analytics/sentiment" },
     ]
   },
   { id: "signals", label: "Signals", icon: Radio, href: "/market/signals" },

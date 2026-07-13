@@ -56,11 +56,6 @@ const defaultNavSections: NavSection[] = [
             label: "Competitor Intel",
             href: "/analytics/competitor",
           },
-          {
-            id: "sentiment",
-            label: "Sentiment Analysis",
-            href: "/analytics/sentiment",
-          },
         ],
       },
     ],
