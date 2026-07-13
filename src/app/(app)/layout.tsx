@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { SynexisSidebar } from "@/components/layout/synexis-sidebar";
 import { SynexisHeader } from "@/components/layout/synexis-header";
 import { useUser } from "@/contexts/user-context";
+import { AnimatePresence } from "framer-motion";
+import { PageTransition } from "@/components/ui/page-transition";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -58,10 +60,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         />
         
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto custom-scrollbar">
-          <div className="mx-auto w-full p-8 pt-4 pb-20">
-            {children}
-          </div>
+        <main className="flex-1 overflow-y-auto custom-scrollbar relative">
+          <AnimatePresence mode="wait">
+            <PageTransition key={pathname} className="mx-auto w-full p-8 pt-4 pb-20">
+              {children}
+            </PageTransition>
+          </AnimatePresence>
         </main>
       </div>
     </div>

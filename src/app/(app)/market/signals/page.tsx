@@ -199,8 +199,8 @@ export default function SignalsFeedPage() {
              <div className="text-center py-10 text-zinc-500">No verified threats detected in the current timeframe.</div>
           ) : (
             threats.map(threat => (
-              <div key={threat.id} className="bg-white dark:bg-[#1A1525] rounded-xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm relative overflow-hidden group">
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-red-500 to-orange-400"></div>
+              <div key={threat.id} className="bg-white dark:bg-[#1A1525] rounded-xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-xl hover:border-red-500/30 transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-red-500 to-orange-400 opacity-80 group-hover:opacity-100 transition-opacity"></div>
                 <div className="flex flex-col md:flex-row justify-between md:items-start gap-4 mb-4">
                   <div>
                     <div className="flex items-center gap-3 mb-2">

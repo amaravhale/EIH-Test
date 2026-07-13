@@ -99,7 +99,7 @@ export function SynexisSidebar({
   };
 
   return (
-    <aside className="flex flex-col w-64 h-full bg-white dark:bg-[#1A1525] text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200 dark:border-white/5 transition-colors duration-300">
+    <aside className="flex flex-col w-64 h-full bg-white/80 dark:bg-[#1A1525]/80 backdrop-blur-xl text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200/50 dark:border-white/5 transition-colors duration-300 relative z-40 shadow-xl shadow-zinc-200/20 dark:shadow-black/40">
       
       {/* Brand Logo Area */}
       <div className="flex items-center justify-center w-full mt-4 mb-10">

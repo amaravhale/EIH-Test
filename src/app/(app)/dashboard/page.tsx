@@ -89,7 +89,7 @@ export default function DashboardPage() {
 
       {/* Revenue Pulse KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm">
+        <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-xl transition-shadow">
           <div className="flex justify-between items-start mb-4">
             <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">Active Pipeline</span>
             <Target className="h-4 w-4 text-violet-500" />
@@ -98,7 +98,7 @@ export default function DashboardPage() {
           <p className="text-sm text-zinc-500">Tier-A targets currently vulnerable</p>
         </div>
 
-        <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm relative overflow-hidden">
+        <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-xl transition-shadow relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-transparent to-orange-500/5"></div>
           <div className="flex justify-between items-start mb-4 relative z-10">
             <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">Displacement Opps</span>
@@ -108,7 +108,7 @@ export default function DashboardPage() {
           <p className="text-sm text-zinc-500">Incumbents vulnerable to disruption</p>
         </div>
 
-        <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm">
+        <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-xl transition-shadow">
           <div className="flex justify-between items-start mb-4">
             <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">Dominant Theme</span>
             <BarChart3 className="h-4 w-4 text-cyan-500" />
