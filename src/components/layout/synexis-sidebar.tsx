@@ -41,14 +41,6 @@ const mainNavItems = [
   },
   { id: "signals", label: "Signals", icon: Radio, href: "/market/signals" },
   { id: "assistant", label: "AI Assistant", icon: Bot, href: "/assistant" },
-  { 
-    id: "content", label: "Content Studio", icon: PenTool, href: "/content",
-    subItems: [
-      { id: "ideas", label: "Content Ideas", href: "/content/ideas" },
-      { id: "trending", label: "Trending Topics", href: "/content/trending" },
-      { id: "library", label: "Content Library", href: "/content/library" }
-    ]
-  },
 ];
 
 const bottomNavItems = [
