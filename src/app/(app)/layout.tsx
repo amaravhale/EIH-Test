@@ -46,13 +46,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className={`flex h-screen w-full overflow-hidden ${isDarkMode ? 'dark bg-[#0A0710]' : 'bg-[#F8F9FB]'} text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-300 relative`}>
+    <div className={`flex h-screen w-full overflow-hidden ${isDarkMode ? 'dark bg-[#05030A]' : 'bg-[#F8F9FB]'} text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-300 relative`}>
       
       {/* Ambient Background Mesh to reveal Glassmorphism */}
       {isDarkMode && (
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-violet-600/20 blur-[120px]" />
-          <div className="absolute top-[60%] -right-[10%] w-[40%] h-[40%] rounded-full bg-cyan-600/10 blur-[120px]" />
+          <div className="absolute -top-[10%] -left-[5%] w-[40%] h-[40%] rounded-full bg-violet-600/50 blur-[100px]" />
+          <div className="absolute top-[50%] -right-[5%] w-[40%] h-[40%] rounded-full bg-cyan-600/40 blur-[100px]" />
         </div>
       )}
 

@@ -31,7 +31,7 @@ export function SynexisHeader({ user, isDarkMode, onToggleTheme }: SynexisHeader
   };
 
   return (
-    <header className="flex h-20 items-center justify-between px-8 shrink-0 sticky top-0 z-50 backdrop-blur-xl bg-white/60 dark:bg-[#1A1525]/60 border-b border-zinc-200/50 dark:border-white/5 transition-colors duration-300">
+    <header className="flex h-20 items-center justify-between px-8 shrink-0 sticky top-0 z-50 backdrop-blur-2xl bg-white/40 dark:bg-white/5 border-b border-zinc-200/50 dark:border-white/10 transition-colors duration-300">
       
       {/* Left side: Search Pill */}
       <div className="flex-1 flex items-center">

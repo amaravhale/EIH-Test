@@ -99,7 +99,7 @@ export function SynexisSidebar({
   };
 
   return (
-    <aside className="flex flex-col w-64 h-full bg-white/80 dark:bg-[#1A1525]/80 backdrop-blur-xl text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200/50 dark:border-white/5 transition-colors duration-300 relative z-40 shadow-xl shadow-zinc-200/20 dark:shadow-black/40">
+    <aside className="flex flex-col w-64 h-full bg-white/40 dark:bg-white/5 backdrop-blur-2xl text-zinc-900 dark:text-zinc-100 shrink-0 py-6 px-5 border-r border-zinc-200/50 dark:border-white/10 transition-colors duration-300 relative z-40 shadow-xl shadow-zinc-200/20 dark:shadow-black/40">
       
       {/* Brand Logo Area */}
       <div className="flex items-center justify-center w-full mt-4 mb-10">
@@ -120,14 +120,14 @@ export function SynexisSidebar({
                 className={cn(
                   "flex items-center w-full gap-3.5 px-4 py-3 rounded-2xl transition-all duration-300 text-[15px] font-semibold group relative overflow-hidden",
                   isActive && !item.subItems
-                    ? "text-white shadow-[0_4px_20px_rgba(139,92,246,0.3)]" 
+                    ? "text-white shadow-[0_0_20px_rgba(139,92,246,0.2)] bg-white/10 dark:bg-white/10 border border-white/20" 
                     : isActive && item.subItems
                       ? "text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-white/5"
-                      : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200"
+                      : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200 border border-transparent"
                 )}
               >
                 {isActive && !item.subItems && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-400 opacity-100 z-0" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-600/30 to-cyan-500/30 opacity-100 z-0 rounded-2xl" />
                 )}
                 <Icon className={cn("h-[20px] w-[20px] shrink-0 relative z-10", isActive && !item.subItems ? "text-white" : "")} />
                 <span className="relative z-10 flex-1 text-left">{item.label}</span>
