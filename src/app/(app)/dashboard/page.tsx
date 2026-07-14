@@ -18,13 +18,6 @@ interface ExecutiveBriefing {
   targets: StrikeTarget[];
 }
 
-const getGreeting = () => {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
-  return "Good evening";
-};
-
 export default function DashboardPage() {
   const [briefing, setBriefing] = useState<ExecutiveBriefing | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,10 +56,6 @@ export default function DashboardPage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
         <div className="mb-2">
-          <div className="text-[14px] font-semibold text-violet-500 dark:text-violet-400 mb-2 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse"></span>
-            {getGreeting()}, Empirisys Team
-          </div>
           <h1 className="text-[36px] font-bold text-zinc-900 dark:text-white tracking-tight mb-2">Mission Control</h1>
           <p className="text-[15px] text-zinc-500 dark:text-zinc-400">
             Real-time strategic posture, revenue pulse, and priority intelligence.

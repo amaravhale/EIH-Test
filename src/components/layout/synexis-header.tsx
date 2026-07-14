@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { Search, Bell, Moon, Sun } from "lucide-react";
+import { Search, Bell, Moon, Sun, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { toast } from "@/components/ui/toaster";
+import { usePathname } from "next/navigation";
 
 export interface SynexisHeaderProps {
   user: {
@@ -16,9 +17,37 @@ export interface SynexisHeaderProps {
   onToggleTheme: () => void;
 }
 
+const MOTIVATIONAL_QUOTES = [
+  "Growth is never by mere chance; it is the result of forces working together.",
+  "Strategy without execution is hallucination.",
+  "The secret of change is to focus all of your energy on building the new.",
+  "Don't be afraid to give up the good to go for the great.",
+  "Risk more than others think is safe. Dream more than others think is practical.",
+  "Success is not final; failure is not fatal: it is the courage to continue that counts.",
+  "The best way to predict the future is to create it."
+];
+
 export function SynexisHeader({ user, isDarkMode, onToggleTheme }: SynexisHeaderProps) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  };
+
+  const getDailyQuote = () => {
+    const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
+    return MOTIVATIONAL_QUOTES[dayOfYear % MOTIVATIONAL_QUOTES.length];
+  };
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchQuery.trim()) {
@@ -48,8 +77,20 @@ export function SynexisHeader({ user, isDarkMode, onToggleTheme }: SynexisHeader
         </div>
       </div>
 
-      {/* Middle: Links */}
-      <div className="flex-1 flex justify-center items-center gap-8 hidden md:flex">
+      {/* Middle: Links & Greeting (Only on Dashboard) */}
+      <div className="flex-1 flex justify-center items-center px-4 hidden lg:flex">
+        {mounted && pathname === '/dashboard' && (
+          <div className="flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-500">
+            <div className="text-[14px] font-semibold text-violet-500 dark:text-violet-400 mb-0.5 flex items-center justify-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+              {getGreeting()}, Empirisys Team
+            </div>
+            <div className="text-[12px] italic text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+              <Sparkles className="h-3 w-3 text-cyan-400" />
+              "{getDailyQuote()}"
+            </div>
+          </div>
+        )}
       </div>
 
 
