@@ -80,18 +80,26 @@ export function SynexisHeader({ user, isDarkMode, onToggleTheme }: SynexisHeader
       {/* Middle: Links & Greeting (Only on Dashboard) */}
       <div className="flex-1 flex justify-center items-center px-4 hidden lg:flex">
         {mounted && pathname === '/dashboard' && (
-          <div className="flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-700">
-            <div className="text-[16px] md:text-[18px] font-bold text-zinc-900 dark:text-white mb-1.5 flex items-center justify-center gap-2.5">
-              <span className="relative flex h-2.5 w-2.5">
+          <div className="flex flex-row items-center justify-center gap-6 animate-in fade-in zoom-in duration-700 w-full px-2">
+            
+            {/* Greeting */}
+            <div className="text-[16px] font-bold text-zinc-900 dark:text-white flex items-center justify-center gap-2.5 whitespace-nowrap shrink-0">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-violet-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
               </span>
               {getGreeting()}, <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-cyan-500 dark:from-violet-400 dark:to-cyan-400">Empirisys Team</span>
             </div>
-            <div className="text-[13px] md:text-[14px] font-medium italic text-zinc-600 dark:text-zinc-300 flex items-center gap-2 px-4 py-1 rounded-full bg-zinc-100/80 dark:bg-white/5 border border-transparent dark:border-white/10 shadow-sm">
-              <Sparkles className="h-3.5 w-3.5 text-cyan-500 dark:text-cyan-400" />
-              "{getDailyQuote()}"
+
+            {/* Vertical Divider */}
+            <div className="h-5 w-px bg-zinc-300 dark:bg-white/10 hidden xl:block shrink-0"></div>
+
+            {/* Quote Pill */}
+            <div className="hidden xl:flex text-[13px] font-medium italic text-zinc-600 dark:text-zinc-300 items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-100/80 dark:bg-white/5 border border-transparent dark:border-white/10 shadow-sm whitespace-nowrap shrink max-w-[450px] overflow-hidden">
+              <Sparkles className="h-3.5 w-3.5 text-cyan-500 dark:text-cyan-400 shrink-0" />
+              <span className="truncate">"{getDailyQuote()}"</span>
             </div>
+
           </div>
         )}
       </div>
