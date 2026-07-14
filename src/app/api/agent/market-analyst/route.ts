@@ -17,9 +17,11 @@ export async function POST(req: Request) {
       events: result.events,
       themes: result.themes,
       metrics: result.metrics,
+      landscape: result.landscape,
       meta: {
         totalEventsExtracted: result.events.length,
         totalThemes: result.themes.length,
+        totalSegments: result.landscape?.segments?.length || 0,
         generatedAt: new Date().toISOString(),
       },
     });

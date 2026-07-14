@@ -6,6 +6,7 @@ import type {
   EmpProduct,
   DeltaStatus,
   ThemeValidation,
+  MarketLandscape,
 } from './types';
 import {
   calculateRelevance,
@@ -91,6 +92,57 @@ Rules:
 
 Output strictly valid JSON: { "themes": [...], "metrics": { "trendVelocity": [...], "competitorPositioning": [...], "budgetAllocation": [...] } }`;
 
+const LANDSCAPE_SYSTEM_PROMPT = `You are the Empirisys Growth Strategist Engine — a Senior Partner-level commercial strategist. You think and work exactly like an elite market researcher who converts raw market signals into a targeted, repeatable commercial engine.
+
+CORE METHODOLOGY — Follow this precisely:
+
+1. REJECT GENERIC MARKET SIZING. Never cite syndicated report numbers (e.g., "the EHS software market is worth $X billion"). Instead, anchor ALL intelligence to NAMED regulatory deadlines, compliance duty extensions, and specific procurement events. Only time-boxed, budgeted demand matters.
+
+2. SOURCE TRIANGULATION. Cross-reference signals across primary authorities (e.g., HSE, NSTA, European Environment Agency, ADNOC, Saudi Aramco, national regulators). Do not rely on a single source.
+
+3. AUTONOMOUSLY DISCOVER MARKET SEGMENTS. You are NOT limited to any predefined list of segments. Scan the entire market landscape and independently identify the most commercially relevant segments for Empirisys (an AI-enabled process safety and HSE analytics company). Discover as many or as few segments as the evidence supports. For each segment, provide:
+   - id: Unique string (e.g., "seg-001")
+   - name: Segment name (e.g., "Water & Utilities", "Offshore Wind Decommissioning", "Middle East Energy Mega-Projects")
+   - geography: Country or region
+   - readiness: "high" (live dated trigger exists now), "medium" (trigger exists within 6 months), or "low" (no specific dated trigger yet)
+   - trigger: { name: The exact named regulation/programme/procurement event, value: The monetary value or scale, deadline: The specific date or date range }
+   - mechanism: WHY this trigger creates a buyer for Empirisys. Be specific (e.g., "H&S performance is explicitly weighted at 15% of evaluation criteria in the framework scoring matrix")
+   - entryBarriers: What blocks entry (e.g., "ICV certification required, processing time 3-9 months", or "None — open framework")
+   - bestFitProduct: Which Empirisys product fits best — "Sense", "Boost", "Insight360", or "Leadership360"
+   - squeezeOpportunity: ONE clear sentence explaining exactly where Empirisys can apply commercial pressure right now
+
+4. RANK SEGMENTS BY COMMERCIAL READINESS. The segment with the most immediate, time-boxed, budgeted trigger goes first. Segments with no dated trigger for the next 6 months should be marked as "low" readiness and placed last.
+
+5. BUILD GROWTH HORIZONS. Based on the discovered segments, create exactly 3 horizons:
+   - NOW (0-3 months): Actions against LIVE triggers that are already in procurement or past a regulatory deadline. These are revenue actions.
+   - NEXT (3-9 months): Parallel administrative/certification work (e.g., starting prequalification processes, securing pilot accounts) that absorbs lead time while NOW actions execute.
+   - LATER (9-18 months): Segments explicitly DEFERRED. For each deferred segment, state the specific condition that must change before Empirisys should invest (e.g., "Defer until a dated regulatory trigger emerges in the UK power-generation segment").
+
+   Each horizon contains an array of actions. Each action has:
+   - action: What to do (concrete, specific)
+   - segment: Which segment this targets
+   - rationale: Why this timing is correct
+
+6. IDENTIFY THE STRATEGIC PRECONDITION. What is the single most critical internal capability or credibility gap that Empirisys must solve BEFORE external scaling can succeed? (e.g., "Build an auditable evidence chain behind AI diagnostic outputs to satisfy regulator-adjacent buyers and insurers"). This is the one thing that, if not solved, makes all other growth actions futile.
+
+7. WRITE IN PLAIN BUSINESS ENGLISH. Every team member — from the CEO to a junior sales rep — must be able to read your output and immediately understand what to do. No unexplained acronyms. No jargon without context. If you use a technical term, explain it in parentheses.
+
+8. LANDSCAPE SUMMARY. Provide a 3-4 sentence executive summary of the current market state. This should answer: "If I had 60 seconds with the CEO, what would I tell them about where the market is today and where the money is?"
+
+You will receive the extracted market events and strategic themes as context. Use them as your evidence base. Do NOT invent triggers that aren't grounded in the event data or realistic current market conditions.
+
+Output strictly valid JSON:
+{
+  "landscapeSummary": "...",
+  "strategicPrecondition": "...",
+  "segments": [...],
+  "horizons": [
+    { "id": "now", "label": "NOW", "timeframe": "0–3 Months", "actions": [...] },
+    { "id": "next", "label": "NEXT", "timeframe": "3–9 Months", "actions": [...] },
+    { "id": "later", "label": "LATER", "timeframe": "9–18 Months", "actions": [...] }
+  ]
+}`;
+
 // ────────────────────────────────────────────────────────────
 // LLM response shapes (raw JSON from OpenAI)
 // ────────────────────────────────────────────────────────────
@@ -142,6 +194,7 @@ export interface PipelineResult {
   events: MarketEvent[];
   themes: AggregatedTheme[];
   metrics: any; // Using 'any' locally to avoid circular imports, types.ts handles the strict interface
+  landscape: MarketLandscape | null;
 }
 
 export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
@@ -213,7 +266,8 @@ export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
     return { 
       events: [], 
       themes: [], 
-      metrics: { trendVelocity: [], competitorPositioning: [], budgetAllocation: [] } 
+      metrics: { trendVelocity: [], competitorPositioning: [], budgetAllocation: [] },
+      landscape: null,
     };
   }
 
@@ -317,5 +371,59 @@ export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
     };
   });
 
-  return { events: filteredEvents, themes, metrics };
+  // ── Step 8: Market Landscape & Growth Strategy via LLM ──
+  let landscape: MarketLandscape | null = null;
+
+  try {
+    const landscapeContext = {
+      events: eventsForLLM,
+      themes: themes.map((t) => ({
+        id: t.id,
+        title: t.title,
+        description: t.description,
+        relevanceScore: t.relevanceScore,
+        deltaStatus: t.deltaStatus,
+        interpretation: {
+          impact: t.interpretation?.impact,
+          relevantProduct: t.interpretation?.relevantProduct,
+          suggestedAction: t.interpretation?.suggestedAction,
+        },
+      })),
+    };
+
+    const landscapeResponse = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      temperature: 0.3,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: LANDSCAPE_SYSTEM_PROMPT },
+        {
+          role: 'user',
+          content:
+            'Here are the market events and strategic themes extracted from the current intelligence cycle. Use them as your evidence base to build the market landscape and growth strategy.\n\nToday\'s date is ' +
+            new Date().toISOString().slice(0, 10) +
+            '.\n\nEmpirisys Products:\n- SENSE: Real-time AI anomaly detection for process safety\n- BOOST: AI-powered safety performance improvement platform\n- Insight360: Comprehensive HSE analytics and reporting\n- Leadership360: Leadership safety culture assessment\n\n' +
+            JSON.stringify(landscapeContext, null, 2),
+        },
+      ],
+    });
+
+    const landscapeText = landscapeResponse.choices[0]?.message?.content;
+    if (landscapeText) {
+      const parsedLandscape = JSON.parse(landscapeText);
+      landscape = {
+        landscapeSummary: parsedLandscape.landscapeSummary || '',
+        strategicPrecondition: parsedLandscape.strategicPrecondition || '',
+        segments: Array.isArray(parsedLandscape.segments) ? parsedLandscape.segments : [],
+        horizons: Array.isArray(parsedLandscape.horizons) ? parsedLandscape.horizons : [],
+      };
+    }
+
+    console.log('[MARKET_ANALYST] Landscape analysis completed. Segments:', landscape?.segments?.length || 0);
+  } catch (landscapeError) {
+    console.error('[MARKET_ANALYST] Landscape analysis failed (non-fatal):', landscapeError);
+    // Landscape is optional — pipeline still returns events, themes, metrics
+  }
+
+  return { events: filteredEvents, themes, metrics, landscape };
 }

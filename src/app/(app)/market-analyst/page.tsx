@@ -16,6 +16,10 @@ import {
   ChevronUp,
   ExternalLink,
   AlertTriangle,
+  Map,
+  Clock,
+  Target,
+  TrendingUp,
 } from "lucide-react";
 import { toast } from "@/components/ui/toaster";
 import {
@@ -94,13 +98,47 @@ export interface QuantitativeMetrics {
   budgetAllocation: any[];
 }
 
+interface MarketSegment {
+  id: string;
+  name: string;
+  geography: string;
+  readiness: 'high' | 'medium' | 'low';
+  trigger: { name: string; value: string; deadline: string; };
+  mechanism: string;
+  entryBarriers: string;
+  bestFitProduct: string;
+  squeezeOpportunity: string;
+}
+
+interface GrowthAction {
+  action: string;
+  segment: string;
+  rationale: string;
+}
+
+interface GrowthHorizon {
+  id: 'now' | 'next' | 'later';
+  label: string;
+  timeframe: string;
+  actions: GrowthAction[];
+}
+
+interface MarketLandscape {
+  segments: MarketSegment[];
+  horizons: GrowthHorizon[];
+  strategicPrecondition: string;
+  landscapeSummary: string;
+}
+
 interface PipelineResult {
   events: MarketEvent[];
   themes: AggregatedTheme[];
   metrics: QuantitativeMetrics;
+  landscape: MarketLandscape | null;
   meta: {
     totalEventsExtracted: number;
     totalThemes: number;
+    totalSegments: number;
     generatedAt: string;
   };
 }
@@ -135,7 +173,7 @@ const eventTypeLabels: Record<string, string> = {
 export default function MarketAnalystPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PipelineResult | null>(null);
-  const [activeView, setActiveView] = useState<"dashboard" | "themes" | "events">("dashboard");
+  const [activeView, setActiveView] = useState<"dashboard" | "themes" | "events" | "landscape">("dashboard");
   const [expandedTheme, setExpandedTheme] = useState<string | null>(null);
   const [validationState, setValidationState] = useState<Record<string, string>>({});
 
@@ -259,7 +297,7 @@ export default function MarketAnalystPage() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
           
           {/* KPI Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
               <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Events Extracted</span>
               <div className="text-3xl font-bold text-zinc-900 dark:text-white mt-1">{result.meta.totalEventsExtracted}</div>
@@ -267,6 +305,10 @@ export default function MarketAnalystPage() {
             <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
               <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Themes Identified</span>
               <div className="text-3xl font-bold text-zinc-900 dark:text-white mt-1">{result.meta.totalThemes}</div>
+            </div>
+            <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
+              <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Segments Found</span>
+              <div className="text-3xl font-bold text-emerald-500 mt-1">{result.meta.totalSegments}</div>
             </div>
             <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
               <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Pending Review</span>
@@ -314,6 +356,17 @@ export default function MarketAnalystPage() {
             >
               <Network className="h-3.5 w-3.5 inline mr-1.5" />
               Event Feed ({result.events.length})
+            </button>
+            <button
+              onClick={() => setActiveView("landscape")}
+              className={`px-5 py-2 rounded-full text-[13px] font-bold transition-all duration-300 ${
+                activeView === "landscape"
+                  ? "bg-gradient-to-r from-emerald-500 to-cyan-400 text-white shadow-lg"
+                  : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+              }`}
+            >
+              <Map className="h-3.5 w-3.5 inline mr-1.5" />
+              Market Landscape
             </button>
           </div>
 
@@ -526,6 +579,183 @@ export default function MarketAnalystPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* ═══════════════ MARKET LANDSCAPE VIEW ═══════════════ */}
+          {activeView === "landscape" && result.landscape && (
+            <div className="space-y-6">
+
+              {/* Landscape Summary */}
+              <div className="bg-gradient-to-r from-emerald-600 to-cyan-600 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[11px] font-bold tracking-widest uppercase flex items-center">
+                      <Map className="h-3 w-3 mr-1.5" /> Market Landscape
+                    </span>
+                  </div>
+                  <p className="text-[16px] leading-relaxed font-medium max-w-4xl">
+                    {result.landscape.landscapeSummary}
+                  </p>
+                </div>
+              </div>
+
+              {/* Strategic Precondition Banner */}
+              {result.landscape.strategicPrecondition && (
+                <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-5 flex items-start gap-4">
+                  <div className="p-2 rounded-xl bg-amber-500/10 shrink-0 mt-0.5">
+                    <AlertTriangle className="h-5 w-5 text-amber-500" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold tracking-widest text-amber-600 dark:text-amber-400 uppercase block mb-1">
+                      Strategic Precondition — Must Solve First
+                    </span>
+                    <p className="text-[14px] text-zinc-800 dark:text-zinc-200 font-medium leading-relaxed">
+                      {result.landscape.strategicPrecondition}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Market Segments — Dynamically Discovered */}
+              <div>
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-4 uppercase tracking-wider flex items-center gap-2">
+                  <Target className="h-4 w-4 text-emerald-500" /> Discovered Market Segments ({result.landscape.segments.length})
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {result.landscape.segments.map((segment, idx) => {
+                    const readinessConfig = {
+                      high: { bg: "bg-emerald-500/10 border-emerald-500/20", text: "text-emerald-600 dark:text-emerald-400", label: "🟢 High Readiness" },
+                      medium: { bg: "bg-amber-500/10 border-amber-500/20", text: "text-amber-600 dark:text-amber-400", label: "🟡 Medium Readiness" },
+                      low: { bg: "bg-red-500/10 border-red-500/20", text: "text-red-600 dark:text-red-400", label: "🔴 Low Readiness" },
+                    };
+                    const config = readinessConfig[segment.readiness] || readinessConfig.medium;
+
+                    return (
+                      <div
+                        key={segment.id || idx}
+                        className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5 hover:shadow-xl transition-shadow duration-300 animate-in fade-in duration-300 relative overflow-hidden"
+                        style={{ animationDelay: `${idx * 100}ms`, animationFillMode: "both" }}
+                      >
+                        {/* Header */}
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h4 className="text-[16px] font-bold text-zinc-900 dark:text-white mb-1">
+                              {segment.name}
+                            </h4>
+                            <span className="text-[12px] text-zinc-400">📍 {segment.geography}</span>
+                          </div>
+                          <span className={`px-2.5 py-1 rounded-lg border text-[10px] font-bold ${config.bg} ${config.text}`}>
+                            {config.label}
+                          </span>
+                        </div>
+
+                        {/* Trigger */}
+                        <div className="bg-zinc-50 dark:bg-[#1A1525] rounded-xl p-3 mb-3 border border-zinc-100 dark:border-white/5">
+                          <span className="text-[9px] font-bold text-violet-500 uppercase tracking-wider block mb-1">
+                            Commercial Trigger
+                          </span>
+                          <p className="text-[13px] font-semibold text-zinc-900 dark:text-white">{segment.trigger?.name}</p>
+                          <div className="flex items-center gap-3 mt-1 text-[11px] text-zinc-500">
+                            <span>💰 {segment.trigger?.value}</span>
+                            <span>📅 {segment.trigger?.deadline}</span>
+                          </div>
+                        </div>
+
+                        {/* Mechanism */}
+                        <div className="mb-3">
+                          <span className="text-[9px] font-bold text-cyan-500 uppercase tracking-wider block mb-1">Why This Creates a Buyer</span>
+                          <p className="text-[12px] text-zinc-600 dark:text-zinc-400 leading-relaxed">{segment.mechanism}</p>
+                        </div>
+
+                        {/* Entry Barriers */}
+                        <div className="mb-3">
+                          <span className="text-[9px] font-bold text-amber-500 uppercase tracking-wider block mb-1">Entry Barriers</span>
+                          <p className="text-[12px] text-zinc-600 dark:text-zinc-400">{segment.entryBarriers}</p>
+                        </div>
+
+                        {/* Squeeze Opportunity */}
+                        <div className="bg-gradient-to-r from-violet-500/10 to-cyan-500/10 rounded-xl p-3 border border-violet-500/10 mb-3">
+                          <span className="text-[9px] font-bold text-violet-500 uppercase tracking-wider block mb-1">🎯 Squeeze Opportunity</span>
+                          <p className="text-[13px] font-semibold text-zinc-900 dark:text-white leading-relaxed">{segment.squeezeOpportunity}</p>
+                        </div>
+
+                        {/* Product Pill */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-zinc-400">Best Fit:</span>
+                          <span className="px-3 py-1 rounded-full bg-violet-500/10 text-violet-500 text-[11px] font-bold border border-violet-500/20">
+                            {segment.bestFitProduct}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Growth Horizons Timeline */}
+              <div>
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-4 uppercase tracking-wider flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-violet-500" /> Growth Strategy Horizons
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {result.landscape.horizons.map((horizon) => {
+                    const horizonConfig = {
+                      now: { accent: "from-emerald-500 to-emerald-600", glow: "shadow-emerald-500/10", badge: "bg-emerald-500 text-white", icon: "🚀" },
+                      next: { accent: "from-amber-500 to-orange-500", glow: "shadow-amber-500/10", badge: "bg-amber-500 text-white", icon: "⚙️" },
+                      later: { accent: "from-zinc-400 to-zinc-500", glow: "shadow-zinc-500/10", badge: "bg-zinc-500 text-white", icon: "⏸️" },
+                    };
+                    const config = horizonConfig[horizon.id] || horizonConfig.later;
+
+                    return (
+                      <div
+                        key={horizon.id}
+                        className={`bg-white dark:bg-[#241E32] rounded-2xl border border-zinc-100 dark:border-white/5 overflow-hidden hover:shadow-xl ${config.glow} transition-shadow duration-300`}
+                      >
+                        {/* Horizon Header */}
+                        <div className={`bg-gradient-to-r ${config.accent} p-4 text-white`}>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <span className="text-[20px] mr-2">{config.icon}</span>
+                              <span className="text-[18px] font-bold">{horizon.label}</span>
+                            </div>
+                            <span className="text-[12px] font-medium opacity-80">{horizon.timeframe}</span>
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="p-4 space-y-3">
+                          {horizon.actions?.map((action, aIdx) => (
+                            <div key={aIdx} className="bg-zinc-50 dark:bg-[#1A1525] rounded-xl p-3 border border-zinc-100 dark:border-white/5">
+                              <p className="text-[13px] font-semibold text-zinc-900 dark:text-white mb-1.5">{action.action}</p>
+                              <div className="flex items-center gap-2 text-[11px] text-zinc-500 mb-1">
+                                <span className="px-2 py-0.5 rounded bg-violet-500/10 text-violet-500 font-bold">{action.segment}</span>
+                              </div>
+                              <p className="text-[11px] text-zinc-400 italic">{action.rationale}</p>
+                            </div>
+                          ))}
+                          {(!horizon.actions || horizon.actions.length === 0) && (
+                            <p className="text-[12px] text-zinc-400 italic text-center py-4">No actions identified for this horizon.</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* Landscape Not Available */}
+          {activeView === "landscape" && !result.landscape && (
+            <div className="bg-white dark:bg-[#241E32] rounded-2xl p-12 border border-zinc-100 dark:border-white/5 text-center">
+              <Map className="h-10 w-10 text-zinc-400 mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">Landscape Analysis Unavailable</h3>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
+                The market landscape analysis could not be generated in this pipeline run. Try running the pipeline again.
+              </p>
             </div>
           )}
         </div>

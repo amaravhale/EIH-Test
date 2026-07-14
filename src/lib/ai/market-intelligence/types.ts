@@ -147,3 +147,45 @@ export interface LLMExtractedEvent {
   sector: string;
   eventDate: string;
 }
+
+// ─── Market Landscape & Growth Strategy Types ───
+
+export type SegmentReadiness = 'high' | 'medium' | 'low';
+export type HorizonId = 'now' | 'next' | 'later';
+
+export interface MarketSegment {
+  id: string;
+  name: string;
+  geography: string;
+  readiness: SegmentReadiness;
+  trigger: {
+    name: string;
+    value: string;
+    deadline: string;
+  };
+  mechanism: string;
+  entryBarriers: string;
+  bestFitProduct: EmpProduct;
+  squeezeOpportunity: string;
+}
+
+export interface GrowthAction {
+  action: string;
+  segment: string;
+  rationale: string;
+}
+
+export interface GrowthHorizon {
+  id: HorizonId;
+  label: string;
+  timeframe: string;
+  actions: GrowthAction[];
+}
+
+export interface MarketLandscape {
+  segments: MarketSegment[];
+  horizons: GrowthHorizon[];
+  strategicPrecondition: string;
+  landscapeSummary: string;
+}
+

@@ -11,6 +11,16 @@ const TARGET_GEOGRAPHIES = new Set([
   'norway',
   'sweden',
   'denmark',
+  'uae',
+  'saudi arabia',
+  'qatar',
+  'oman',
+  'bahrain',
+  'kuwait',
+  'australia',
+  'canada',
+  'usa',
+  'india',
 ]);
 
 const TARGET_SECTORS = new Set([
@@ -21,6 +31,15 @@ const TARGET_SECTORS = new Set([
   'offshore wind',
   'hydrogen',
   'process safety',
+  'water & utilities',
+  'construction',
+  'carbon capture',
+  'offshore hydrogen',
+  'mining',
+  'pharmaceuticals',
+  'manufacturing',
+  'data centres',
+  'renewables',
 ]);
 
 // --- Tier weights ---
