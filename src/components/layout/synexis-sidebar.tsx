@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard,
+  Home,
   BarChart3,
   Shield,
   Users,
@@ -29,7 +29,7 @@ export interface SynexisSidebarProps {
 }
 
 const mainNavItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+  { id: "dashboard", label: "Home", icon: Home, href: "/dashboard" },
   { id: "market-analyst", label: "Market Analyst", icon: Sparkles, href: "/market-analyst" },
   { id: "lead-scoring", label: "Client Acquisition", icon: Target, href: "/lead-scoring" },
   { 
