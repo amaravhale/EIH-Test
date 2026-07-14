@@ -48,13 +48,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`flex h-screen w-full overflow-hidden ${isDarkMode ? 'dark bg-[#05030A]' : 'bg-[#F8F9FB]'} text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-300 relative`}>
       
-      {/* Ambient Background Mesh to reveal Glassmorphism */}
-      {isDarkMode && (
-        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-[10%] -left-[5%] w-[40%] h-[40%] rounded-full bg-violet-600/50 blur-[100px]" />
-          <div className="absolute top-[50%] -right-[5%] w-[40%] h-[40%] rounded-full bg-cyan-600/40 blur-[100px]" />
-        </div>
-      )}
+      {/* Ambient Background Mesh to reveal Glassmorphism in both modes */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none transition-opacity duration-700">
+        <div className="absolute -top-[10%] -left-[5%] w-[40%] h-[40%] rounded-full bg-violet-400/30 dark:bg-violet-600/50 blur-[100px]" />
+        <div className="absolute top-[50%] -right-[5%] w-[40%] h-[40%] rounded-full bg-cyan-400/30 dark:bg-cyan-600/40 blur-[100px]" />
+      </div>
 
       <div className="relative z-10 flex h-full w-full">
         <SynexisSidebar 
