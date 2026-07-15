@@ -13,8 +13,6 @@ export interface SynexisHeaderProps {
     role?: string;
     avatarUrl?: string;
   };
-  isDarkMode: boolean;
-  onToggleTheme: () => void;
 }
 
 const MOTIVATIONAL_QUOTES = [
@@ -27,7 +25,7 @@ const MOTIVATIONAL_QUOTES = [
   "The best way to predict the future is to create it."
 ];
 
-export function SynexisHeader({ user, isDarkMode, onToggleTheme }: SynexisHeaderProps) {
+export function SynexisHeader({ user }: SynexisHeaderProps) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
@@ -143,13 +141,6 @@ export function SynexisHeader({ user, isDarkMode, onToggleTheme }: SynexisHeader
               </div>
             </div>
           )}
-          
-          <button 
-            onClick={onToggleTheme} 
-            className="flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-          >
-            {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
         </div>
 
         {/* User Profile */}

@@ -37,8 +37,6 @@ export interface HeaderProps {
   onProfileClick?: () => void;
   onSettingsClick?: () => void;
   onLogout?: () => void;
-  onThemeToggle?: () => void;
-  isDarkMode?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
@@ -51,8 +49,6 @@ export function Header({
   onProfileClick,
   onSettingsClick,
   onLogout,
-  onThemeToggle,
-  isDarkMode = false,
   className,
   children,
 }: HeaderProps) {
@@ -107,19 +103,6 @@ export function Header({
           aria-label="Search"
         >
           <Search className="h-4 w-4" />
-        </button>
-
-        {/* Theme toggle */}
-        <button
-          onClick={onThemeToggle}
-          className="rounded-md p-2 text-zinc-500 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
-          aria-label="Toggle theme"
-        >
-          {isDarkMode ? (
-            <Sun className="h-4 w-4" />
-          ) : (
-            <Moon className="h-4 w-4" />
-          )}
         </button>
 
         {/* Notifications */}
