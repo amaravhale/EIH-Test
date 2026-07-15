@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Radio, ShieldAlert, Building2, Clock, Activity, Briefcase } from "lucide-react";
 import { IntelligenceSignal } from "@/app/api/agent/signals/route";
+import { FunFactLoader } from "@/components/ui/fun-fact-loader";
 
 export default function SignalsFeedPage() {
   const [signals, setSignals] = useState<IntelligenceSignal[]>([]);
@@ -167,25 +168,9 @@ export default function SignalsFeedPage() {
       
       <div className="space-y-4 max-w-4xl">
         {isLoading ? (
-          // Skeleton loaders
-          Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-48 rounded-xl bg-zinc-100 dark:bg-[#1A1525] border border-zinc-200 dark:border-white/5 animate-pulse relative overflow-hidden">
-               <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent"></div>
-               <div className="p-6">
-                 <div className="flex justify-between">
-                   <div className="space-y-3 w-2/3">
-                     <div className="h-4 w-32 bg-zinc-200 dark:bg-white/10 rounded-full"></div>
-                     <div className="h-6 w-full bg-zinc-200 dark:bg-white/10 rounded-md"></div>
-                   </div>
-                   <div className="h-16 w-16 bg-zinc-200 dark:bg-white/10 rounded-xl"></div>
-                 </div>
-                 <div className="space-y-2 mt-6">
-                   <div className="h-3 w-full bg-zinc-200 dark:bg-white/10 rounded-full"></div>
-                   <div className="h-3 w-5/6 bg-zinc-200 dark:bg-white/10 rounded-full"></div>
-                 </div>
-               </div>
-            </div>
-          ))
+          <div className="animate-in fade-in duration-300">
+            <FunFactLoader message="Fetching Strategic Signals..." />
+          </div>
         ) : activeStream === "market" ? (
           filteredSignals.length === 0 ? (
             <div className="text-center py-10 text-zinc-500">No signals match your filters.</div>

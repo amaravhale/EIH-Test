@@ -32,9 +32,23 @@ export function FunFactLoader({ message = "Loading Intelligence...", className =
   const [fact, setFact] = useState<string>("");
 
   useEffect(() => {
-    // Pick a random fact on mount
-    const randomFact = EMPIRISYS_FACTS[Math.floor(Math.random() * EMPIRISYS_FACTS.length)];
-    setFact(randomFact);
+    // Pick an initial random fact
+    const setRandomFact = () => {
+      setFact(prev => {
+        let newFact;
+        do {
+          newFact = EMPIRISYS_FACTS[Math.floor(Math.random() * EMPIRISYS_FACTS.length)];
+        } while (newFact === prev && EMPIRISYS_FACTS.length > 1);
+        return newFact;
+      });
+    };
+    
+    setRandomFact();
+
+    // Cycle fact every 6 seconds (optimal reading duration)
+    const intervalId = setInterval(setRandomFact, 6000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   return (

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Loader2, Search, Target, Zap, CheckCircle2, ShieldAlert, AlertTriangle, Briefcase, Lightbulb, Clock, Activity, Building2, X, Network } from "lucide-react";
 import { IncidentIntelligence } from "@/types/domain";
 import { LeadScoreProfile } from "@/lib/ai/lead-scoring/types";
+import { FunFactLoader } from "@/components/ui/fun-fact-loader";
 export function LeadScoringMatrix() {
   const [companyName, setCompanyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -136,12 +137,8 @@ export function LeadScoringMatrix() {
 
       {/* Loading Skeleton */}
       {isLoading && (
-        <div className="animate-pulse space-y-6">
-          <div className="h-24 bg-white dark:bg-[#241E32] rounded-[24px] w-full"></div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="h-[500px] bg-white dark:bg-[#241E32] rounded-[32px] w-full lg:col-span-2"></div>
-            <div className="h-[500px] bg-white dark:bg-[#241E32] rounded-[32px] w-full"></div>
-          </div>
+        <div className="animate-in fade-in duration-300">
+          <FunFactLoader message="Compiling Client Acquisition Profile..." />
         </div>
       )}
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { ShieldAlert, Target, Zap, Activity, AlertTriangle, Briefcase, ChevronRight, BarChart3, TrendingUp, TrendingDown } from "lucide-react";
 import { StrikeList, StrikeTarget } from "@/components/dashboard/strike-list";
+import { FunFactLoader } from "@/components/ui/fun-fact-loader";
 
 interface ExecutiveBriefing {
   bluf: {
@@ -42,12 +43,7 @@ export default function DashboardPage() {
   };
 
   if (isLoading || !briefing) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <Activity className="h-8 w-8 text-violet-500 animate-spin" />
-        <p className="text-zinc-500 font-medium">Compiling Executive Briefing...</p>
-      </div>
-    );
+    return <FunFactLoader message="Compiling Executive Briefing..." />;
   }
 
   return (
