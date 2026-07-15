@@ -28,7 +28,15 @@ export interface SynexisSidebarProps {
   onNavigate?: (href: string) => void;
 }
 
-const mainNavItems = [
+interface NavItem {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  href: string;
+  subItems?: { id: string; label: string; href: string }[];
+}
+
+const mainNavItems: NavItem[] = [
   { id: "dashboard", label: "Home", icon: Home, href: "/dashboard" },
   { id: "market-analyst", label: "Market Analyst", icon: Sparkles, href: "/market-analyst" },
   { id: "lead-scoring", label: "Client Acquisition", icon: Target, href: "/lead-scoring" },
