@@ -56,14 +56,6 @@ const defaultNavSections: NavSection[] = [
         label: "Analytics",
         icon: BarChart3,
         href: "/analytics",
-        subItems: [
-          { id: "market", label: "Market Trends", href: "/analytics/market" },
-          {
-            id: "competitor",
-            label: "Competitor Intel",
-            href: "/analytics/competitor",
-          },
-        ],
       },
     ],
   },

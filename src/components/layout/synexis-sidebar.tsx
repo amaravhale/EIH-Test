@@ -32,13 +32,7 @@ const mainNavItems = [
   { id: "dashboard", label: "Home", icon: Home, href: "/dashboard" },
   { id: "market-analyst", label: "Market Analyst", icon: Sparkles, href: "/market-analyst" },
   { id: "lead-scoring", label: "Client Acquisition", icon: Target, href: "/lead-scoring" },
-  { 
-    id: "analytics", label: "Analytics", icon: BarChart3, href: "/analytics",
-    subItems: [
-      { id: "market", label: "Market Trends", href: "/analytics/market" },
-      { id: "competitor", label: "Competitor Intel", href: "/analytics/competitor" },
-    ]
-  },
+  { id: "analytics", label: "Analytics", icon: BarChart3, href: "/analytics" },
   { id: "signals", label: "Signals", icon: Radio, href: "/market/signals" },
   { id: "assistant", label: "AI Assistant", icon: Bot, href: "/assistant" },
 ];
