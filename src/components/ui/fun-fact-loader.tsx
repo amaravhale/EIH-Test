@@ -45,8 +45,8 @@ export function FunFactLoader({ message = "Loading Intelligence...", className =
     
     setRandomFact();
 
-    // Cycle fact every 6 seconds (optimal reading duration)
-    const intervalId = setInterval(setRandomFact, 6000);
+    // Cycle fact every 9 seconds (optimal reading duration)
+    const intervalId = setInterval(setRandomFact, 9000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -57,7 +57,7 @@ export function FunFactLoader({ message = "Loading Intelligence...", className =
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative max-w-md w-full bg-[#1A1525]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 text-center shadow-2xl overflow-hidden"
+        className="relative max-w-lg w-full bg-[#1A1525]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-10 text-center shadow-2xl overflow-hidden"
       >
         {/* Animated Background Mesh */}
         <motion.div 
@@ -79,8 +79,8 @@ export function FunFactLoader({ message = "Loading Intelligence...", className =
             </div>
           </div>
 
-          <h3 className="text-lg font-bold text-white mb-4 tracking-tight flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-violet-400" />
+          <h3 className="text-xl font-bold text-white mb-6 tracking-tight flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-violet-400" />
             {message}
           </h3>
 
@@ -93,10 +93,10 @@ export function FunFactLoader({ message = "Loading Intelligence...", className =
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="bg-white/5 border border-white/5 rounded-xl p-4"
               >
-                <span className="block text-[10px] font-bold text-violet-400 uppercase tracking-wider mb-2">
+                <span className="block text-[11px] font-bold text-violet-400 uppercase tracking-widest mb-3">
                   Did you know?
                 </span>
-                <p className="text-sm text-zinc-300 leading-relaxed font-medium">
+                <p className="text-base md:text-lg text-zinc-300 leading-relaxed font-medium">
                   "{fact}"
                 </p>
               </motion.div>
