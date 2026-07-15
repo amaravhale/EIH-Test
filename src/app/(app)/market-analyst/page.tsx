@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { FunFactLoader } from "@/components/ui/fun-fact-loader";
 import {
   Loader2,
   Zap,
@@ -314,42 +316,8 @@ export default function MarketAnalystPage() {
 
       {/* Loading State */}
       {isLoading && (
-        <div className="space-y-4 animate-in fade-in duration-300">
-          <div className="bg-white dark:bg-[#241E32] rounded-2xl p-8 border border-zinc-100 dark:border-white/5 text-center">
-            <div className="inline-flex items-center justify-center p-4 rounded-full bg-violet-500/10 mb-4">
-              <Network className="h-8 w-8 text-violet-500 animate-pulse" />
-            </div>
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">
-              Executing Market Intelligence Pipeline
-            </h3>
-            <div className="flex items-center justify-center gap-3 text-sm text-zinc-500 dark:text-zinc-400 mb-6">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                Source Ingestion
-              </span>
-              <span>→</span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" style={{ animationDelay: "0.3s" }} />
-                Event Extraction
-              </span>
-              <span>→</span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-violet-500 animate-pulse" style={{ animationDelay: "0.6s" }} />
-                Scoring & Filtering
-              </span>
-              <span>→</span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-cyan-500 animate-pulse" style={{ animationDelay: "0.9s" }} />
-                Theme Aggregation
-              </span>
-            </div>
-            {/* Skeleton cards */}
-            <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-16 bg-zinc-100 dark:bg-white/5 rounded-xl animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
-              ))}
-            </div>
-          </div>
+        <div className="animate-in fade-in duration-300">
+          <FunFactLoader message="Executing Market Intelligence Pipeline..." />
         </div>
       )}
 
