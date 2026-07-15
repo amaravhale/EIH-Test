@@ -4,13 +4,20 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Loader2 } from "lucide-react";
 
-// Placeholder facts to be replaced by the user's historical content
+// Real Empirisys historical facts
 const EMPIRISYS_FACTS = [
-  "Empirisys was founded on the principle that true intelligence is predictive, not just reactive.",
-  "Our proprietary intelligence engine was initially conceptualized to solve fragmented data silos in high-stakes industries.",
-  "Before becoming the platform it is today, Empirisys began as a specialized analytics framework for processing complex unstructured signals.",
-  "The 'Enterprise Intelligence Hub' evolved from our core mission to transform raw data noise into clear, strategic action.",
-  "Empirisys algorithms have processed millions of data points to identify leading indicators before they become critical threats."
+  "The founding of Empirisys was deeply personal: both founders were driven by their own family's experiences with serious industrial accidents.",
+  "Empirisys began in 2020 as a kitchen-table startup during the COVID-19 lockdown, making 'remote-first' part of its DNA from day one.",
+  "Our internal motto for team culture is simple but powerful: 'We have no egos, amigos.'",
+  "In 2023, just three years after founding, Empirisys was named one of the Sunday Times Best Places to Work in the UK.",
+  "We run on trust: Empirisys has a nominal holiday policy, but we deliberately don't track leave to encourage true work-life balance.",
+  "Our team brings unique perspectives—one of our talented data scientists used to be a professional chef!",
+  "In 2024, our CEO Gus Carroll was awarded the prestigious IChemE Franklin Medal for his 30-year contribution to process safety.",
+  "Our Chairman, Iain Conn, brings world-class experience, having previously served as CEO of both BP's downstream business and Centrica.",
+  "The Alex White Memorial Fund honors our late colleague by supporting neurodiverse students during our annual Cardiff internships.",
+  "Our DETECT analytics engine was developed in direct partnership with BP, revolutionising decision-making support in process safety.",
+  "We ran the largest-ever Process Safety Leadership Survey with Step Change in Safety, gathering input from 450 leaders across 73 organisations.",
+  "From a two-person startup to a 30+ strong team, we proudly work alongside industry giants like BP, Thames Water, SSE, and Ineos."
 ];
 
 interface FunFactLoaderProps {
