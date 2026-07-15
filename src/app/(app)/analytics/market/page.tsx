@@ -126,7 +126,7 @@ export default function IntelligenceAnalyticsPage() {
           { label: "High Confidence Signals", value: data.kpis.highConfidenceSignals, icon: ShieldCheck, color: "text-cyan-500", bg: "bg-cyan-500/10" }
         ].map((kpi, i) => (
           <div key={i} className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5 shadow-sm relative overflow-hidden group">
-            <div className={\`absolute top-0 right-0 w-24 h-24 \${kpi.bg} rounded-full blur-2xl -translate-y-1/2 translate-x-1/3 group-hover:scale-150 transition-transform duration-500\`}></div>
+            <div className={`absolute top-0 right-0 w-24 h-24 ${kpi.bg} rounded-full blur-2xl -translate-y-1/2 translate-x-1/3 group-hover:scale-150 transition-transform duration-500`}></div>
             <div className="relative z-10 flex items-start justify-between">
               <div>
                 <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase block mb-2">{kpi.label}</span>
@@ -136,8 +136,8 @@ export default function IntelligenceAnalyticsPage() {
                   <div className="text-3xl font-extrabold text-zinc-900 dark:text-white">{kpi.value}</div>
                 )}
               </div>
-              <div className={\`p-2.5 rounded-xl \${kpi.bg}\`}>
-                <kpi.icon className={\`h-5 w-5 \${kpi.color}\`} />
+              <div className={`p-2.5 rounded-xl ${kpi.bg}`}>
+                <kpi.icon className={`h-5 w-5 ${kpi.color}`} />
               </div>
             </div>
           </div>
@@ -206,7 +206,7 @@ export default function IntelligenceAnalyticsPage() {
                   stroke="none"
                 >
                   {data.sourceQuality.map((entry, index) => (
-                    <Cell key={\`cell-\${index}\`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
