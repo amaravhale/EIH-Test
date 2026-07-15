@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 import React, { useState } from "react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
@@ -143,6 +145,24 @@ interface PipelineResult {
   };
 }
 
+// ─── Framer Motion Variants ───
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+  }
+} as const;
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { 
+    opacity: 1, 
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 70, damping: 15 }
+  }
+} as const;
+
 // ─── Tier badge colors ───
 const tierColors: Record<string, { bg: string; text: string; label: string }> = {
   A: { bg: "bg-emerald-500/10 border-emerald-500/20", text: "text-emerald-600 dark:text-emerald-400", label: "Tier A · Regulatory" },
@@ -225,31 +245,72 @@ export default function MarketAnalystPage() {
   ) ?? [];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <PageHeader
-          title="Market Analyst"
-          description="Event-driven intelligence pipeline: Source Ingestion → Entity Extraction → Deterministic Scoring → Theme Aggregation → Strategic Interpretation"
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-8 max-w-[1400px] mx-auto pb-20"
+    >
+      {/* Header section with elite glassmorphic styling */}
+      <motion.div variants={itemVariants} className="relative bg-white/40 dark:bg-[#1A1525]/40 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl shadow-violet-500/5 overflow-hidden">
+        {/* Animated Background Orbs */}
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-600/20 dark:bg-violet-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none"
         />
-        <Button
-          onClick={handleRunPipeline}
-          disabled={isLoading}
-          className="bg-gradient-to-r from-violet-600 to-cyan-500 hover:opacity-90 text-white shadow-lg transition-all h-11 px-6"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Running Pipeline...
-            </>
-          ) : (
-            <>
-              <Zap className="mr-2 h-4 w-4 fill-white" />
-              Run Intelligence Pipeline
-            </>
-          )}
-        </Button>
-      </div>
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-600/20 dark:bg-cyan-500/10 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4 pointer-events-none"
+        />
+        
+        <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="px-3 py-1.5 rounded-full bg-violet-500/10 text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 border border-violet-500/20 flex items-center shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+                <div className="relative flex h-2.5 w-2.5 mr-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-violet-500"></span>
+                </div>
+                Intelligence Engine Live
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-500 mb-3">
+              Market Analyst
+            </h1>
+            <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl text-[16px] leading-relaxed font-medium">
+              Event-driven intelligence pipeline: Source Ingestion → Entity Extraction → Deterministic Scoring → Theme Aggregation → Strategic Interpretation
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-3 shrink-0">
+            <Button
+              onClick={handleRunPipeline}
+              disabled={isLoading}
+              className="rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-300 px-6 h-12"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Running Pipeline...
+                </>
+              ) : (
+                <>
+                  <Zap className="mr-2 h-5 w-5 fill-current" />
+                  Run Intelligence Pipeline
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Loading State */}
       {isLoading && (
@@ -297,30 +358,28 @@ export default function MarketAnalystPage() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
           
           {/* KPI Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
-              <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Events Extracted</span>
-              <div className="text-3xl font-bold text-zinc-900 dark:text-white mt-1">{result.meta.totalEventsExtracted}</div>
-            </div>
-            <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
-              <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Themes Identified</span>
-              <div className="text-3xl font-bold text-zinc-900 dark:text-white mt-1">{result.meta.totalThemes}</div>
-            </div>
-            <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
-              <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Segments Found</span>
-              <div className="text-3xl font-bold text-emerald-500 mt-1">{result.meta.totalSegments}</div>
-            </div>
-            <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
-              <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Pending Review</span>
-              <div className="text-3xl font-bold text-amber-500 mt-1">{pendingThemes.length}</div>
-            </div>
-            <div className="bg-white dark:bg-[#241E32] rounded-2xl p-5 border border-zinc-100 dark:border-white/5">
-              <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Pipeline Run</span>
-              <div className="text-sm font-bold text-zinc-900 dark:text-white mt-2">
-                {new Date(result.meta.generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-              </div>
-            </div>
-          </div>
+          <motion.div variants={containerVariants} className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {[
+              { label: "Events Extracted", value: result.meta.totalEventsExtracted, bg: "bg-violet-500/10", border: "border-violet-500/20", color: "text-zinc-900 dark:text-white" },
+              { label: "Themes Identified", value: result.meta.totalThemes, bg: "bg-cyan-500/10", border: "border-cyan-500/20", color: "text-zinc-900 dark:text-white" },
+              { label: "Segments Found", value: result.meta.totalSegments, bg: "bg-emerald-500/10", border: "border-emerald-500/20", color: "text-emerald-500" },
+              { label: "Pending Review", value: pendingThemes.length, bg: "bg-amber-500/10", border: "border-amber-500/20", color: "text-amber-500" },
+              { label: "Pipeline Run", value: new Date(result.meta.generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), bg: "bg-zinc-500/10", border: "border-zinc-500/20", color: "text-zinc-900 dark:text-white", textClass: "text-sm mt-2" }
+            ].map((kpi, i) => (
+              <motion.div 
+                variants={itemVariants}
+                whileHover={{ y: -5, scale: 1.02 }}
+                key={i} 
+                className={`bg-white dark:bg-[#1A1525]/80 backdrop-blur-md rounded-2xl p-5 border ${kpi.border} shadow-lg shadow-zinc-200/20 dark:shadow-black/20 relative overflow-hidden group`}
+              >
+                <div className={`absolute top-0 right-0 w-24 h-24 ${kpi.bg} rounded-full blur-2xl -translate-y-1/2 translate-x-1/3 group-hover:scale-150 transition-transform duration-700`}></div>
+                <div className="relative z-10">
+                  <span className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">{kpi.label}</span>
+                  <div className={`${kpi.textClass || 'text-3xl mt-1'} font-bold ${kpi.color}`}>{kpi.value}</div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
 
           {/* View Toggle */}
           <div className="flex bg-zinc-100 dark:bg-[#110D17] p-1.5 rounded-full border border-zinc-200 dark:border-white/5 w-fit">
@@ -372,75 +431,80 @@ export default function MarketAnalystPage() {
 
           {/* ═══════════════ DASHBOARD VIEW ═══════════════ */}
           {activeView === "dashboard" && result.metrics && (
-            <div className="space-y-6">
+            <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-8">
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Budget Allocation (Donut) */}
-                <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
-                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
-                    <Network className="h-4 w-4 text-emerald-500" /> Budget CapEx Allocation
+                <motion.div variants={itemVariants} className="bg-white/60 dark:bg-[#1A1525]/60 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-zinc-200 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-black/20 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                  <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2 relative z-10">
+                    <Network className="h-5 w-5 text-emerald-500" /> Budget CapEx Allocation
                   </h3>
-                  <div className="h-64 w-full">
+                  <div className="h-[300px] w-full relative z-10">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
                           data={result.metrics.budgetAllocation}
                           cx="50%"
                           cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
-                          paddingAngle={5}
+                          innerRadius={70}
+                          outerRadius={100}
+                          paddingAngle={8}
                           dataKey="allocationPercentage"
                           nameKey="category"
+                          stroke="none"
+                          cornerRadius={8}
                         >
                           {result.metrics.budgetAllocation.map((entry: any, index: number) => {
                             const colors = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
-                            return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                            return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} style={{ filter: `drop-shadow(0px 0px 8px ${colors[index % colors.length]}40)` }} />;
                           })}
                         </Pie>
                         <Tooltip 
-                          contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
+                          contentStyle={{ backgroundColor: 'rgba(26,21,37,0.8)', backdropFilter: 'blur(12px)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }} 
                           itemStyle={{ color: '#fff' }}
                         />
-                        <Legend wrapperStyle={{ fontSize: '11px', color: '#e4e4e7' }} />
+                        <Legend wrapperStyle={{ fontSize: '13px', fontWeight: 500 }} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Competitor Positioning Matrix */}
-                <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
-                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-cyan-500" /> Competitive Positioning Matrix
+                <motion.div variants={itemVariants} className="bg-white/60 dark:bg-[#1A1525]/60 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-zinc-200 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-black/20 relative overflow-hidden">
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                  <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2 relative z-10">
+                    <Shield className="h-5 w-5 text-cyan-500" /> Competitive Positioning Matrix
                   </h3>
-                  <div className="h-64 w-full">
+                  <div className="h-[300px] w-full relative z-10">
                     <ResponsiveContainer width="100%" height="100%">
                       <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                        <XAxis type="number" dataKey="marketShareScore" name="Market Share" domain={[0, 100]} stroke="#71717a" fontSize={12} />
-                        <YAxis type="number" dataKey="innovationScore" name="Innovation" domain={[0, 100]} stroke="#71717a" fontSize={12} />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#52525b" opacity={0.15} />
+                        <XAxis type="number" dataKey="marketShareScore" name="Market Share" domain={[0, 100]} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={10} />
+                        <YAxis type="number" dataKey="innovationScore" name="Innovation" domain={[0, 100]} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dx={-10} />
                         <ZAxis type="category" dataKey="competitorName" name="Competitor" />
-                        <Tooltip cursor={{ strokeDasharray: '3 3' }} 
-                          contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
+                        <Tooltip cursor={{ strokeDasharray: '3 3', opacity: 0.1 }} 
+                          contentStyle={{ backgroundColor: 'rgba(26,21,37,0.8)', backdropFilter: 'blur(12px)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }} 
                           itemStyle={{ color: '#fff' }}
                         />
                         <Scatter name="Competitors" data={result.metrics.competitorPositioning} fill="#8b5cf6">
                           {result.metrics.competitorPositioning.map((entry: any, index: number) => (
-                            <Cell key={`cell-${index}`} fill={entry.competitorName === 'Empirisys' ? '#06b6d4' : '#8b5cf6'} />
+                            <Cell key={`cell-${index}`} fill={entry.competitorName === 'Empirisys' ? '#06b6d4' : '#8b5cf6'} style={{ filter: `drop-shadow(0px 0px 10px ${entry.competitorName === 'Empirisys' ? '#06b6d4' : '#8b5cf6'})` }} />
                           ))}
                         </Scatter>
                       </ScatterChart>
                     </ResponsiveContainer>
                   </div>
-                </div>
+                </motion.div>
               </div>
               
               {/* STEEPLE Trend Velocity (Full Width, Below) */}
-              <div className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5">
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-violet-500" /> STEEPLE Trend Velocity (7 Days)
+              <motion.div variants={itemVariants} className="bg-white/60 dark:bg-[#1A1525]/60 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-zinc-200 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-black/20 relative overflow-hidden">
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-8 uppercase tracking-wider flex items-center gap-2 relative z-10">
+                  <Activity className="h-5 w-5 text-violet-500" /> STEEPLE Trend Velocity (7 Days)
                 </h3>
-                <div className="h-72 w-full">
+                <div className="h-[400px] w-full relative z-10">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={result.metrics.trendVelocity.map((d: any) => {
                       const normalize = (keys: string[]) => {
@@ -458,28 +522,28 @@ export default function MarketAnalystPage() {
                         ethical: normalize(['ethical', 'Ethical']),
                       };
                     })}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                      <XAxis dataKey="day" stroke="#71717a" fontSize={12} />
-                      <YAxis stroke="#71717a" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#52525b" opacity={0.15} />
+                      <XAxis dataKey="day" stroke="#a1a1aa" fontSize={13} fontWeight={500} tickLine={false} axisLine={false} dy={10} />
+                      <YAxis stroke="#a1a1aa" fontSize={13} tickLine={false} axisLine={false} dx={-10} />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: '#1A1525', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }}
-                        itemStyle={{ color: '#fff', fontSize: '12px' }}
-                        labelStyle={{ color: '#a1a1aa', fontWeight: 'bold', marginBottom: '4px' }}
+                        contentStyle={{ backgroundColor: 'rgba(26,21,37,0.8)', backdropFilter: 'blur(12px)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }}
+                        itemStyle={{ color: '#fff', fontSize: '13px' }}
+                        labelStyle={{ color: '#a1a1aa', fontWeight: 'bold', marginBottom: '8px' }}
                       />
-                      <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '20px', color: '#e4e4e7' }} />
-                      <Line type="monotone" dataKey="sociocultural" stroke="#f472b6" strokeWidth={2} name="Socio-cultural" dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="technological" stroke="#3b82f6" strokeWidth={2} name="Technological" dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="economic" stroke="#f59e0b" strokeWidth={2} name="Economic" dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="environmental" stroke="#10b981" strokeWidth={2} name="Environmental" dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="political" stroke="#a78bfa" strokeWidth={2} name="Political" dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="legal" stroke="#ef4444" strokeWidth={2} name="Legal" dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="ethical" stroke="#06b6d4" strokeWidth={2} name="Ethical" dot={{ r: 3 }} />
+                      <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '20px', fontWeight: 500 }} />
+                      <Line type="monotone" dataKey="sociocultural" stroke="#f472b6" strokeWidth={3} name="Socio-cultural" dot={{ r: 4, fill: '#f472b6', strokeWidth: 0 }} activeDot={{ r: 6, fill: '#f472b6', strokeWidth: 2, stroke: '#fff' }} />
+                      <Line type="monotone" dataKey="technological" stroke="#3b82f6" strokeWidth={3} name="Technological" dot={{ r: 4, fill: '#3b82f6', strokeWidth: 0 }} activeDot={{ r: 6, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }} />
+                      <Line type="monotone" dataKey="economic" stroke="#f59e0b" strokeWidth={3} name="Economic" dot={{ r: 4, fill: '#f59e0b', strokeWidth: 0 }} activeDot={{ r: 6, fill: '#f59e0b', strokeWidth: 2, stroke: '#fff' }} />
+                      <Line type="monotone" dataKey="environmental" stroke="#10b981" strokeWidth={3} name="Environmental" dot={{ r: 4, fill: '#10b981', strokeWidth: 0 }} activeDot={{ r: 6, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }} />
+                      <Line type="monotone" dataKey="political" stroke="#a78bfa" strokeWidth={3} name="Political" dot={{ r: 4, fill: '#a78bfa', strokeWidth: 0 }} activeDot={{ r: 6, fill: '#a78bfa', strokeWidth: 2, stroke: '#fff' }} />
+                      <Line type="monotone" dataKey="legal" stroke="#ef4444" strokeWidth={3} name="Legal" dot={{ r: 4, fill: '#ef4444', strokeWidth: 0 }} activeDot={{ r: 6, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }} />
+                      <Line type="monotone" dataKey="ethical" stroke="#06b6d4" strokeWidth={3} name="Ethical" dot={{ r: 4, fill: '#06b6d4', strokeWidth: 0 }} activeDot={{ r: 6, fill: '#06b6d4', strokeWidth: 2, stroke: '#fff' }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
           )}
 
           {/* ═══════════════ THEMES VIEW ═══════════════ */}
@@ -783,7 +847,7 @@ export default function MarketAnalystPage() {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
