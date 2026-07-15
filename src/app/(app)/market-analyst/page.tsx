@@ -282,7 +282,7 @@ export default function MarketAnalystPage() {
                 Intelligence Engine Live
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-500 mb-3">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-500 mb-3 pb-2">
               Market Analyst
             </h1>
             <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl text-[16px] leading-relaxed font-medium">
