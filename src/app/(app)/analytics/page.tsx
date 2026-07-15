@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, RefreshCw, Activity, ShieldAlert, Target, ShieldCheck, BarChart2, PieChart as PieChartIcon, Network } from "lucide-react";
 import { motion } from "framer-motion";
+import { FunFactLoader } from "@/components/ui/fun-fact-loader";
 import { 
   ResponsiveContainer, 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -99,6 +100,10 @@ export default function IntelligenceAnalyticsPage() {
     }
     return null;
   };
+
+  if (isLoading) {
+    return <FunFactLoader message="Compiling Analytics Dashboard..." />;
+  }
 
   return (
     <motion.div 
