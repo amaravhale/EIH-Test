@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Download, RefreshCw, Activity, ShieldAlert, Target, ShieldCheck, BarChart2, PieChart as PieChartIcon, Network } from "lucide-react";
+import { motion } from "framer-motion";
 import { 
   ResponsiveContainer, 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -12,6 +12,24 @@ import {
 } from "recharts";
 
 const COLORS = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+
+// Framer Motion Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+  }
+} as const;
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { 
+    opacity: 1, 
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 70, damping: 15 }
+  }
+} as const;
 
 export default function IntelligenceAnalyticsPage() {
   const [data, setData] = useState<{ 
@@ -63,134 +81,203 @@ export default function IntelligenceAnalyticsPage() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white dark:bg-[#1A1525] border border-zinc-200 dark:border-white/10 p-4 rounded-xl shadow-xl">
-          <p className="text-sm font-bold text-zinc-900 dark:text-white mb-2">{label || payload[0].name}</p>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white/80 dark:bg-[#1A1525]/80 backdrop-blur-xl border border-zinc-200 dark:border-white/10 p-4 rounded-xl shadow-[0_0_30px_rgba(0,0,0,0.1)] dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+        >
+          <p className="text-sm font-bold text-zinc-900 dark:text-white mb-3">{label || payload[0].name}</p>
           {payload.map((entry: any, index: number) => (
-            <div key={index} className="flex items-center gap-2 text-xs">
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color || entry.fill }} />
-              <span className="text-zinc-500 dark:text-zinc-400 capitalize">{entry.name}:</span>
+            <div key={index} className="flex items-center gap-3 text-sm mb-1.5 last:mb-0">
+              <div className="w-2.5 h-2.5 rounded-full shadow-[0_0_10px_currentColor]" style={{ backgroundColor: entry.color || entry.fill, color: entry.color || entry.fill }} />
+              <span className="text-zinc-500 dark:text-zinc-400 font-medium capitalize">{entry.name}:</span>
               <span className="font-bold text-zinc-900 dark:text-white">{entry.value}</span>
             </div>
           ))}
-        </div>
+        </motion.div>
       );
     }
     return null;
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-8 max-w-[1400px] mx-auto pb-20"
+    >
       {/* Header section with elite glassmorphic styling */}
-      <div className="relative bg-white/40 dark:bg-[#1A1525]/40 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl shadow-zinc-200/20 dark:shadow-black/40 overflow-hidden">
-        {/* Decorative background blurs */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
+      <motion.div variants={itemVariants} className="relative bg-white/40 dark:bg-[#1A1525]/40 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl shadow-violet-500/5 overflow-hidden">
+        {/* Animated Background Orbs */}
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-600/20 dark:bg-violet-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none"
+        />
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-600/20 dark:bg-cyan-500/10 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4 pointer-events-none"
+        />
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="px-3 py-1 rounded-full bg-violet-500/10 text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 border border-violet-500/20 flex items-center">
-                <Network className="h-3 w-3 mr-1.5" /> Intelligence Engine Live
+            <div className="flex items-center gap-2 mb-4">
+              <span className="px-3 py-1.5 rounded-full bg-violet-500/10 text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 border border-violet-500/20 flex items-center shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+                <div className="relative flex h-2.5 w-2.5 mr-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-violet-500"></span>
+                </div>
+                Intelligence Engine Live
               </span>
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white mb-2">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-500 mb-3">
               Intelligence Analytics
             </h1>
-            <p className="text-zinc-500 dark:text-zinc-400 max-w-2xl text-[15px] leading-relaxed">
+            <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl text-[16px] leading-relaxed font-medium">
               Real-time visualization of the raw data flowing through the Empirisys AI platform. Track signal volume, threat topologies, and source verification metrics across the global process safety landscape.
             </p>
           </div>
           
-          <div className="flex flex-wrap gap-3 shrink-0">
-            <Button variant="outline" className="gap-2 bg-white/50 dark:bg-black/20 backdrop-blur-md border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-700 dark:text-zinc-300 rounded-xl" onClick={handleExport}>
-              <Download className="h-4 w-4" /> Export Data
+          <div className="flex items-center gap-3 shrink-0">
+            <Button 
+              variant="outline" 
+              className="rounded-full border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/5 bg-white/50 dark:bg-black/20 backdrop-blur-md transition-all duration-300 shadow-sm"
+              onClick={fetchAnalytics}
+              disabled={isLoading}
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin text-violet-500' : ''}`} />
+              Sync Data
             </Button>
             <Button 
-              onClick={fetchAnalytics} 
-              disabled={isLoading}
-              className="gap-2 bg-gradient-to-r from-violet-600 to-cyan-500 hover:from-violet-700 hover:to-cyan-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)] rounded-xl transition-all duration-300"
+              className="rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-300"
+              onClick={handleExport}
             >
-              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
-              {isLoading ? "Syncing Engine..." : "Sync Engine"}
+              <Download className="h-4 w-4 mr-2" />
+              Export Report
             </Button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* KPI Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <motion.div variants={containerVariants} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {[
-          { label: "Total Signals Processed", value: data.kpis.totalSignalsProcessed, icon: Activity, color: "text-violet-500", bg: "bg-violet-500/10" },
-          { label: "Active Verified Threats", value: data.kpis.activeThreats, icon: ShieldAlert, color: "text-red-500", bg: "bg-red-500/10" },
-          { label: "Actionable Segments", value: data.kpis.actionableSegments, icon: Target, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-          { label: "High Confidence Signals", value: data.kpis.highConfidenceSignals, icon: ShieldCheck, color: "text-cyan-500", bg: "bg-cyan-500/10" }
+          { label: "Total Signals Processed", value: data.kpis.totalSignalsProcessed, icon: Activity, color: "text-violet-500", bg: "bg-violet-500/10", border: "border-violet-500/20" },
+          { label: "Active Verified Threats", value: data.kpis.activeThreats, icon: ShieldAlert, color: "text-rose-500", bg: "bg-rose-500/10", border: "border-rose-500/20" },
+          { label: "Actionable Segments", value: data.kpis.actionableSegments, icon: Target, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+          { label: "High Confidence Signals", value: data.kpis.highConfidenceSignals, icon: ShieldCheck, color: "text-cyan-500", bg: "bg-cyan-500/10", border: "border-cyan-500/20" }
         ].map((kpi, i) => (
-          <div key={i} className="bg-white dark:bg-[#241E32] rounded-2xl p-6 border border-zinc-100 dark:border-white/5 shadow-sm relative overflow-hidden group">
-            <div className={`absolute top-0 right-0 w-24 h-24 ${kpi.bg} rounded-full blur-2xl -translate-y-1/2 translate-x-1/3 group-hover:scale-150 transition-transform duration-500`}></div>
-            <div className="relative z-10 flex items-start justify-between">
+          <motion.div 
+            variants={itemVariants}
+            whileHover={{ y: -5, scale: 1.02 }}
+            key={i} 
+            className={`bg-white dark:bg-[#1A1525]/80 backdrop-blur-md rounded-3xl p-6 md:p-8 border ${kpi.border} shadow-lg shadow-zinc-200/20 dark:shadow-black/20 relative overflow-hidden group`}
+          >
+            <div className={`absolute top-0 right-0 w-32 h-32 ${kpi.bg} rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 group-hover:scale-150 transition-transform duration-700`}></div>
+            <div className="relative z-10 flex flex-col h-full justify-between">
+              <div className="flex justify-between items-start mb-6">
+                <span className="text-[11px] font-bold tracking-widest text-zinc-500 uppercase leading-snug w-2/3">{kpi.label}</span>
+                <div className={`p-3 rounded-2xl ${kpi.bg} relative`}>
+                  <kpi.icon className={`h-5 w-5 ${kpi.color} relative z-10`} />
+                  <div className={`absolute inset-0 rounded-2xl ${kpi.bg} animate-ping opacity-50`}></div>
+                </div>
+              </div>
               <div>
-                <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase block mb-2">{kpi.label}</span>
                 {isLoading ? (
-                  <div className="h-8 w-20 bg-zinc-200 dark:bg-white/5 rounded animate-pulse"></div>
+                  <div className="h-10 w-24 bg-zinc-200 dark:bg-white/5 rounded-lg animate-pulse"></div>
                 ) : (
-                  <div className="text-3xl font-extrabold text-zinc-900 dark:text-white">{kpi.value}</div>
+                  <motion.div 
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="text-4xl font-extrabold text-zinc-900 dark:text-white"
+                  >
+                    {kpi.value}
+                  </motion.div>
                 )}
               </div>
-              <div className={`p-2.5 rounded-xl ${kpi.bg}`}>
-                <kpi.icon className={`h-5 w-5 ${kpi.color}`} />
-              </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Main Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        {/* Sector Activity Chart (Takes up 2 columns on large screens) */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#241E32] rounded-3xl p-6 md:p-8 border border-zinc-100 dark:border-white/5 shadow-sm relative">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-                <BarChart2 className="h-5 w-5 text-violet-500" /> Sector Pipeline Activity
+        {/* Sector Pipeline Activity Bar Chart */}
+        <motion.div variants={itemVariants} className="bg-white/60 dark:bg-[#1A1525]/60 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-zinc-200 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-black/20 relative overflow-hidden col-span-1 lg:col-span-2">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
+            <div className="max-w-2xl">
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2 mb-2">
+                <BarChart2 className="h-6 w-6 text-cyan-500" /> Sector Pipeline Activity
               </h3>
-              <p className="text-sm text-zinc-500 mt-1">Volume of raw signals vs verified threats extracted by the pipeline per sector.</p>
+              <p className="text-sm text-zinc-500 font-medium">Comparison of raw intelligence signals versus fully verified threats dropped into the action pipeline.</p>
             </div>
+            
+            {!isLoading && (
+              <div className="mt-4 md:mt-0 px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center gap-3 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+                <span className="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest">Highest Volume</span>
+                <span className="text-sm font-bold text-zinc-900 dark:text-white">
+                  {data.sectorActivity.reduce((max, s) => s.signals > max.signals ? s : max, data.sectorActivity[0])?.sector || 'N/A'}
+                </span>
+              </div>
+            )}
           </div>
           
-          <div className="h-[350px] w-full relative">
+          <div className="h-[400px] w-full relative z-10">
             {isLoading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 dark:bg-[#241E32]/50 backdrop-blur-sm rounded-xl">
-                <RefreshCw className="h-8 w-8 text-violet-500 animate-spin" />
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/50 dark:bg-[#1A1525]/50 backdrop-blur-sm rounded-2xl">
+                <RefreshCw className="h-8 w-8 text-cyan-500 animate-spin" />
               </div>
             )}
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data.sectorActivity} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e4e4e7" strokeOpacity={0.1} />
-                <XAxis dataKey="sector" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={10} />
-                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip content={<CustomTooltip />} cursor={{ fill: '#8b5cf6', opacity: 0.05 }} />
-                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} />
-                <Bar dataKey="signals" name="Raw Signals" fill="#8b5cf6" radius={[4, 4, 0, 0]} maxBarSize={50} />
-                <Bar dataKey="threats" name="Verified Threats" fill="#ef4444" radius={[4, 4, 0, 0]} maxBarSize={50} />
+              <BarChart data={data.sectorActivity} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="colorSignals" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.9}/>
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.2}/>
+                  </linearGradient>
+                  <linearGradient id="colorThreats" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.9}/>
+                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.2}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#52525b" opacity={0.15} />
+                <XAxis dataKey="sector" axisLine={false} tickLine={false} tick={{ fill: '#a1a1aa', fontSize: 13, fontWeight: 500 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#a1a1aa', fontSize: 13 }} dx={-10} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: '#a1a1aa', opacity: 0.05 }} />
+                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '13px', fontWeight: 500 }} />
+                <Bar dataKey="signals" name="Raw Signals" fill="url(#colorSignals)" radius={[6, 6, 0, 0]} maxBarSize={50} />
+                <Bar dataKey="threats" name="Verified Threats" fill="url(#colorThreats)" radius={[6, 6, 0, 0]} maxBarSize={50} />
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Source Quality Chart */}
-        <div className="bg-white dark:bg-[#241E32] rounded-3xl p-6 md:p-8 border border-zinc-100 dark:border-white/5 shadow-sm relative">
-          <div className="mb-8">
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-              <PieChartIcon className="h-5 w-5 text-cyan-500" /> Intelligence Sources
-            </h3>
-            <p className="text-sm text-zinc-500 mt-1">Distribution of extracted intelligence by source tier validation.</p>
+        {/* Intelligence Sources Pie Chart */}
+        <motion.div variants={itemVariants} className="bg-white/60 dark:bg-[#1A1525]/60 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-zinc-200 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-black/20 relative overflow-hidden">
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-violet-500/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
+            <div>
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2 mb-2">
+                <PieChartIcon className="h-6 w-6 text-violet-500" /> Intelligence Sources
+              </h3>
+              <p className="text-sm text-zinc-500 font-medium">Distribution of processed signals by source tier.</p>
+            </div>
           </div>
           
-          <div className="h-[300px] w-full relative">
+          <div className="h-[350px] w-full relative z-10">
             {isLoading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 dark:bg-[#241E32]/50 backdrop-blur-sm rounded-xl">
-                <RefreshCw className="h-8 w-8 text-cyan-500 animate-spin" />
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/50 dark:bg-[#1A1525]/50 backdrop-blur-sm rounded-2xl">
+                <RefreshCw className="h-8 w-8 text-violet-500 animate-spin" />
               </div>
             )}
             <ResponsiveContainer width="100%" height="100%">
@@ -199,75 +286,84 @@ export default function IntelligenceAnalyticsPage() {
                   data={data.sourceQuality}
                   cx="50%"
                   cy="50%"
-                  innerRadius={70}
-                  outerRadius={100}
-                  paddingAngle={5}
+                  innerRadius={80}
+                  outerRadius={120}
+                  paddingAngle={8}
                   dataKey="value"
                   stroke="none"
+                  cornerRadius={8}
                 >
                   {data.sourceQuality.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} style={{ filter: `drop-shadow(0px 0px 8px ${COLORS[index % COLORS.length]}40)` }} />
                   ))}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
                 <Legend 
                   iconType="circle" 
                   layout="vertical" 
-                  verticalAlign="bottom" 
-                  align="center"
-                  wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
+                  verticalAlign="middle" 
+                  align="right"
+                  wrapperStyle={{ fontSize: '13px', fontWeight: 500 }}
                 />
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
 
         {/* Threat Typology Radar Chart */}
-        <div className="bg-white dark:bg-[#241E32] rounded-3xl p-6 md:p-8 border border-zinc-100 dark:border-white/5 shadow-sm relative lg:col-span-3">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
-            <div className="max-w-xl">
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-                <Target className="h-5 w-5 text-emerald-500" /> Threat Typology Vector Map
+        <motion.div variants={itemVariants} className="bg-white/60 dark:bg-[#1A1525]/60 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-zinc-200 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-black/20 relative overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
+            <div className="max-w-xs">
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2 mb-2">
+                <Target className="h-6 w-6 text-emerald-500" /> Threat Typology Vector
               </h3>
-              <p className="text-sm text-zinc-500 mt-1">Multi-dimensional analysis of threat categorization currently dominating the European HSE regulatory landscape.</p>
+              <p className="text-sm text-zinc-500 font-medium">Multi-dimensional categorization of dominating threats.</p>
             </div>
             
             {!isLoading && (
-              <div className="mt-4 md:mt-0 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block">Dominant Vector</span>
+              <div className="mt-4 md:mt-0 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block mb-0.5">Primary Vector</span>
                 <span className="text-sm font-bold text-zinc-900 dark:text-white">
-                  {data.threatTypology.reduce((max, t) => t.A > max.A ? t : max, data.threatTypology[0])?.subject || "Calculating..."}
+                  {data.threatTypology.reduce((max, t) => t.A > max.A ? t : max, data.threatTypology[0])?.subject || 'N/A'}
                 </span>
               </div>
             )}
           </div>
           
-          <div className="h-[400px] w-full relative">
+          <div className="h-[350px] w-full relative z-10">
             {isLoading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 dark:bg-[#241E32]/50 backdrop-blur-sm rounded-xl">
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/50 dark:bg-[#1A1525]/50 backdrop-blur-sm rounded-2xl">
                 <RefreshCw className="h-8 w-8 text-emerald-500 animate-spin" />
               </div>
             )}
             <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="75%" data={data.threatTypology}>
-                <PolarGrid stroke="#e4e4e7" strokeOpacity={0.2} />
-                <PolarAngleAxis dataKey="subject" tick={{ fill: '#a1a1aa', fontSize: 12, fontWeight: 600 }} />
+              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data.threatTypology}>
+                <defs>
+                  <linearGradient id="radarGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.6}/>
+                    <stop offset="100%" stopColor="#10b981" stopOpacity={0.1}/>
+                  </linearGradient>
+                </defs>
+                <PolarGrid stroke="#a1a1aa" strokeOpacity={0.2} />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: '#71717a', fontSize: 12, fontWeight: 600 }} />
                 <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} axisLine={false} />
                 <Radar
                   name="Threat Concentration"
                   dataKey="A"
                   stroke="#10b981"
-                  fill="#10b981"
-                  fillOpacity={0.3}
-                  strokeWidth={2}
+                  strokeWidth={3}
+                  fill="url(#radarGradient)"
+                  fillOpacity={1}
+                  className="drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                 />
                 <Tooltip content={<CustomTooltip />} />
               </RadarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }
