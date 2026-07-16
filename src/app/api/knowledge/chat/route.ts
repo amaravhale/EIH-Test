@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import * as cheerio from "cheerio";
+import { performWebSearch } from "@/lib/ai/search";
 import { scrapeLiveThreats } from "@/lib/ai/threat-monitor/scraper";
 
 export const maxDuration = 60;
@@ -9,32 +9,6 @@ export const dynamic = 'force-dynamic';
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'dummy_key',
 });
-
-async function performWebSearch(query: string) {
-  try {
-    const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-      }
-    });
-
-    if (!response.ok) return "";
-
-    const html = await response.text();
-    const $ = cheerio.load(html);
-    
-    const results: string[] = [];
-    $('.result__snippet').each((i, el) => {
-      if (i < 5) results.push($(el).text().trim());
-    });
-    
-    return results.join("\n\n");
-  } catch (error) {
-    console.error("Web search error:", error);
-    return "";
-  }
-}
 
 export async function POST(req: Request) {
   try {

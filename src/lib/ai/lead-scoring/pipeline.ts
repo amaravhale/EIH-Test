@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { LeadScoreProfile, BantScore } from './types';
+import { performWebSearch } from '../search';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'dummy_key',
@@ -88,7 +89,10 @@ export async function runLeadScoringPipeline(companyName: string): Promise<LeadS
   }
 
   // Call OpenAI if key exists
-  const prompt = `
+  const searchQuery = `${companyName} HSE safety news incident`;
+  const scrapedData = await performWebSearch(searchQuery);
+
+  let prompt = `
 You are the Empirisys Lead Scoring AI.
 Generate a tactical sales dossier for: ${companyName} (Industry: ${industry}).
 The company has an estimated BANT score of: ${JSON.stringify(bant)}.
@@ -131,6 +135,9 @@ Output strictly valid JSON matching this schema:
 Note: The incident block is optional if no real incident applies.
 `;
 
+  if (scrapedData) {
+    prompt += `\n\n--- LIVE INTERNET DATA ---\nUse the following real-time internet search results to ground your tactical sales dossier in actual recent events for this company:\n${scrapedData}\nIf the data is insufficient, use your deep industry knowledge to generate a realistic simulated dossier.`;
+  }
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
     response_format: { type: "json_object" },

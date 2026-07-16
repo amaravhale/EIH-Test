@@ -14,6 +14,7 @@ import {
   applyDecay,
   shouldFilter,
 } from './scoring';
+import { performWebSearch } from '../search';
 
 // ────────────────────────────────────────────────────────────
 // Prompts
@@ -201,6 +202,15 @@ export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
   const openai = new OpenAI(); // uses OPENAI_API_KEY from env
 
   // ── Step 1: Extract events via LLM ──────────────────────
+  const searchQuery = "European process safety HSE news latest OR offshore wind safety OR chemical industry regulations";
+  const scrapedData = await performWebSearch(searchQuery);
+  
+  let userContent = 'Generate a fresh batch of market intelligence events for the current period. Today\'s date is ' + new Date().toISOString().slice(0, 10) + '.';
+  
+  if (scrapedData) {
+    userContent += `\n\n--- LIVE INTERNET DATA ---\nHere are real-time search results related to European process safety markets:\n${scrapedData}\n\nUse this real-world data as the factual basis for your generated events. If the live data is insufficient to generate exactly 8 events, invent the remaining ones as highly realistic simulations.`;
+  }
+
   const extractionResponse = await openai.chat.completions.create({
     model: 'gpt-4o',
     temperature: 0.4,
@@ -209,10 +219,7 @@ export async function runMarketIntelligencePipeline(): Promise<PipelineResult> {
       { role: 'system', content: EXTRACTION_SYSTEM_PROMPT },
       {
         role: 'user',
-        content:
-          'Generate a fresh batch of market intelligence events for the current period. Today\'s date is ' +
-          new Date().toISOString().slice(0, 10) +
-          '.',
+        content: userContent,
       },
     ],
   });

@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { performWebSearch } from '../search';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'dummy_key',
@@ -68,9 +69,12 @@ export async function scrapeLiveThreats(): Promise<VerifiedThreat[]> {
   }
 
   // Live OpenAI parsing of hypothetical regulatory feeds
-  const prompt = `
+  const searchQuery = "UK HSE enforcement notice environmental incident Seveso";
+  const scrapedData = await performWebSearch(searchQuery);
+
+  let prompt = `
 You are the Empirisys Threat Scraper.
-Your function is to scan simulated European regulatory enforcement feeds (UK HSE, EEA, BAuA) and extract verified HSE threats and regulatory notices.
+Your function is to extract verified HSE threats and regulatory notices.
 
 Generate exactly 3 verified threats.
 For each threat, output strictly valid JSON matching this schema:
@@ -96,6 +100,12 @@ For each threat, output strictly valid JSON matching this schema:
 Output format must be:
 { "threats": [ ... ] }
 `;
+
+  if (scrapedData) {
+    prompt += `\n\n--- LIVE INTERNET DATA ---\nUse the following real-time internet search results to base your generated threats on true events:\n${scrapedData}\nIf the data is insufficient to generate 3 events, invent the rest as highly realistic simulations.`;
+  } else {
+    prompt += `\n\nScan simulated European regulatory enforcement feeds (UK HSE, EEA, BAuA) and extract highly realistic simulated threats.`;
+  }
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
