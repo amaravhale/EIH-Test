@@ -1,1 +1,0 @@
-const cheerio = require('cheerio'); fetch('https://html.duckduckgo.com/html/?q=uk+hse+notices').then(res = const $ = cheerio.load(html); const results = []; .result__snippet.each((i, el) =; console.log(results.slice(0,3)); })  
