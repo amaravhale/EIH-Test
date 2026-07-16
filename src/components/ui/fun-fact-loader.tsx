@@ -7,20 +7,20 @@ import { Sparkles, Loader2 } from "lucide-react";
 // Real Empirisys historical facts - A mix of serious history and humorous company quirks
 const EMPIRISYS_FACTS = [
   // The Serious & Meaningful
-  "The founding of Empirisys was deeply personal: both founders were driven by their own family's experiences with serious industrial accidents.",
-  "The Alex White Memorial Fund honors our late colleague by supporting neurodiverse students during our annual Cardiff internships.",
-  "In 2024, our CEO Gus Carroll was awarded the prestigious IChemE Franklin Medal for his 30-year contribution to process safety.",
-  "Our DETECT analytics engine was developed in direct partnership with BP, revolutionising decision-making support in process safety.",
-  "We ran the largest-ever Process Safety Leadership Survey with Step Change in Safety, gathering input from 450 leaders across 73 organisations.",
-  "From a two-person startup to a 30+ strong team, we proudly work alongside industry giants like BP, Thames Water, SSE, and Ineos.",
-  "Our Chairman, Iain Conn, brings world-class experience, having previously served as CEO of both BP's downstream business and Centrica.",
+  "The founding of Empirisys was deeply personal: both founders were driven by their own family's experiences with serious industrial accidents. 🛡️🤝",
+  "The Alex White Memorial Fund honors our late colleague by supporting neurodiverse students during our annual Cardiff internships. 🎓💡",
+  "In 2024, our CEO Gus Carroll was awarded the prestigious IChemE Franklin Medal for his 30-year contribution to process safety. 🏅👨‍🔬",
+  "Our DETECT analytics engine was developed in direct partnership with BP, revolutionising decision-making support in process safety. ⚙️📊",
+  "We ran the largest-ever Process Safety Leadership Survey with Step Change in Safety, gathering input from 450 leaders across 73 organisations. 📝📈",
+  "From a two-person startup to a 30+ strong team, we proudly work alongside industry giants like BP, Thames Water, SSE, and Ineos. 🚀🏭",
+  "Our Chairman, Iain Conn, brings world-class experience, having previously served as CEO of both BP's downstream business and Centrica. 🌍👔",
   
   // The Humorous & Quirky
-  "Empirisys was founded in 2020 from a kitchen table. We claim 'remote-first' was a strategic visionary move, but really we were just stuck in lockdown.",
-  "Our official team motto is 'We have no egos, amigos.' Unofficial motto: 'Who broke the build on a Friday afternoon?'",
-  "We trust our team so much we don't even track their holidays. If someone is missing for 3 weeks, we just assume they're deep in a neural network.",
-  "Our data science team includes a former professional chef. We're still trying to convince him to cook us lunch instead of writing Python scripts.",
-  "In 2023, we accidentally won a Sunday Times Best Place to Work award. We thought our culture was just 'okay', but apparently having no egos actually works!"
+  "Empirisys was founded in 2020 from a kitchen table. We claim 'remote-first' was a strategic visionary move, but really we were just stuck in lockdown. 🏠💻😅",
+  "Our official team motto is 'We have no egos, amigos.' Unofficial motto: 'Who broke the build on a Friday afternoon?' 🛑🔥🤦‍♂️",
+  "We trust our team so much we don't even track their holidays. If someone is missing for 3 weeks, we just assume they're deep in a neural network. 🏖️🧠🤖",
+  "Our data science team includes a former professional chef. We're still trying to convince him to cook us lunch instead of writing Python scripts. 👨‍🍳🍝🐍",
+  "In 2023, we accidentally won a Sunday Times Best Place to Work award. We thought our culture was just 'okay', but apparently having no egos actually works! 🏆🤷‍♂️🎉"
 ];
 
 interface FunFactLoaderProps {
