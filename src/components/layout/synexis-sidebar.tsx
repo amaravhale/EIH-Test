@@ -117,11 +117,11 @@ export function SynexisSidebar({
                     ? "text-white shadow-[0_0_20px_rgba(139,92,246,0.2)] bg-white/10 dark:bg-white/10 border border-white/20" 
                     : isActive && item.subItems
                       ? "text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-white/5"
-                      : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200 border border-transparent"
+                      : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200 border border-transparent"
                 )}
               >
                 {isActive && !item.subItems && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-violet-600/30 to-cyan-500/30 opacity-100 z-0 rounded-2xl" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-500 dark:from-violet-600/30 dark:to-cyan-500/30 opacity-100 z-0 rounded-2xl" />
                 )}
                 <Icon className={cn("h-[20px] w-[20px] shrink-0 relative z-10", isActive && !item.subItems ? "text-white" : "")} />
                 <span className="relative z-10 flex-1 text-left">{item.label}</span>
@@ -145,7 +145,7 @@ export function SynexisSidebar({
                           "flex items-center w-full text-left pl-4 py-2 rounded-xl transition-all duration-200 text-[13px] font-medium",
                           isSubActive
                             ? "text-cyan-600 dark:text-cyan-400 font-bold bg-cyan-50 dark:bg-cyan-500/10"
-                            : "text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+                            : "text-zinc-600 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
                         )}
                       >
                         {subItem.label}

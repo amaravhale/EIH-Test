@@ -59,19 +59,19 @@ export function SynexisHeader({ user }: SynexisHeaderProps) {
   };
 
   return (
-    <header className="flex h-20 items-center justify-between px-8 shrink-0 sticky top-0 z-50 backdrop-blur-2xl bg-white/40 dark:bg-white/5 border-b border-zinc-200/50 dark:border-white/10 transition-colors duration-300">
+    <header className="flex h-20 items-center justify-between px-8 shrink-0 sticky top-0 z-50 backdrop-blur-2xl bg-white/70 dark:bg-white/5 border-b border-zinc-200 shadow-sm dark:shadow-none dark:border-white/10 transition-colors duration-300">
       
       {/* Left side: Search Pill */}
       <div className="flex-1 flex items-center">
         <div className="flex items-center w-full max-w-sm px-4 py-2.5 rounded-full bg-zinc-100/50 dark:bg-[#2A233D] border border-transparent dark:border-white/5 transition-colors focus-within:ring-2 focus-within:ring-violet-500/50">
-          <Search className="h-4 w-4 text-zinc-400 mr-2" />
+          <Search className="h-4 w-4 text-zinc-500 dark:text-zinc-400 mr-2" />
           <input 
             type="text" 
             placeholder="Search neural patterns..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearch}
-            className="bg-transparent border-none outline-none text-sm w-full text-zinc-900 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
+            className="bg-transparent border-none outline-none text-sm w-full text-zinc-900 dark:text-zinc-200 placeholder:text-zinc-500 dark:placeholder:text-zinc-500"
           />
         </div>
       </div>

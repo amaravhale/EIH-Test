@@ -73,9 +73,9 @@ export function LeadScoringMatrix() {
     <div className="space-y-8 pb-10">
       
       {/* Search Engine (Synexis Neural Search) */}
-      <div className="rounded-[32px] overflow-hidden bg-white dark:bg-[#241E32] shadow-sm border border-zinc-100 dark:border-white/5 relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-400/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-500/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+      <div className="rounded-[32px] overflow-hidden bg-white dark:bg-[#241E32] shadow-xl shadow-zinc-200/50 dark:shadow-none border border-zinc-200/50 dark:border-white/5 relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 dark:bg-cyan-400/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/10 dark:bg-violet-500/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4 pointer-events-none" />
 
         <div className="p-10 relative z-10 flex flex-col items-center text-center">
           <div className="flex justify-center mb-6">
@@ -90,12 +90,12 @@ export function LeadScoringMatrix() {
 
           <div className="w-full max-w-2xl mx-auto mt-8 relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 to-cyan-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative flex items-center bg-zinc-50 dark:bg-[#1A1525] rounded-2xl border border-zinc-200 dark:border-white/10 p-2">
-              <Search className="h-6 w-6 text-zinc-400 ml-4 mr-2" />
+            <div className="relative flex items-center bg-zinc-100 dark:bg-[#1A1525] rounded-2xl border border-zinc-200 shadow-inner dark:shadow-none dark:border-white/10 p-2">
+              <Search className="h-6 w-6 text-zinc-500 dark:text-zinc-400 ml-4 mr-2" />
               <input 
                 type="text"
                 placeholder="e.g. Shell, BP, Balfour Beatty..."
-                className="w-full bg-transparent border-none outline-none text-[16px] text-zinc-900 dark:text-white placeholder:text-zinc-400 p-2"
+                className="w-full bg-transparent border-none outline-none text-[16px] text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 p-2"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
@@ -124,7 +124,7 @@ export function LeadScoringMatrix() {
               priorityTargets.map((sample) => (
                 <button 
                   key={sample} 
-                  className="px-3 py-1 rounded-full bg-zinc-100 dark:bg-[#2A233D] text-[11px] font-bold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-colors"
+                  className="px-3 py-1 rounded-full bg-zinc-100 dark:bg-[#2A233D] text-[11px] font-bold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-white/10 border border-zinc-200 dark:border-transparent transition-colors"
                   onClick={() => handleAnalyze(sample)}
                 >
                   {sample}
@@ -164,7 +164,7 @@ export function LeadScoringMatrix() {
               const baseCompany = incident.clientDetails.split('-')[0].trim();
 
               return (
-                <div key={incident.id} className="bg-white dark:bg-[#241E32] rounded-[24px] p-6 shadow-sm border border-zinc-100 dark:border-white/5 relative flex flex-col group overflow-hidden">
+                <div key={incident.id} className="bg-white dark:bg-[#241E32] rounded-[24px] p-6 shadow-xl shadow-zinc-200/50 dark:shadow-none border border-zinc-200/50 dark:border-white/5 relative flex flex-col group overflow-hidden">
                   <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-cyan-400 to-violet-500"></div>
                   
                   <div className="flex justify-between items-start mb-4">
@@ -182,7 +182,7 @@ export function LeadScoringMatrix() {
                     {incident.incidentDescription}
                   </p>
                   
-                  <div className="bg-zinc-50 dark:bg-[#1A1525] rounded-xl p-4 border border-zinc-100 dark:border-white/5 mb-5 flex items-center gap-3">
+                  <div className="bg-zinc-50 dark:bg-[#1A1525] rounded-xl p-4 border border-zinc-200 dark:border-white/5 mb-5 flex items-center gap-3">
                      <Briefcase className="h-4 w-4 text-zinc-400" />
                      <div>
                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold block mb-0.5">Assigned Contractor</span>
@@ -191,7 +191,7 @@ export function LeadScoringMatrix() {
                   </div>
                   
                   <button 
-                    className="w-full py-3 bg-zinc-100 dark:bg-[#2A233D] hover:bg-zinc-200 dark:hover:bg-[#322A4A] text-zinc-900 dark:text-white font-bold rounded-xl transition-all text-[13px] flex items-center justify-center border border-transparent dark:border-white/5"
+                    className="w-full py-3 bg-zinc-100 dark:bg-[#2A233D] hover:bg-zinc-200 dark:hover:bg-[#322A4A] text-zinc-900 dark:text-white font-bold rounded-xl transition-all text-[13px] flex items-center justify-center border border-zinc-200 dark:border-transparent"
                     onClick={() => handleAnalyze(baseCompany)}
                   >
                     <Target className="h-4 w-4 mr-2 text-cyan-500" /> Analyse Client
