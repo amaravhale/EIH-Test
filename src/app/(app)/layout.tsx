@@ -15,23 +15,22 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    document.documentElement.classList.add("dark");
   }, []);
 
   const { user } = useUser();
 
   // Prevent hydration mismatch flash
   if (!mounted) {
-    return <div className="h-screen w-full bg-[#1A1525]"></div>;
+    return <div className="h-screen w-full bg-zinc-50 dark:bg-[#1A1525]"></div>;
   }
 
   return (
-    <div className={`flex h-screen w-full overflow-hidden dark bg-[#05030A] text-zinc-100 font-sans relative`}>
+    <div className={`flex h-screen w-full overflow-hidden bg-zinc-50 dark:bg-[#05030A] text-zinc-900 dark:text-zinc-100 font-sans relative`}>
       
       {/* Ambient Background Mesh to reveal Glassmorphism in both modes */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none transition-opacity duration-700">
-        <div className="absolute -top-[10%] -left-[5%] w-[40%] h-[40%] rounded-full bg-violet-600/50 blur-[100px]" />
-        <div className="absolute top-[50%] -right-[5%] w-[40%] h-[40%] rounded-full bg-cyan-600/40 blur-[100px]" />
+        <div className="absolute -top-[10%] -left-[5%] w-[40%] h-[40%] rounded-full bg-violet-600/20 dark:bg-violet-600/50 blur-[100px]" />
+        <div className="absolute top-[50%] -right-[5%] w-[40%] h-[40%] rounded-full bg-cyan-600/10 dark:bg-cyan-600/40 blur-[100px]" />
       </div>
 
       <div className="relative z-10 flex h-full w-full">

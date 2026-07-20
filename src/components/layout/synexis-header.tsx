@@ -6,6 +6,7 @@ import { Search, Bell, Moon, Sun, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { toast } from "@/components/ui/toaster";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export interface SynexisHeaderProps {
   user: {
@@ -108,6 +109,7 @@ export function SynexisHeader({ user }: SynexisHeaderProps) {
         
         {/* Actions */}
         <div className="flex items-center gap-4 relative">
+          <ThemeToggle />
           <button 
             onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
             className="relative text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
