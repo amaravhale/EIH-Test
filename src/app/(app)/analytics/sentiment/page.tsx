@@ -78,7 +78,7 @@ export default function SentimentAnalyticsPage() {
             ) : (
               <>
                 <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{data.kpis.score}</div>
-                <p className="text-xs text-zinc-500 mt-1">Positive mentions across all channels</p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-500 mt-1">Positive mentions across all channels</p>
               </>
             )}
           </CardContent>
@@ -93,7 +93,7 @@ export default function SentimentAnalyticsPage() {
             ) : (
               <>
                 <div className="text-3xl font-bold text-red-600 dark:text-red-500">{data.kpis.negativeAlerts}</div>
-                <p className="text-xs text-zinc-500 mt-1">Requires immediate PR review</p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-500 mt-1">Requires immediate PR review</p>
               </>
             )}
           </CardContent>
@@ -108,7 +108,7 @@ export default function SentimentAnalyticsPage() {
             ) : (
               <>
                 <div className="text-3xl font-bold">{data.kpis.totalMentions}</div>
-                <p className="text-xs text-zinc-500 mt-1">Last 30 days</p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-500 mt-1">Last 30 days</p>
               </>
             )}
           </CardContent>
@@ -134,7 +134,7 @@ export default function SentimentAnalyticsPage() {
                   </div>
                 ))
              ) : data.mentions.length === 0 ? (
-                <div className="text-center py-10 text-zinc-500">No recent mentions found.</div>
+                <div className="text-center py-10 text-zinc-600 dark:text-zinc-500">No recent mentions found.</div>
              ) : (
                data.mentions.map((mention, index) => (
                 <div key={index} className="rounded-lg border border-zinc-200 dark:border-white/10 p-4">

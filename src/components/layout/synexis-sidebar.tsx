@@ -176,7 +176,7 @@ export function SynexisSidebar({
                 "flex items-center w-full gap-3.5 px-4 py-2.5 rounded-2xl transition-all duration-200 text-[15px] font-semibold",
                 isActive
                   ? "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10"
-                  : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200"
+                  : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200"
               )}
             >
               <Icon className="h-[20px] w-[20px] shrink-0" />

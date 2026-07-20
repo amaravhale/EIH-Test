@@ -53,7 +53,7 @@ export default function DashboardPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
         <div className="mb-2">
           <h1 className="text-[36px] font-bold text-zinc-900 dark:text-white tracking-tight mb-2">Mission Control</h1>
-          <p className="text-[15px] text-zinc-500 dark:text-zinc-400">
+          <p className="text-[15px] text-zinc-600 dark:text-zinc-400">
             Real-time strategic posture, revenue pulse, and priority intelligence.
           </p>
         </div>
@@ -87,32 +87,32 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-xl transition-shadow">
           <div className="flex justify-between items-start mb-4">
-            <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">Active Pipeline</span>
+            <span className="text-[11px] uppercase tracking-widest text-zinc-600 dark:text-zinc-500 font-bold">Active Pipeline</span>
             <Target className="h-4 w-4 text-violet-500" />
           </div>
           <div className="text-4xl font-bold text-zinc-900 dark:text-white mb-2">{briefing.targets.length}</div>
-          <p className="text-sm text-zinc-500">Tier-A targets currently vulnerable</p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-500">Tier-A targets currently vulnerable</p>
         </div>
 
         <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-xl transition-shadow relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-transparent to-orange-500/5"></div>
           <div className="flex justify-between items-start mb-4 relative z-10">
-            <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">Displacement Opps</span>
+            <span className="text-[11px] uppercase tracking-widest text-zinc-600 dark:text-zinc-500 font-bold">Displacement Opps</span>
             <Briefcase className="h-4 w-4 text-orange-500" />
           </div>
           <div className="text-4xl font-bold text-zinc-900 dark:text-white mb-2">{Math.floor(briefing.targets.length / 2) + 1}</div>
-          <p className="text-sm text-zinc-500">Incumbents vulnerable to disruption</p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-500">Incumbents vulnerable to disruption</p>
         </div>
 
         <div className="bg-white dark:bg-[#1A1525] rounded-3xl p-6 border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-xl transition-shadow">
           <div className="flex justify-between items-start mb-4">
-            <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">Dominant Theme</span>
+            <span className="text-[11px] uppercase tracking-widest text-zinc-600 dark:text-zinc-500 font-bold">Dominant Theme</span>
             <BarChart3 className="h-4 w-4 text-cyan-500" />
           </div>
           <div className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white leading-tight mb-2 h-10 flex items-center">
             {briefing.dominantTheme}
           </div>
-          <p className="text-sm text-zinc-500">Primary driver for consulting demand</p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-500">Primary driver for consulting demand</p>
         </div>
       </div>
 
@@ -121,7 +121,7 @@ export default function DashboardPage() {
         <div className="space-y-6">
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-xl font-bold text-zinc-900 dark:text-white">Strategic Posture</h3>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-zinc-100 dark:bg-white/10 text-zinc-500">Matrix</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-500">Matrix</span>
           </div>
 
           <div className="bg-white dark:bg-[#1A1525] rounded-3xl border border-zinc-200 dark:border-white/10 overflow-hidden shadow-sm">

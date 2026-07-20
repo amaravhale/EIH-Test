@@ -27,14 +27,14 @@ export default function TrendingTopicsPage() {
               <li className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-zinc-900 text-sm">Hydrogen Storage Safety</p>
-                  <p className="text-xs text-zinc-500">Mentions up 240%</p>
+                  <p className="text-xs text-zinc-600 dark:text-zinc-500">Mentions up 240%</p>
                 </div>
                 <div className="text-emerald-600 font-bold text-sm">Hot</div>
               </li>
               <li className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-zinc-900 text-sm">Predictive Maintenance AI</p>
-                  <p className="text-xs text-zinc-500">Mentions up 120%</p>
+                  <p className="text-xs text-zinc-600 dark:text-zinc-500">Mentions up 120%</p>
                 </div>
                 <div className="text-emerald-600 font-bold text-sm">Warm</div>
               </li>
@@ -55,14 +55,14 @@ export default function TrendingTopicsPage() {
               <li className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-zinc-900 text-sm">Offshore Wind Farm Logistics</p>
-                  <p className="text-xs text-zinc-500">Consistent high volume</p>
+                  <p className="text-xs text-zinc-600 dark:text-zinc-500">Consistent high volume</p>
                 </div>
                 <div className="text-amber-600 font-bold text-sm">Stable</div>
               </li>
               <li className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-zinc-900 text-sm">Safety Culture Transformation</p>
-                  <p className="text-xs text-zinc-500">Consistent high volume</p>
+                  <p className="text-xs text-zinc-600 dark:text-zinc-500">Consistent high volume</p>
                 </div>
                 <div className="text-amber-600 font-bold text-sm">Stable</div>
               </li>

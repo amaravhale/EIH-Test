@@ -89,7 +89,7 @@ export default function AssistantPage() {
     <div className="flex flex-col h-[calc(100vh-8rem)] max-w-5xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">AI Assistant</h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Chat with your intelligent copilot to explore data and generate insights.</p>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Chat with your intelligent copilot to explore data and generate insights.</p>
       </div>
 
       <div className="flex-1 overflow-hidden flex flex-col bg-white dark:bg-[#221c35]/50 rounded-3xl border border-zinc-200 dark:border-white/5 shadow-sm relative">
@@ -183,7 +183,7 @@ export default function AssistantPage() {
               </Button>
             </div>
             <div className="text-center mt-3">
-              <span className="text-xs text-zinc-400 dark:text-zinc-500">
+              <span className="text-xs text-zinc-500 dark:text-zinc-500">
                 AI Assistant can make mistakes. Consider verifying important safety and market insights.
               </span>
             </div>

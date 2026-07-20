@@ -91,7 +91,7 @@ export default function IntelligenceAnalyticsPage() {
           {payload.map((entry: any, index: number) => (
             <div key={index} className="flex items-center gap-3 text-sm mb-1.5 last:mb-0">
               <div className="w-2.5 h-2.5 rounded-full shadow-[0_0_10px_currentColor]" style={{ backgroundColor: entry.color || entry.fill, color: entry.color || entry.fill }} />
-              <span className="text-zinc-500 dark:text-zinc-400 font-medium capitalize">{entry.name}:</span>
+              <span className="text-zinc-600 dark:text-zinc-400 font-medium capitalize">{entry.name}:</span>
               <span className="font-bold text-zinc-900 dark:text-white">{entry.value}</span>
             </div>
           ))}
@@ -189,7 +189,7 @@ export default function IntelligenceAnalyticsPage() {
             <div className={`absolute top-0 right-0 w-32 h-32 ${kpi.bg} rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 group-hover:scale-150 transition-transform duration-700`}></div>
             <div className="relative z-10 flex flex-col h-full justify-between">
               <div className="flex justify-between items-start mb-6">
-                <span className="text-[11px] font-bold tracking-widest text-zinc-500 uppercase leading-snug w-2/3">{kpi.label}</span>
+                <span className="text-[11px] font-bold tracking-widest text-zinc-600 dark:text-zinc-500 uppercase leading-snug w-2/3">{kpi.label}</span>
                 <div className={`p-3 rounded-2xl ${kpi.bg} relative`}>
                   <kpi.icon className={`h-5 w-5 ${kpi.color} relative z-10`} />
                   <div className={`absolute inset-0 rounded-2xl ${kpi.bg} animate-ping opacity-50`}></div>
@@ -224,7 +224,7 @@ export default function IntelligenceAnalyticsPage() {
               <h3 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2 mb-2">
                 <BarChart2 className="h-6 w-6 text-cyan-500" /> Sector Pipeline Activity
               </h3>
-              <p className="text-sm text-zinc-500 font-medium">Comparison of raw intelligence signals versus fully verified threats dropped into the action pipeline.</p>
+              <p className="text-sm text-zinc-600 dark:text-zinc-500 font-medium">Comparison of raw intelligence signals versus fully verified threats dropped into the action pipeline.</p>
             </div>
             
             {!isLoading && (
@@ -275,7 +275,7 @@ export default function IntelligenceAnalyticsPage() {
               <h3 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2 mb-2">
                 <PieChartIcon className="h-6 w-6 text-violet-500" /> Intelligence Sources
               </h3>
-              <p className="text-sm text-zinc-500 font-medium">Distribution of processed signals by source tier.</p>
+              <p className="text-sm text-zinc-600 dark:text-zinc-500 font-medium">Distribution of processed signals by source tier.</p>
             </div>
           </div>
           
@@ -323,7 +323,7 @@ export default function IntelligenceAnalyticsPage() {
               <h3 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2 mb-2">
                 <Target className="h-6 w-6 text-emerald-500" /> Threat Typology Vector
               </h3>
-              <p className="text-sm text-zinc-500 font-medium">Multi-dimensional categorization of dominating threats.</p>
+              <p className="text-sm text-zinc-600 dark:text-zinc-500 font-medium">Multi-dimensional categorization of dominating threats.</p>
             </div>
             
             {!isLoading && (

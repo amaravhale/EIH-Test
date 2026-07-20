@@ -65,7 +65,7 @@ export default function ContentIdeasPage() {
               </p>
               <div className="flex flex-wrap gap-2 mb-6">
                 {idea.tags.map(tag => (
-                  <span key={tag} className="text-[10px] font-medium text-zinc-500 bg-zinc-100 px-2 py-1 rounded-full">
+                  <span key={tag} className="text-[10px] font-medium text-zinc-600 dark:text-zinc-500 bg-zinc-100 px-2 py-1 rounded-full">
                     {tag}
                   </span>
                 ))}

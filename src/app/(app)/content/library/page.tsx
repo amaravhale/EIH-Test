@@ -29,10 +29,10 @@ export default function ContentLibraryPage() {
                     </div>
                     <div>
                       <h4 className="font-medium text-sm text-zinc-900">Q{i} Safety Analytics Report</h4>
-                      <p className="text-xs text-zinc-500">Published • PDF • 2.4MB</p>
+                      <p className="text-xs text-zinc-600 dark:text-zinc-500">Published • PDF • 2.4MB</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-blue-600">
+                  <Button variant="ghost" size="icon" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600">
                     <ExternalLink className="h-4 w-4" />
                   </Button>
                 </div>
