@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { performWebSearch } from "@/lib/ai/search";
 import { scrapeLiveThreats } from "@/lib/ai/threat-monitor/scraper";
+import { checkRateLimit } from "@/lib/security/rate-limiter";
+import { ChatMessagesSchema } from "@/lib/security/validation";
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -12,11 +14,22 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
-
-    if (!messages || !Array.isArray(messages)) {
-      return new NextResponse("Missing or invalid messages", { status: 400 });
+    const rateLimit = checkRateLimit(req, 15); // 15 requests per minute
+    if (!rateLimit.allowed && rateLimit.errorResponse) {
+      return rateLimit.errorResponse;
     }
+
+    const body = await req.json().catch(() => null);
+    const validation = ChatMessagesSchema.safeParse(body);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: "Invalid request payload", details: validation.error.flatten() },
+        { status: 400, headers: rateLimit.headers }
+      );
+    }
+
+    const { messages } = validation.data;
 
     // Extract the latest user message to run a background search
     const lastUserMessage = [...messages].reverse().find(m => m.role === 'user')?.content || "";

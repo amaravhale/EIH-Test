@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { IncidentIntelligence } from '@/types/domain';
+import { checkRateLimit } from '@/lib/security/rate-limiter';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -9,8 +10,13 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const rateLimit = checkRateLimit(req, 20);
+    if (!rateLimit.allowed && rateLimit.errorResponse) {
+      return rateLimit.errorResponse;
+    }
+
     if (!process.env.OPENAI_API_KEY) {
       throw new Error("OPENAI_API_KEY is not configured.");
     }

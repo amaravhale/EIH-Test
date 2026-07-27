@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { scrapeLiveThreats } from '@/lib/ai/threat-monitor/scraper';
+import { checkRateLimit } from '@/lib/security/rate-limiter';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -9,8 +10,13 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'dummy_key',
 });
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const rateLimit = checkRateLimit(req, 15); // 15 requests per minute
+    if (!rateLimit.allowed && rateLimit.errorResponse) {
+      return rateLimit.errorResponse;
+    }
+
     const liveThreats = await scrapeLiveThreats();
     
     if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy_key' || process.env.OPENAI_API_KEY.includes('your-openai-api-key')) {

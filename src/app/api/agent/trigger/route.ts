@@ -1,15 +1,27 @@
 import { NextResponse } from 'next/server';
 import { LeadScoringAgent } from '@/lib/ai/lead-scorer';
-import { RawSignal } from '@/lib/ai/types';
+import { RawSignal, IncidentSource } from '@/lib/ai/types';
+import { checkRateLimit } from '@/lib/security/rate-limiter';
+import { TriggerSignalSchema } from '@/lib/security/validation';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { rawText, sourceUrl, sourceType } = body;
-
-    if (!rawText) {
-      return NextResponse.json({ error: 'Missing rawText field' }, { status: 400 });
+    const rateLimit = checkRateLimit(req, 30); // 30 requests per minute
+    if (!rateLimit.allowed && rateLimit.errorResponse) {
+      return rateLimit.errorResponse;
     }
+
+    const body = await req.json().catch(() => null);
+    const validation = TriggerSignalSchema.safeParse(body);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: 'Invalid signal payload', details: validation.error.flatten() },
+        { status: 400, headers: rateLimit.headers }
+      );
+    }
+
+    const { rawText, sourceUrl, sourceType } = validation.data;
 
     const agent = new LeadScoringAgent();
     
@@ -17,7 +29,7 @@ export async function POST(req: Request) {
     const signal: RawSignal = {
       id: Math.random().toString(36).substring(7),
       sourceUrl: sourceUrl || 'https://euosha.europa.eu/incidents',
-      sourceType: sourceType || 'eu_osha',
+      sourceType: (sourceType as IncidentSource) || 'eu_osha',
       rawText: rawText,
       publishedAt: new Date().toISOString()
     };

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { checkRateLimit } from '@/lib/security/rate-limiter';
 
 export const maxDuration = 60; // Prevent Vercel timeouts for LLM calls
 export const dynamic = 'force-dynamic';
@@ -22,8 +23,13 @@ export interface IntelligenceSignal {
   url?: string;
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const rateLimit = checkRateLimit(req, 20);
+    if (!rateLimit.allowed && rateLimit.errorResponse) {
+      return rateLimit.errorResponse;
+    }
+
     if (!process.env.OPENAI_API_KEY) {
       throw new Error("OPENAI_API_KEY is not configured.");
     }
