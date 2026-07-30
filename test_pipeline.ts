@@ -7,6 +7,7 @@ async function test() {
     console.log("Starting pipeline...");
     const result = await runMarketIntelligencePipeline();
     console.log("Success! Extracted events:", result.events.length);
+    console.log("Trend Velocity:", JSON.stringify(result.metrics.trendVelocity, null, 2));
   } catch (error) {
     console.error("Pipeline Error:", error);
   }

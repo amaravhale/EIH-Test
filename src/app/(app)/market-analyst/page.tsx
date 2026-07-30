@@ -475,12 +475,25 @@ export default function MarketAnalystPage() {
                 <div className="h-[400px] w-full relative z-10">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={result.metrics.trendVelocity.map((d: any) => {
+                      let dataObj = d;
+                      let dayStr = d.day || d.Day || '';
+                      
+                      // Handle LLM sometimes nesting data like { "Mon": { sociocultural: 5, ... } }
+                      if (!d.day && !d.Day) {
+                        const keys = Object.keys(d);
+                        if (keys.length === 1 && typeof d[keys[0]] === 'object') {
+                           dayStr = keys[0];
+                           dataObj = d[keys[0]];
+                        }
+                      }
+
                       const normalize = (keys: string[]) => {
-                        for (const k of keys) { if (d[k] !== undefined) return d[k]; }
+                        for (const k of keys) { if (dataObj[k] !== undefined) return dataObj[k]; }
                         return 0;
                       };
+                      
                       return {
-                        day: d.day || d.Day || '',
+                        day: dayStr,
                         sociocultural: normalize(['sociocultural', 'Sociocultural', 'socio-cultural', 'Socio-cultural', 'socio_cultural']),
                         technological: normalize(['technological', 'Technological']),
                         economic: normalize(['economic', 'Economic']),
