@@ -77,13 +77,15 @@ export function calculateRelevance(
 ): number {
   let score = 0;
 
-  // Geography check (case-insensitive)
-  if (TARGET_GEOGRAPHIES.has(event.geography.toLowerCase())) {
+  // Geography check (case-insensitive, null-safe)
+  const geo = event.geography || '';
+  if (TARGET_GEOGRAPHIES.has(geo.toLowerCase())) {
     score += 30;
   }
 
-  // Sector check (case-insensitive)
-  if (TARGET_SECTORS.has(event.sector.toLowerCase())) {
+  // Sector check (case-insensitive, null-safe)
+  const sec = event.sector || '';
+  if (TARGET_SECTORS.has(sec.toLowerCase())) {
     score += 30;
   }
 

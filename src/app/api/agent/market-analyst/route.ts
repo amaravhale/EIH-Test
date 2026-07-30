@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { runMarketIntelligencePipeline } from '@/lib/ai/market-intelligence/pipeline';
 import { checkRateLimit } from '@/lib/security/rate-limiter';
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {

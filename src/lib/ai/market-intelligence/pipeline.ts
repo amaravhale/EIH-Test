@@ -40,9 +40,9 @@ For each event, extract:
 - eventDate: ISO 8601 date string (within the last 14 days)
 
 Rules:
-- Generate exactly 8 events
-- At least 2 must be Tier A (regulatory/official sources like HSE UK, BAuA, ECHA, eMARS)
-- At least 2 must be Tier B (procurement: TED, OJEU, operator capex)
+- Generate exactly 5 events
+- At least 1 must be Tier A (regulatory/official sources like HSE UK, BAuA, ECHA, eMARS)
+- At least 1 must be Tier B (procurement: TED, OJEU, operator capex)
 - Remaining can be Tier C or D
 - Events must be highly realistic and specific to the European process safety market
 - Do NOT include generic company press releases as primary sources
